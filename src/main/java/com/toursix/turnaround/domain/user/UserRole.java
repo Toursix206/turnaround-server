@@ -1,7 +1,7 @@
 package com.toursix.turnaround.domain.user;
 
-public enum UserStatus {
-    ACTIVE,
-    DELETED,
+public enum UserRole {
+    ADMIN,
+    USER,
     ;
 }
