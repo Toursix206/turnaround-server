@@ -1,12 +1,12 @@
 package com.toursix.turnaround.domain.user.repository;
 
+import static com.toursix.turnaround.domain.user.QUser.user;
+
+import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.toursix.turnaround.domain.common.Status;
 import com.toursix.turnaround.domain.user.User;
 import com.toursix.turnaround.domain.user.UserSocialType;
-import com.toursix.turnaround.domain.user.UserStatus;
-import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
-
-import static com.toursix.turnaround.domain.user.QUser.user;
 
 @RequiredArgsConstructor
 public class UserRepositoryImpl implements UserRepositoryCustom {
@@ -20,7 +20,7 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
                 .where(
                         user.socialInfo.socialId.eq(socialId),
                         user.socialInfo.socialType.eq(socialType),
-                        user.status.eq(UserStatus.ACTIVE)
+                        user.status.eq(Status.ACTIVE)
                 ).fetchFirst() != null;
     }
 
@@ -30,7 +30,7 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
                 .selectFrom(user)
                 .where(
                         user.id.eq(id),
-                        user.status.eq(UserStatus.ACTIVE)
+                        user.status.eq(Status.ACTIVE)
                 )
                 .fetchOne();
     }
@@ -42,7 +42,7 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
                 .where(
                         user.socialInfo.socialId.eq(socialId),
                         user.socialInfo.socialType.eq(socialType),
-                        user.status.eq(UserStatus.ACTIVE)
+                        user.status.eq(Status.ACTIVE)
                 )
                 .fetchOne();
     }
@@ -53,7 +53,7 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
                 .selectFrom(user)
                 .where(
                         user.fcmToken.eq(fcmToken),
-                        user.status.eq(UserStatus.ACTIVE)
+                        user.status.eq(Status.ACTIVE)
                 )
                 .fetchOne();
     }

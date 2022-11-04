@@ -29,6 +29,7 @@ public enum ErrorCode {
     VALIDATION_WRONG_TYPE_EXCEPTION(BAD_REQUEST, "잘못된 타입이 입력되었습니다."),
     VALIDATION_SOCIAL_TYPE_EXCEPTION(BAD_REQUEST, "잘못된 소셜 프로바이더 입니다."),
     VALIDATION_SORT_TYPE_EXCEPTION(BAD_REQUEST, "허용하지 않는 정렬기준을 입력했습니다."),
+    VALIDATION_RATING_RANGE_EXCEPTION(BAD_REQUEST, "허용하지 않는 평점 범위를 입력하였습니다. (0 ~ 5)"),
 
     /**
      * 401 UnAuthorized
