@@ -30,4 +30,11 @@ public class UserService {
         user.updateFcmToken(request.getFcmToken());
         return user.getId();
     }
+
+    public void existsByNickname(NicknameValidateRequestDto request) {
+        if (onbordingRepository.existsByNickname(request.getNickname())) {
+            throw new ConflictException(String.format("이미 존재하는 닉네임 (%s) 입니다", request.getNickname()),
+                    CONFLICT_NICKNAME_EXCEPTION);
+        }
+    }
 }
