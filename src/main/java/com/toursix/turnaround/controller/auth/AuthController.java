@@ -44,12 +44,14 @@ public class AuthController {
                     "socialType - KAKAO (카카오), APPLE (애플)"
     )
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "회원가입 성공입니다."),
+            @ApiResponse(code = 201, message = "회원가입 성공입니다."),
             @ApiResponse(
                     code = 400,
                     message = "1. 유저의 socialType 를 입력해주세요. (socialType)\n"
                             + "2. access token 을 입력해주세요. (token)\n"
-                            + "3. fcm token 을 입력해주세요. (fcmToken)",
+                            + "3. 유저의 fcm token 을 입력해주세요. (fcmToken)\n"
+                            + "4. 유저의 profileType 을 입력해주세요. (profileType)\n"
+                            + "5. 유저의 nickname 을 입력해주세요. (nickname)",
                     response = ErrorResponse.class),
             @ApiResponse(code = 401, message = "유효하지 않은 토큰입니다.", response = ErrorResponse.class),
             @ApiResponse(

@@ -22,12 +22,16 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@Builder(access = AccessLevel.PRIVATE)
 public class Onboarding extends AuditingTimeEntity {
 
     @Id
@@ -72,4 +76,13 @@ public class Onboarding extends AuditingTimeEntity {
     @Column(nullable = false, length = 30)
     @Enumerated(EnumType.STRING)
     private Status status;
+
+    public static Onboarding newInstance(User user, OnboardingProfileType profileType, String nickname) {
+        return Onboarding.builder()
+                .user(user)
+                .profileType(profileType)
+                .nickname(nickname)
+                .status(Status.ACTIVE)
+                .build();
+    }
 }

@@ -14,13 +14,13 @@ public enum SuccessCode {
     OK_SUCCESS(SuccessStatusCode.OK, "성공입니다."),
 
     // 인증
-    SIGNUP_SUCCESS(SuccessStatusCode.OK, "회원가입 성공입니다."),
     LOGIN_SUCCESS(SuccessStatusCode.OK, "로그인 성공입니다."),
     REISSUE_TOKEN_SUCCESS(SuccessStatusCode.OK, "토큰 갱신 성공입니다."),
 
     /**
      * 201 CREATED
      */
+    SIGNUP_SUCCESS(SuccessStatusCode.OK, "회원가입 성공입니다."),
     CREATED_SUCCESS(SuccessStatusCode.CREATED, "생성 성공입니다."),
 
     /**

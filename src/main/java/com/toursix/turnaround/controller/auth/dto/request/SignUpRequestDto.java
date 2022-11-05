@@ -1,5 +1,6 @@
 package com.toursix.turnaround.controller.auth.dto.request;
 
+import com.toursix.turnaround.domain.user.OnboardingProfileType;
 import com.toursix.turnaround.domain.user.UserSocialType;
 import com.toursix.turnaround.service.auth.dto.request.SignUpDto;
 import io.swagger.annotations.ApiModelProperty;
@@ -29,7 +30,15 @@ public class SignUpRequestDto {
     @NotBlank(message = "{auth.fcmToken.notBlank}")
     private String fcmToken;
 
+    @ApiModelProperty(value = "프로필 이미지", example = "ONE")
+    @NotNull(message = "{auth.profile.NotNull}")
+    private OnboardingProfileType profileType;
+
+    @ApiModelProperty(value = "nickname", example = "혜조니")
+    @NotBlank(message = "{auth.nickname.notBlank}")
+    private String nickname;
+
     public SignUpDto toServiceDto() {
-        return SignUpDto.of(socialType, token, fcmToken);
+        return SignUpDto.of(socialType, token, fcmToken, profileType, nickname);
     }
 }
