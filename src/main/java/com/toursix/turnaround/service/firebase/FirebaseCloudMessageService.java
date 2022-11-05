@@ -1,5 +1,9 @@
 package com.toursix.turnaround.service.firebase;
 
+import static com.toursix.turnaround.common.exception.ErrorCode.INTERNAL_SERVER_EXCEPTION;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.auth.oauth2.GoogleCredentials;
 import com.toursix.turnaround.common.exception.InternalServerException;
 import com.toursix.turnaround.common.util.HttpHeaderUtils;
 import com.toursix.turnaround.common.util.JwtUtils;
@@ -7,9 +11,6 @@ import com.toursix.turnaround.common.util.YamlPropertySourceFactory;
 import com.toursix.turnaround.domain.user.User;
 import com.toursix.turnaround.external.client.firebase.FirebaseApiClient;
 import com.toursix.turnaround.service.firebase.dto.request.FcmMessage;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.auth.oauth2.GoogleCredentials;
-import com.toursix.turnaround.common.exception.ErrorCode;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -68,7 +69,7 @@ public class FirebaseCloudMessageService {
         } catch (Exception exception) {
             log.error(exception.getMessage(), exception);
             throw new InternalServerException("FCM makeMessage exception",
-                    ErrorCode.INTERNAL_SERVER_EXCEPTION);
+                    INTERNAL_SERVER_EXCEPTION);
         }
     }
 
@@ -83,7 +84,7 @@ public class FirebaseCloudMessageService {
         } catch (Exception exception) {
             log.error(exception.getMessage(), exception);
             throw new InternalServerException("FCM getAccessToken exception",
-                    ErrorCode.INTERNAL_SERVER_EXCEPTION);
+                    INTERNAL_SERVER_EXCEPTION);
         }
     }
 }

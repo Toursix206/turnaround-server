@@ -15,12 +15,16 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@Builder(access = AccessLevel.PRIVATE)
 public class User extends AuditingTimeEntity {
 
     @Id
@@ -52,13 +56,18 @@ public class User extends AuditingTimeEntity {
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    private User(String socialId, UserSocialType socialType) {
-        this.socialInfo = SocialInfo.of(socialId, socialType);
-        this.status = Status.ACTIVE;
+    public static User newInstance(String socialId, UserSocialType socialType, Setting setting, Point point) {
+        return User.builder()
+                .role(UserRole.USER)
+                .socialInfo(SocialInfo.of(socialId, socialType))
+                .setting(setting)
+                .point(point)
+                .status(Status.ACTIVE)
+                .build();
     }
 
-    public static User newInstance(String socialId, UserSocialType socialType) {
-        return new User(socialId, socialType);
+    public void setOnboarding(Onboarding onboarding) {
+        this.onboarding = onboarding;
     }
 
     public void updateFcmToken(String fcmToken) {

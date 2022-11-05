@@ -1,5 +1,6 @@
 package com.toursix.turnaround.service.user.dto.request;
 
+import com.toursix.turnaround.domain.user.OnboardingProfileType;
 import com.toursix.turnaround.domain.user.UserSocialType;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -18,13 +19,17 @@ public class CreateUserRequestDto {
     private String socialId;
     private UserSocialType socialType;
     private String fcmToken;
+    private String nickname;
+    private OnboardingProfileType profileType;
 
     public static CreateUserRequestDto of(String socialId, UserSocialType socialType,
-            String fcmToken) {
+            String fcmToken, OnboardingProfileType profileType, String nickname) {
         return CreateUserRequestDto.builder()
                 .socialId(socialId)
                 .socialType(socialType)
                 .fcmToken(fcmToken)
+                .nickname(nickname)
+                .profileType(profileType)
                 .build();
     }
 }
