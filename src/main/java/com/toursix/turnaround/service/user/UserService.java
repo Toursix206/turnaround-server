@@ -1,8 +1,5 @@
 package com.toursix.turnaround.service.user;
 
-import static com.toursix.turnaround.common.exception.ErrorCode.CONFLICT_NICKNAME_EXCEPTION;
-
-import com.toursix.turnaround.common.exception.ConflictException;
 import com.toursix.turnaround.common.util.JwtUtils;
 import com.toursix.turnaround.domain.user.Onboarding;
 import com.toursix.turnaround.domain.user.Point;
@@ -34,17 +31,17 @@ public class UserService {
         UserServiceUtils.validateNotExistsUser(userRepository, request.getSocialId(),
                 request.getSocialType());
         UserServiceUtils.validateNickname(onbordingRepository, request.getNickname());
+        User conflictFcmTokenUser = userRepository.findUserByFcmToken(request.getFcmToken());
+        if (conflictFcmTokenUser != null) {
+            jwtProvider.expireRefreshToken(conflictFcmTokenUser.getId());
+            conflictFcmTokenUser.resetFcmToken();
+        }
         User user = userRepository.save(
                 User.newInstance(request.getSocialId(), request.getSocialType(),
                         pointRepository.save(Point.newInstance()),
                         settingRepository.save(Setting.newInstance())));
         Onboarding onboarding = onbordingRepository.save(
                 Onboarding.newInstance(user, request.getProfileType(), request.getNickname()));
-        User conflictFcmTokenUser = userRepository.findUserByFcmToken(request.getFcmToken());
-        if (conflictFcmTokenUser != null) {
-            jwtProvider.expireRefreshToken(conflictFcmTokenUser.getId());
-            conflictFcmTokenUser.resetFcmToken();
-        }
         user.updateFcmToken(request.getFcmToken());
         user.setOnboarding(onboarding);
         return user.getId();
@@ -52,8 +49,5 @@ public class UserService {
 
     public void existsByNickname(NicknameValidateRequestDto request) {
         UserServiceUtils.validateNickname(onbordingRepository, request.getNickname());
-            throw new ConflictException(String.format("이미 존재하는 닉네임 (%s) 입니다", request.getNickname()),
-                    CONFLICT_NICKNAME_EXCEPTION);
-        }
     }
 }
