@@ -20,8 +20,10 @@ public enum SuccessCode {
     /**
      * 201 CREATED
      */
-    SIGNUP_SUCCESS(SuccessStatusCode.OK, "회원가입 성공입니다."),
     CREATED_SUCCESS(SuccessStatusCode.CREATED, "생성 성공입니다."),
+
+    // 인증
+    SIGNUP_SUCCESS(SuccessStatusCode.CREATED, "회원가입 성공입니다."),
 
     /**
      * 202 ACCEPTED

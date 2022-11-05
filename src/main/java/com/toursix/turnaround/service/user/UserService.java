@@ -38,8 +38,8 @@ public class UserService {
         }
         User user = userRepository.save(
                 User.newInstance(request.getSocialId(), request.getSocialType(),
-                        pointRepository.save(Point.newInstance()),
-                        settingRepository.save(Setting.newInstance())));
+                        settingRepository.save(Setting.newInstance()),
+                        pointRepository.save(Point.newInstance())));
         Onboarding onboarding = onbordingRepository.save(
                 Onboarding.newInstance(user, request.getProfileType(), request.getNickname()));
         user.updateFcmToken(request.getFcmToken());
@@ -47,7 +47,7 @@ public class UserService {
         return user.getId();
     }
 
-    public void existsByNickname(NicknameValidateRequestDto request) {
+    public void validateUniqueNickname(NicknameValidateRequestDto request) {
         UserServiceUtils.validateNickname(onbordingRepository, request.getNickname());
     }
 }

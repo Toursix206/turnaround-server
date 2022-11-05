@@ -38,8 +38,8 @@ public class Setting extends AuditingTimeEntity {
 
     public static Setting newInstance() {
         return Setting.builder()
-                .agreeBenefitAndEvent(false)
-                .agreeActivityNotification(false)
+                .agreeBenefitAndEvent(true)
+                .agreeActivityNotification(true)
                 .status(Status.ACTIVE)
                 .build();
     }

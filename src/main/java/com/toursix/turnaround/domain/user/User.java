@@ -56,7 +56,7 @@ public class User extends AuditingTimeEntity {
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    public static User newInstance(String socialId, UserSocialType socialType, Point point, Setting setting) {
+    public static User newInstance(String socialId, UserSocialType socialType, Setting setting, Point point) {
         return User.builder()
                 .role(UserRole.USER)
                 .socialInfo(SocialInfo.of(socialId, socialType))

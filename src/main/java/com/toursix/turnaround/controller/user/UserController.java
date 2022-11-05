@@ -33,20 +33,17 @@ public class UserController {
             @ApiResponse(
                     code = 400,
                     message = "1. 닉네임을 입력해주세요. (nickname)\n"
-                            + "2. 닉네임은 최대 8자까지 가능합니다. (nickname)\n",
+                            + "2. 닉네임은 최대 8자까지 가능합니다. (nickname)",
                     response = ErrorResponse.class),
             @ApiResponse(code = 401, message = "토큰이 만료되었습니다. 다시 로그인 해주세요.", response = ErrorResponse.class),
-            @ApiResponse(code = 404,
-                    message = "1. 탈퇴했거나 존재하지 않는 유저입니다. \n"
-                            + "2. 존재하지 않는 방입니다.",
-                    response = ErrorResponse.class),
+            @ApiResponse(code = 404, message = "탈퇴했거나 존재하지 않는 유저입니다.", response = ErrorResponse.class),
             @ApiResponse(code = 409, message = "이미 존재하는 닉네임입니다.", response = ErrorResponse.class),
             @ApiResponse(code = 500, message = "예상치 못한 서버 에러가 발생하였습니다.", response = ErrorResponse.class)
     })
     @PostMapping("/user/nickname/check")
     public ResponseEntity<SuccessResponse<String>> updateUserInfo(
             @Valid @RequestBody NicknameValidateRequestDto request) {
-        userService.existsByNickname(request);
+        userService.validateUniqueNickname(request);
         return SuccessResponse.OK;
     }
 }

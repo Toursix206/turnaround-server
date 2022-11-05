@@ -32,8 +32,8 @@ public class SignUpRequestDto {
     @NotBlank(message = "{auth.fcmToken.notBlank}")
     private String fcmToken;
 
-    @ApiModelProperty(value = "프로필 이미지", example = "ONE")
-    @NotNull(message = "{onboarding.profile.NotNull}")
+    @ApiModelProperty(value = "프로필 타입", example = "ONE")
+    @NotNull(message = "{onboarding.profile.notNull}")
     private OnboardingProfileType profileType;
 
     @ApiModelProperty(value = "nickname", example = "혜조니")
