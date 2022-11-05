@@ -33,6 +33,7 @@ public class UserService {
     public Long registerUser(CreateUserRequestDto request) {
         UserServiceUtils.validateNotExistsUser(userRepository, request.getSocialId(),
                 request.getSocialType());
+        UserServiceUtils.validateNickname(onbordingRepository, request.getNickname());
         User user = userRepository.save(
                 User.newInstance(request.getSocialId(), request.getSocialType(),
                         pointRepository.save(Point.newInstance()),
@@ -50,7 +51,7 @@ public class UserService {
     }
 
     public void existsByNickname(NicknameValidateRequestDto request) {
-        if (onbordingRepository.existsByNickname(request.getNickname())) {
+        UserServiceUtils.validateNickname(onbordingRepository, request.getNickname());
             throw new ConflictException(String.format("이미 존재하는 닉네임 (%s) 입니다", request.getNickname()),
                     CONFLICT_NICKNAME_EXCEPTION);
         }

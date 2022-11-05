@@ -1,11 +1,13 @@
 package com.toursix.turnaround.controller.auth.dto.request;
 
+import com.toursix.turnaround.domain.common.Constraint;
 import com.toursix.turnaround.domain.user.OnboardingProfileType;
 import com.toursix.turnaround.domain.user.UserSocialType;
 import com.toursix.turnaround.service.auth.dto.request.SignUpDto;
 import io.swagger.annotations.ApiModelProperty;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -31,11 +33,12 @@ public class SignUpRequestDto {
     private String fcmToken;
 
     @ApiModelProperty(value = "프로필 이미지", example = "ONE")
-    @NotNull(message = "{auth.profile.NotNull}")
+    @NotNull(message = "{onboarding.profile.NotNull}")
     private OnboardingProfileType profileType;
 
     @ApiModelProperty(value = "nickname", example = "혜조니")
-    @NotBlank(message = "{auth.nickname.notBlank}")
+    @NotBlank(message = "{onboarding.nickname.notBlank}")
+    @Size(max = Constraint.ONBOARDING_NICKNAME_MAX, message = "{onboarding.nickname.max}")
     private String nickname;
 
     public SignUpDto toServiceDto() {

@@ -1,5 +1,6 @@
 package com.toursix.turnaround.service.user;
 
+import static com.toursix.turnaround.common.exception.ErrorCode.CONFLICT_NICKNAME_EXCEPTION;
 import static com.toursix.turnaround.common.exception.ErrorCode.CONFLICT_USER_EXCEPTION;
 import static com.toursix.turnaround.common.exception.ErrorCode.NOT_FOUND_USER_EXCEPTION;
 
@@ -7,6 +8,7 @@ import com.toursix.turnaround.common.exception.ConflictException;
 import com.toursix.turnaround.common.exception.NotFoundException;
 import com.toursix.turnaround.domain.user.User;
 import com.toursix.turnaround.domain.user.UserSocialType;
+import com.toursix.turnaround.domain.user.repository.OnbordingRepository;
 import com.toursix.turnaround.domain.user.repository.UserRepository;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -37,5 +39,12 @@ public class UserServiceUtils {
             throw new NotFoundException(String.format("존재하지 않는 유저 (%s) 입니다", userId), NOT_FOUND_USER_EXCEPTION);
         }
         return user;
+    }
+
+    public static void validateNickname(OnbordingRepository onbordingRepository, String nickname) {
+        if (onbordingRepository.existsByNickname(nickname)) {
+            throw new ConflictException(String.format("이미 존재하는 닉네임 (%s) 입니다", nickname),
+                    CONFLICT_NICKNAME_EXCEPTION);
+        }
     }
 }
