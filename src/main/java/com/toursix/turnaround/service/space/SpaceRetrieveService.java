@@ -23,6 +23,6 @@ public class SpaceRetrieveService {
         Onboarding onboarding = user.getOnboarding();
         //TODO 공간 여러개인 경우 고려
         Acquire acquire = onboarding.getAcquires().get(0);
-        return SpaceMainInfoResponse.of(user.getOnboarding(), acquire);
+        return SpaceMainInfoResponse.of(onboarding, acquire);
     }
 }

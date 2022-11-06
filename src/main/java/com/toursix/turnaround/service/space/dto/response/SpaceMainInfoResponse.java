@@ -25,6 +25,7 @@ public class SpaceMainInfoResponse {
     private int broom;
     private int cleanScore;
     private List<InteriorInfo> interiors;
+    //TODO 토스트 메시지 정책 확정되면 반영
 
     @ToString
     @Getter
