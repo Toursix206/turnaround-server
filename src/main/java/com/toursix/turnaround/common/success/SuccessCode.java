@@ -12,6 +12,7 @@ public enum SuccessCode {
      * 200 OK
      */
     OK_SUCCESS(SuccessStatusCode.OK, "성공입니다."),
+    GET_SPACE_MAIN_INFO_SUCCESS(SuccessStatusCode.OK, "방타버스 메인 정보 조회 성공입니다."),
 
     // 인증
     LOGIN_SUCCESS(SuccessStatusCode.OK, "로그인 성공입니다."),
