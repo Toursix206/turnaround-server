@@ -1,12 +1,24 @@
 package com.toursix.turnaround.controller.advice;
 
+import static com.toursix.turnaround.common.exception.ErrorCode.INTERNAL_SERVER_EXCEPTION;
+import static com.toursix.turnaround.common.exception.ErrorCode.METHOD_NOT_ALLOWED_EXCEPTION;
+import static com.toursix.turnaround.common.exception.ErrorCode.NOT_ACCEPTABLE_EXCEPTION;
+import static com.toursix.turnaround.common.exception.ErrorCode.UNAUTHORIZED_INVALID_SOCIAL_TOKEN_EXCEPTION;
+import static com.toursix.turnaround.common.exception.ErrorCode.UNSUPPORTED_MEDIA_TYPE_EXCEPTION;
+import static com.toursix.turnaround.common.exception.ErrorCode.VALIDATION_ENUM_VALUE_EXCEPTION;
+import static com.toursix.turnaround.common.exception.ErrorCode.VALIDATION_EXCEPTION;
+import static com.toursix.turnaround.common.exception.ErrorCode.VALIDATION_REQUEST_MISSING_EXCEPTION;
+import static com.toursix.turnaround.common.exception.ErrorCode.VALIDATION_SORT_TYPE_EXCEPTION;
+import static com.toursix.turnaround.common.exception.ErrorCode.VALIDATION_WRONG_TYPE_EXCEPTION;
+
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.toursix.turnaround.common.dto.ErrorResponse;
-import com.toursix.turnaround.common.exception.ErrorCode;
 import com.toursix.turnaround.common.exception.FeignClientException;
 import com.toursix.turnaround.common.exception.TurnaroundException;
+import com.toursix.turnaround.service.slack.SlackService;
 import java.util.Objects;
 import javax.validation.ConstraintViolationException;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.http.HttpStatus;
@@ -26,17 +38,54 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 
 @Slf4j
 @RestControllerAdvice
+@RequiredArgsConstructor
 public class ControllerExceptionAdvice {
+
+    private final SlackService slackService;
+
+    /**
+     * Turnaround Custom Exception
+     */
+    @ExceptionHandler(TurnaroundException.class)
+    protected ResponseEntity<ErrorResponse> handleBaseException(TurnaroundException exception) {
+        if (exception.getStatus() >= 400 && exception.getStatus() < 500) {
+            log.warn(exception.getMessage(), exception);
+        } else {
+            log.error(exception.getMessage(), exception);
+            slackService.sendSlackMessage(exception);
+        }
+        return ResponseEntity.status(exception.getStatus())
+                .body(ErrorResponse.error(exception.getErrorCode()));
+    }
+
+    /**
+     * Feign Client Exception
+     */
+    @ExceptionHandler(FeignClientException.class)
+    protected ResponseEntity<ErrorResponse> handleFeignClientException(final FeignClientException exception) {
+        if (exception.getStatus() >= 400 && exception.getStatus() < 500) {
+            log.warn(exception.getMessage(), exception);
+        } else {
+            log.error(exception.getMessage(), exception);
+            slackService.sendSlackMessage(exception);
+        }
+        if (exception.getStatus() == UNAUTHORIZED_INVALID_SOCIAL_TOKEN_EXCEPTION.getStatus()) {
+            return ResponseEntity.status(UNAUTHORIZED_INVALID_SOCIAL_TOKEN_EXCEPTION.getStatus())
+                    .body(ErrorResponse.error(UNAUTHORIZED_INVALID_SOCIAL_TOKEN_EXCEPTION));
+        }
+        return ResponseEntity.status(INTERNAL_SERVER_EXCEPTION.getStatus())
+                .body(ErrorResponse.error(INTERNAL_SERVER_EXCEPTION));
+    }
 
     /**
      * 400 BadRequest Spring Validation
      */
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(BindException.class)
-    protected ErrorResponse handleBadRequest(final BindException e) {
-        log.error(e.getMessage());
-        FieldError fieldError = Objects.requireNonNull(e.getFieldError());
-        return ErrorResponse.error(ErrorCode.VALIDATION_EXCEPTION,
+    protected ErrorResponse handleBadRequest(final BindException exception) {
+        log.warn(exception.getMessage());
+        FieldError fieldError = Objects.requireNonNull(exception.getFieldError());
+        return ErrorResponse.error(VALIDATION_EXCEPTION,
                 String.format("%s (%s)", fieldError.getDefaultMessage(), fieldError.getField()));
     }
 
@@ -45,10 +94,9 @@ public class ControllerExceptionAdvice {
      */
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(ConstraintViolationException.class)
-    protected ErrorResponse handleConstraintViolationException(
-            final ConstraintViolationException e) {
-        log.error(e.getMessage());
-        return ErrorResponse.error(ErrorCode.VALIDATION_SORT_TYPE_EXCEPTION);
+    protected ErrorResponse handleConstraintViolationException(final ConstraintViolationException exception) {
+        log.warn(exception.getMessage());
+        return ErrorResponse.error(VALIDATION_SORT_TYPE_EXCEPTION);
     }
 
     /**
@@ -56,10 +104,9 @@ public class ControllerExceptionAdvice {
      */
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    protected ErrorResponse handleHttpMessageNotReadableException(
-            final HttpMessageNotReadableException e) {
-        log.error(e.getMessage());
-        return ErrorResponse.error(ErrorCode.VALIDATION_ENUM_VALUE_EXCEPTION);
+    protected ErrorResponse handleHttpMessageNotReadableException(final HttpMessageNotReadableException exception) {
+        log.warn(exception.getMessage());
+        return ErrorResponse.error(VALIDATION_ENUM_VALUE_EXCEPTION);
     }
 
     /**
@@ -67,9 +114,9 @@ public class ControllerExceptionAdvice {
      */
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MissingRequestValueException.class)
-    protected ErrorResponse handle(final MissingRequestValueException e) {
-        log.error(e.getMessage());
-        return ErrorResponse.error(ErrorCode.VALIDATION_REQUEST_MISSING_EXCEPTION);
+    protected ErrorResponse handle(final MissingRequestValueException exception) {
+        log.warn(exception.getMessage());
+        return ErrorResponse.error(VALIDATION_REQUEST_MISSING_EXCEPTION);
     }
 
     /**
@@ -77,11 +124,10 @@ public class ControllerExceptionAdvice {
      */
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(TypeMismatchException.class)
-    protected ErrorResponse handleTypeMismatchException(final TypeMismatchException e) {
-        log.error(e.getMessage());
-        return ErrorResponse.error(ErrorCode.VALIDATION_WRONG_TYPE_EXCEPTION,
-                String.format("%s (%s)", ErrorCode.VALIDATION_WRONG_TYPE_EXCEPTION.getMessage(),
-                        e.getValue()));
+    protected ErrorResponse handleTypeMismatchException(final TypeMismatchException exception) {
+        log.warn(exception.getMessage());
+        return ErrorResponse.error(VALIDATION_WRONG_TYPE_EXCEPTION,
+                String.format("%s (%s)", VALIDATION_WRONG_TYPE_EXCEPTION.getMessage(), exception.getValue()));
     }
 
     /**
@@ -93,9 +139,9 @@ public class ControllerExceptionAdvice {
             ServletRequestBindingException.class,
             MethodArgumentTypeMismatchException.class
     })
-    protected ErrorResponse handleInvalidFormatException(final Exception e) {
-        log.error(e.getMessage());
-        return ErrorResponse.error(ErrorCode.VALIDATION_EXCEPTION);
+    protected ErrorResponse handleInvalidFormatException(final Exception exception) {
+        log.warn(exception.getMessage());
+        return ErrorResponse.error(VALIDATION_EXCEPTION);
     }
 
     /**
@@ -104,9 +150,9 @@ public class ControllerExceptionAdvice {
     @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     protected ErrorResponse handleHttpRequestMethodNotSupportedException(
-            HttpRequestMethodNotSupportedException e) {
-        log.error(e.getMessage());
-        return ErrorResponse.error(ErrorCode.METHOD_NOT_ALLOWED_EXCEPTION);
+            HttpRequestMethodNotSupportedException exception) {
+        log.warn(exception.getMessage());
+        return ErrorResponse.error(METHOD_NOT_ALLOWED_EXCEPTION);
     }
 
     /**
@@ -114,10 +160,9 @@ public class ControllerExceptionAdvice {
      */
     @ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
     @ExceptionHandler(HttpMediaTypeNotAcceptableException.class)
-    protected ErrorResponse handleHttpMediaTypeNotAcceptableException(
-            HttpMediaTypeNotAcceptableException e) {
-        log.error(e.getMessage());
-        return ErrorResponse.error(ErrorCode.NOT_ACCEPTABLE_EXCEPTION);
+    protected ErrorResponse handleHttpMediaTypeNotAcceptableException(HttpMediaTypeNotAcceptableException exception) {
+        log.warn(exception.getMessage());
+        return ErrorResponse.error(NOT_ACCEPTABLE_EXCEPTION);
     }
 
     /**
@@ -125,31 +170,9 @@ public class ControllerExceptionAdvice {
      */
     @ResponseStatus(HttpStatus.UNSUPPORTED_MEDIA_TYPE)
     @ExceptionHandler(HttpMediaTypeException.class)
-    protected ErrorResponse handleHttpMediaTypeException(final HttpMediaTypeException e) {
-        log.error(e.getMessage(), e);
-        return ErrorResponse.error(ErrorCode.UNSUPPORTED_MEDIA_TYPE_EXCEPTION);
-    }
-
-    /**
-     * Feign Client Exception
-     */
-    @ExceptionHandler(FeignClientException.class)
-    protected ErrorResponse handleFeignClientException(final FeignClientException e) {
-        log.error(e.getErrorMessage(), e);
-        if (e.getStatus() == ErrorCode.UNAUTHORIZED_INVALID_SOCIAL_TOKEN_EXCEPTION.getStatus()) {
-            return ErrorResponse.error(ErrorCode.UNAUTHORIZED_INVALID_SOCIAL_TOKEN_EXCEPTION);
-        }
-        return ErrorResponse.error(ErrorCode.INTERNAL_SERVER_EXCEPTION);
-    }
-
-    /**
-     * Turnaround Custom Exception
-     */
-    @ExceptionHandler(TurnaroundException.class)
-    protected ResponseEntity<ErrorResponse> handleBaseException(TurnaroundException exception) {
-        log.error(exception.getMessage(), exception);
-        return ResponseEntity.status(exception.getStatus())
-                .body(ErrorResponse.error(exception.getErrorCode()));
+    protected ErrorResponse handleHttpMediaTypeException(final HttpMediaTypeException exception) {
+        log.warn(exception.getMessage(), exception);
+        return ErrorResponse.error(UNSUPPORTED_MEDIA_TYPE_EXCEPTION);
     }
 
     /**
@@ -159,6 +182,7 @@ public class ControllerExceptionAdvice {
     @ExceptionHandler(Exception.class)
     protected ErrorResponse handleException(final Exception exception) {
         log.error(exception.getMessage(), exception);
-        return ErrorResponse.error(ErrorCode.INTERNAL_SERVER_EXCEPTION);
+        slackService.sendSlackMessage(exception);
+        return ErrorResponse.error(INTERNAL_SERVER_EXCEPTION);
     }
 }
