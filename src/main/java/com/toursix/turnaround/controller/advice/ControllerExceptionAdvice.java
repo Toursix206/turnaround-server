@@ -1,10 +1,10 @@
 package com.toursix.turnaround.controller.advice;
 
-import com.toursix.turnaround.common.dto.ErrorResponse;
-import com.toursix.turnaround.common.exception.BoilerplateException;
-import com.toursix.turnaround.common.exception.FeignClientException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import com.toursix.turnaround.common.dto.ErrorResponse;
 import com.toursix.turnaround.common.exception.ErrorCode;
+import com.toursix.turnaround.common.exception.FeignClientException;
+import com.toursix.turnaround.common.exception.TurnaroundException;
 import java.util.Objects;
 import javax.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
@@ -136,17 +136,17 @@ public class ControllerExceptionAdvice {
     @ExceptionHandler(FeignClientException.class)
     protected ErrorResponse handleFeignClientException(final FeignClientException e) {
         log.error(e.getErrorMessage(), e);
-        if (e.getStatus() == ErrorCode.UNAUTHORIZED_INVALID_TOKEN_EXCEPTION.getStatus()) {
-            return ErrorResponse.error(ErrorCode.UNAUTHORIZED_INVALID_TOKEN_EXCEPTION);
+        if (e.getStatus() == ErrorCode.UNAUTHORIZED_INVALID_SOCIAL_TOKEN_EXCEPTION.getStatus()) {
+            return ErrorResponse.error(ErrorCode.UNAUTHORIZED_INVALID_SOCIAL_TOKEN_EXCEPTION);
         }
         return ErrorResponse.error(ErrorCode.INTERNAL_SERVER_EXCEPTION);
     }
 
     /**
-     * Boilerplate Custom Exception
+     * Turnaround Custom Exception
      */
-    @ExceptionHandler(BoilerplateException.class)
-    protected ResponseEntity<ErrorResponse> handleBaseException(BoilerplateException exception) {
+    @ExceptionHandler(TurnaroundException.class)
+    protected ResponseEntity<ErrorResponse> handleBaseException(TurnaroundException exception) {
         log.error(exception.getMessage(), exception);
         return ResponseEntity.status(exception.getStatus())
                 .body(ErrorResponse.error(exception.getErrorCode()));

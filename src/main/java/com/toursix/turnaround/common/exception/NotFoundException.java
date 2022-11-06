@@ -1,6 +1,6 @@
 package com.toursix.turnaround.common.exception;
 
-public class NotFoundException extends BoilerplateException {
+public class NotFoundException extends TurnaroundException {
 
     public NotFoundException(String message, ErrorCode errorCode) {
         super(message, errorCode);

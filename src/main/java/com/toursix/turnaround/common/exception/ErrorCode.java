@@ -35,7 +35,7 @@ public enum ErrorCode {
      * 401 UnAuthorized
      */
     UNAUTHORIZED_EXCEPTION(UNAUTHORIZED, "토큰이 만료되었습니다. 다시 로그인 해주세요."),
-    UNAUTHORIZED_INVALID_TOKEN_EXCEPTION(UNAUTHORIZED, "유효하지 않은 토큰입니다."),
+    UNAUTHORIZED_INVALID_SOCIAL_TOKEN_EXCEPTION(UNAUTHORIZED, "유효하지 않은 소셜 토큰입니다."),
 
     /**
      * 403 Forbidden

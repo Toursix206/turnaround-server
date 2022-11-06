@@ -1,6 +1,6 @@
 package com.toursix.turnaround.common.exception;
 
-public class ForbiddenException extends BoilerplateException {
+public class ForbiddenException extends TurnaroundException {
 
     public ForbiddenException(String message, ErrorCode errorCode) {
         super(message, errorCode);
