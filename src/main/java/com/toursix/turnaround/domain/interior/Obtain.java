@@ -35,6 +35,13 @@ public class Obtain extends AuditingTimeEntity {
     @JoinColumn(name = "interior_id", nullable = false)
     private Interior interior;
 
+    @Column(nullable = false, length = 30)
+    @Enumerated(EnumType.STRING)
+    private CleanLevel cleanLevel;
+
+    @Column(nullable = false)
+    private Integer cleanScore;
+
     @Column(nullable = false)
     private Boolean isEquipped;
 
