@@ -5,6 +5,7 @@ import com.toursix.turnaround.domain.common.AuditingTimeEntity;
 import com.toursix.turnaround.domain.common.Status;
 import com.toursix.turnaround.domain.done.DoneReview;
 import com.toursix.turnaround.domain.interior.Obtain;
+import com.toursix.turnaround.domain.item.Item;
 import com.toursix.turnaround.domain.space.Acquire;
 import com.toursix.turnaround.domain.todo.Todo;
 import java.util.ArrayList;
@@ -57,6 +58,10 @@ public class Onboarding extends AuditingTimeEntity {
 
     @Column(length = 300)
     private String address;
+
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "item_id", nullable = false)
+    private Item item;
 
     @OneToMany(mappedBy = "onboarding", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private final List<Acquire> acquires = new ArrayList<>();
