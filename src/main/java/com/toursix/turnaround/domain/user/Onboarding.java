@@ -59,6 +59,12 @@ public class Onboarding extends AuditingTimeEntity {
     @Column(length = 300)
     private String address;
 
+    @Column(nullable = false)
+    private Integer level;
+
+    @Column(nullable = false)
+    private Integer experience;
+
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "item_id", nullable = false)
     private Item item;
