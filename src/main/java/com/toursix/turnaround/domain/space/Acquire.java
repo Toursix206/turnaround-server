@@ -35,6 +35,9 @@ public class Acquire extends AuditingTimeEntity {
     @JoinColumn(name = "space_id", nullable = false)
     private Space space;
 
+    @Column(nullable = false)
+    private Integer cleanScore;
+
     @Column(nullable = false, length = 30)
     @Enumerated(EnumType.STRING)
     private Status status;
