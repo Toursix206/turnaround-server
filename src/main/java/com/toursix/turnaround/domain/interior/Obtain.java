@@ -15,12 +15,16 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@Builder(access = AccessLevel.PRIVATE)
 public class Obtain extends AuditingTimeEntity {
 
     @Id
@@ -48,4 +52,23 @@ public class Obtain extends AuditingTimeEntity {
     @Column(nullable = false, length = 30)
     @Enumerated(EnumType.STRING)
     private Status status;
+
+    public static Obtain newInstance(Onboarding onboarding, Interior interior) {
+        return Obtain.builder()
+                .onboarding(onboarding)
+                .interior(interior)
+                .cleanLevel(CleanLevel.ONE)
+                .cleanScore(100)
+                .isEquipped(false)
+                .status(Status.ACTIVE)
+                .build();
+    }
+
+    public void equip() {
+        this.isEquipped = true;
+    }
+
+    public void unequip() {
+        this.isEquipped = false;
+    }
 }

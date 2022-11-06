@@ -88,12 +88,23 @@ public class Onboarding extends AuditingTimeEntity {
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    public static Onboarding newInstance(User user, OnboardingProfileType profileType, String nickname) {
+    public static Onboarding newInstance(User user, OnboardingProfileType profileType, String nickname, Item item) {
         return Onboarding.builder()
                 .user(user)
                 .profileType(profileType)
                 .nickname(nickname)
+                .level(1)
+                .experience(0)
+                .item(item)
                 .status(Status.ACTIVE)
                 .build();
+    }
+
+    public void addAcquire(Acquire acquire) {
+        this.acquires.add(acquire);
+    }
+
+    public void addObtain(Obtain obtain) {
+        this.obtains.add(obtain);
     }
 }
