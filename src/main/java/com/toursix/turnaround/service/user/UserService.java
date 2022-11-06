@@ -8,6 +8,8 @@ import com.toursix.turnaround.domain.interior.repository.ObtainRepository;
 import com.toursix.turnaround.domain.item.Item;
 import com.toursix.turnaround.domain.item.repository.ItemRepository;
 import com.toursix.turnaround.domain.space.Acquire;
+import com.toursix.turnaround.domain.space.Space;
+import com.toursix.turnaround.domain.space.SpaceCategory;
 import com.toursix.turnaround.domain.space.SpaceCategoryType;
 import com.toursix.turnaround.domain.space.repository.AcquireRepository;
 import com.toursix.turnaround.domain.space.repository.SpaceCategoryRepository;
@@ -62,12 +64,7 @@ public class UserService {
         Onboarding onboarding = onbordingRepository.save(
                 Onboarding.newInstance(user, request.getProfileType(), request.getNickname(),
                         itemRepository.save(Item.newInstance())));
-        Acquire acquire = acquireRepository.save(
-                Acquire.newInstance(onboarding, SpaceServiceUtils.findSpaceBySpaceCategory(spaceRepository,
-                        SpaceServiceUtils.findSpaceCategoryByName(spaceCategoryRepository,
-                                SpaceCategoryType.SMALL_ROOM.getKey())
-                )));
-        onboarding.addAcquire(acquire);
+        acquireBasicSpace(onboarding);
         obtainBasicInteriors(onboarding);
         user.updateFcmToken(request.getFcmToken());
         user.setOnboarding(onboarding);
@@ -76,6 +73,14 @@ public class UserService {
 
     public void validateUniqueNickname(NicknameValidateRequestDto request) {
         UserServiceUtils.validateNickname(onbordingRepository, request.getNickname());
+    }
+
+    private void acquireBasicSpace(Onboarding onboarding) {
+        SpaceCategory smallRoomCategory = SpaceServiceUtils.findSpaceCategoryByName(spaceCategoryRepository,
+                SpaceCategoryType.SMALL_ROOM.getKey());
+        Space smallRoomSpace = SpaceServiceUtils.findSpaceBySpaceCategory(spaceRepository, smallRoomCategory);
+        Acquire acquire = acquireRepository.save(Acquire.newInstance(onboarding, smallRoomSpace));
+        onboarding.addAcquire(acquire);
     }
 
     private void obtainBasicInteriors(Onboarding onboarding) {
