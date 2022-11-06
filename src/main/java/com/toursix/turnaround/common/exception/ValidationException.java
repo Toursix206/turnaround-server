@@ -1,6 +1,6 @@
 package com.toursix.turnaround.common.exception;
 
-public class ValidationException extends BoilerplateException {
+public class ValidationException extends TurnaroundException {
 
     public ValidationException(String message, ErrorCode errorCode) {
         super(message, errorCode);

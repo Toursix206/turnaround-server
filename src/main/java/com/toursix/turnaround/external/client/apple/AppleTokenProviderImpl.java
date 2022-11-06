@@ -1,6 +1,6 @@
 package com.toursix.turnaround.external.client.apple;
 
-import static com.toursix.turnaround.common.exception.ErrorCode.UNAUTHORIZED_INVALID_TOKEN_EXCEPTION;
+import static com.toursix.turnaround.common.exception.ErrorCode.UNAUTHORIZED_INVALID_SOCIAL_TOKEN_EXCEPTION;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -46,14 +46,14 @@ public class AppleTokenProviderImpl implements AppleTokenProvider {
                     .getBody();
             return claims.getSubject(); // return socialId;
         } catch (JsonProcessingException | InvalidKeySpecException | InvalidClaimException |
-                NoSuchAlgorithmException | IllegalArgumentException e) {
+                 NoSuchAlgorithmException | IllegalArgumentException e) {
             throw new UnAuthorizedException(
                     String.format("잘못된 애플 idToken (%s) 입니다 (reason: %s)", idToken, e.getMessage()),
-                    UNAUTHORIZED_INVALID_TOKEN_EXCEPTION);
+                    UNAUTHORIZED_INVALID_SOCIAL_TOKEN_EXCEPTION);
         } catch (ExpiredJwtException e) {
             throw new UnAuthorizedException(
                     String.format("만료된 애플 idToken (%s) 입니다 (reason: %s)", idToken, e.getMessage()),
-                    UNAUTHORIZED_INVALID_TOKEN_EXCEPTION);
+                    UNAUTHORIZED_INVALID_SOCIAL_TOKEN_EXCEPTION);
         }
     }
 

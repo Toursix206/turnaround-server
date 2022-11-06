@@ -1,6 +1,6 @@
 package com.toursix.turnaround.common.exception;
 
-public class ConflictException extends BoilerplateException {
+public class ConflictException extends TurnaroundException {
 
     public ConflictException(String message, ErrorCode errorCode) {
         super(message, errorCode);

@@ -57,6 +57,12 @@ public class AuthController {
                     response = ErrorResponse.class),
             @ApiResponse(code = 401, message = "유효하지 않은 토큰입니다.", response = ErrorResponse.class),
             @ApiResponse(
+                    code = 404,
+                    message = "1. 존재하지 않는 공간 카테고리입니다.\n"
+                            + "2. 존재하지 않는 공간입니다.\n"
+                            + "3. 존재하지 않는 인테리어입니다.",
+                    response = ErrorResponse.class),
+            @ApiResponse(
                     code = 409,
                     message = "1. 이미 해당 계정으로 회원가입하셨습니다.\n   로그인 해주세요.\n"
                             + "2. 이미 존재하는 닉네임입니다.",

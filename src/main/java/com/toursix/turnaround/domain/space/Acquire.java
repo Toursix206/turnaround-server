@@ -15,12 +15,16 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@Builder(access = AccessLevel.PRIVATE)
 public class Acquire extends AuditingTimeEntity {
 
     @Id
@@ -41,4 +45,13 @@ public class Acquire extends AuditingTimeEntity {
     @Column(nullable = false, length = 30)
     @Enumerated(EnumType.STRING)
     private Status status;
+
+    public static Acquire newInstance(Onboarding onboarding, Space space) {
+        return Acquire.builder()
+                .onboarding(onboarding)
+                .space(space)
+                .cleanScore(100)
+                .status(Status.ACTIVE)
+                .build();
+    }
 }

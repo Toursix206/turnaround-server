@@ -1,6 +1,6 @@
 package com.toursix.turnaround.common.exception;
 
-public class InternalServerException extends BoilerplateException {
+public class InternalServerException extends TurnaroundException {
 
     public InternalServerException(String message) {
         super(message, ErrorCode.INTERNAL_SERVER_EXCEPTION);
