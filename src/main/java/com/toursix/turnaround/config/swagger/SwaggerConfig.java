@@ -1,6 +1,7 @@
 package com.toursix.turnaround.config.swagger;
 
 import com.fasterxml.classmate.TypeResolver;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -14,12 +15,15 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import springfox.documentation.builders.ApiInfoBuilder;
+import springfox.documentation.builders.ParameterBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.schema.AlternateTypeRules;
+import springfox.documentation.schema.ModelRef;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.ApiKey;
 import springfox.documentation.service.AuthorizationScope;
+import springfox.documentation.service.Parameter;
 import springfox.documentation.service.SecurityReference;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.contexts.SecurityContext;
@@ -58,10 +62,30 @@ public class SwaggerConfig implements WebMvcConfigurer {
                 .apiInfo(apiInfo())
                 .securityContexts(Arrays.asList(securityContext()))
                 .securitySchemes(Arrays.asList(apiKey()))
+                .globalOperationParameters(getGlobalParameterTypes())
                 .select()
                 .apis(RequestHandlerSelectors.withClassAnnotation(RestController.class))
                 .paths(PathSelectors.any())
                 .build();
+    }
+
+    private List<Parameter> getGlobalParameterTypes() {
+        List<Parameter> global = new ArrayList<>();
+        global.add(new ParameterBuilder()
+                .name("TurnaroundOsType")
+                .description("iOS/AOS")
+                .parameterType("header")
+                .required(true)
+                .modelRef(new ModelRef("string"))
+                .build());
+        global.add(new ParameterBuilder()
+                .name("TurnaroundVersion")
+                .description("ex) 1.0.0")
+                .parameterType("header")
+                .required(true)
+                .modelRef(new ModelRef("string"))
+                .build());
+        return global;
     }
 
     private Set<String> getConsumeContentTypes() {

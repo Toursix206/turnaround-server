@@ -1,6 +1,7 @@
 package com.toursix.turnaround.config;
 
 import com.toursix.turnaround.config.interceptor.AuthInterceptor;
+import com.toursix.turnaround.config.interceptor.VersionInterceptor;
 import com.toursix.turnaround.config.resolver.UserIdResolver;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -18,11 +19,13 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
+    private final VersionInterceptor versionInterceptor;
     private final AuthInterceptor authInterceptor;
     private final UserIdResolver userIdResolver;
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(versionInterceptor);
         registry.addInterceptor(authInterceptor);
     }
 
