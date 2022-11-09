@@ -6,6 +6,7 @@ import static com.toursix.turnaround.common.exception.ErrorCode.NOT_FOUND_TODO_E
 import com.toursix.turnaround.common.exception.ErrorCode;
 import com.toursix.turnaround.common.exception.ForbiddenException;
 import com.toursix.turnaround.common.exception.NotFoundException;
+import com.toursix.turnaround.common.exception.ValidationException;
 import com.toursix.turnaround.domain.todo.Todo;
 import com.toursix.turnaround.domain.todo.TodoStage;
 import com.toursix.turnaround.domain.todo.repository.TodoRepository;
@@ -24,23 +25,23 @@ public class TodoServiceUtils {
 
         // 활동 예약 시간이 과거일 경우
         if (startAt.isBefore(now)) {
-            throw new ForbiddenException(
+            throw new ValidationException(
                     String.format("정책에 위배되는 예약 시간입니다. startAt(%s) now(%s) duration(%s)", startAt, now, duration),
-                    ErrorCode.FORBIDDEN_TODO_START_AT_EXCEPTION);
+                    ErrorCode.VALIDATION_TODO_START_AT_EXCEPTION);
         }
 
         // 활동이 시작 날짜와 종료 날짜가 다를 경우
         if (startAt.getDayOfMonth() != endAt.getDayOfMonth()) {
-            throw new ForbiddenException(
+            throw new ValidationException(
                     String.format("정책에 위배되는 예약 시간입니다. startAt(%s) now(%s) duration(%s)", startAt, now, duration),
-                    ErrorCode.FORBIDDEN_TODO_START_AT_EXCEPTION);
+                    ErrorCode.VALIDATION_TODO_START_AT_EXCEPTION);
         }
 
         // 2주 이후의 날짜에 대해 예약을 할 경우
         if (startAt.toLocalDate().isAfter(afterTwoWeeks)) {
-            throw new ForbiddenException(
+            throw new ValidationException(
                     String.format("정책에 위배되는 예약 시간입니다. startAt(%s) now(%s) duration(%s)", startAt, now, duration),
-                    ErrorCode.FORBIDDEN_TODO_START_AT_EXCEPTION);
+                    ErrorCode.VALIDATION_TODO_START_AT_EXCEPTION);
         }
     }
 

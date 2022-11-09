@@ -33,6 +33,7 @@ public enum ErrorCode {
     VALIDATION_RATING_RANGE_EXCEPTION(BAD_REQUEST, "허용하지 않는 평점 범위를 입력하였습니다. (0 ~ 5)"),
     VALIDATION_OS_EXCEPTION(BAD_REQUEST, "잘못된 OS 타입 요청입니다."),
     VALIDATION_VERSION_EXCEPTION(BAD_REQUEST, "잘못된 버전 형식입니다."),
+    VALIDATION_TODO_START_AT_EXCEPTION(BAD_REQUEST, "정책에 위배되는 예약 시간입니다."),
 
     /**
      * 401 UnAuthorized
@@ -46,7 +47,6 @@ public enum ErrorCode {
     FORBIDDEN_EXCEPTION(FORBIDDEN, "허용하지 않는 요청입니다."),
     FORBIDDEN_FILE_TYPE_EXCEPTION(BAD_REQUEST, "허용되지 않은 파일 형식입니다."),
     FORBIDDEN_FILE_NAME_EXCEPTION(BAD_REQUEST, "허용되지 않은 파일 이름입니다."),
-    FORBIDDEN_TODO_START_AT_EXCEPTION(FORBIDDEN, "정책에 위배되는 예약 시간입니다."),
     FORBIDDEN_TODO_STAGE_EXCEPTION(FORBIDDEN, "수정/삭제 할 수 없는 일정입니다."),
 
     /**
