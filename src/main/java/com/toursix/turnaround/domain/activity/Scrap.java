@@ -2,7 +2,6 @@ package com.toursix.turnaround.domain.activity;
 
 import com.toursix.turnaround.domain.common.AuditingTimeEntity;
 import com.toursix.turnaround.domain.common.Status;
-import com.toursix.turnaround.domain.todo.PushStatus;
 import com.toursix.turnaround.domain.user.Onboarding;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -39,8 +38,4 @@ public class Scrap extends AuditingTimeEntity {
     @Column(nullable = false, length = 30)
     @Enumerated(EnumType.STRING)
     private Status status;
-
-    @Column(nullable = false, length = 30)
-    @Enumerated(EnumType.STRING)
-    private PushStatus pushStatus;
 }
