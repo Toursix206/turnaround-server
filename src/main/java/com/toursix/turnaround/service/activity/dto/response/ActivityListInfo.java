@@ -15,12 +15,15 @@ import lombok.ToString;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ActivityListInfo extends ActivityInfo {
 
+    private int duration;
     private String imageUrl;
 
     @Builder(access = AccessLevel.PRIVATE)
-    public ActivityListInfo(Long activityId, ActivityCategory category, ActivityType type, String name, String imageUrl,
+    public ActivityListInfo(Long activityId, ActivityCategory category, ActivityType type, String name, int duration,
+            String imageUrl,
             int broom) {
         super(activityId, category, type, name, broom);
+        this.duration = duration;
         this.imageUrl = imageUrl;
     }
 
@@ -30,6 +33,7 @@ public class ActivityListInfo extends ActivityInfo {
                 .category(activity.getCategory())
                 .type(activity.getType())
                 .name(activity.getName())
+                .duration(activity.getDuration())
                 .imageUrl(activity.getImageUrl())
                 .broom(activity.getBroom())
                 .build();
