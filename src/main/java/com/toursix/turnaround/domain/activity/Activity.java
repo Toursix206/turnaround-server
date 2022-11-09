@@ -1,6 +1,7 @@
 package com.toursix.turnaround.domain.activity;
 
 import com.toursix.turnaround.domain.common.AuditingTimeEntity;
+import com.toursix.turnaround.domain.common.Status;
 import com.toursix.turnaround.domain.done.DoneReview;
 import java.util.ArrayList;
 import java.util.List;
@@ -56,6 +57,10 @@ public class Activity extends AuditingTimeEntity {
 
     @Column(nullable = false)
     private Integer steps;
+
+    @Column(nullable = false, length = 30)
+    @Enumerated(EnumType.STRING)
+    private Status status;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "activity_guide_id", nullable = false)
