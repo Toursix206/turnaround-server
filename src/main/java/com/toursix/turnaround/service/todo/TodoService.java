@@ -43,4 +43,11 @@ public class TodoService {
         todo.updateStartAt(request.getStartAt());
         todo.updatePushStatus(request.getPushStatus());
     }
+
+    public void deleteTodo(Long todoId, Long userId) {
+        UserServiceUtils.findUserById(userRepository, userId);
+        Todo todo = TodoServiceUtils.findTodoById(todoRepository, todoId);
+        TodoServiceUtils.validateUpdatable(todo);
+        todo.delete();
+    }
 }

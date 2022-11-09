@@ -82,4 +82,11 @@ public class Todo extends AuditingTimeEntity {
     public void updatePushStatus(PushStatus pushStatus) {
         this.pushStatus = pushStatus;
     }
+
+    public void delete() {
+        this.status = Status.DELETED;
+        if (this.getDone() != null) {
+            this.getDone().delete();
+        }
+    }
 }

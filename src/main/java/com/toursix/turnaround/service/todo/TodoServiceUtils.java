@@ -54,7 +54,7 @@ public class TodoServiceUtils {
 
     public static void validateUpdatable(Todo todo) {
         if (todo.getStage() != TodoStage.IN_PROGRESS) {
-            throw new ForbiddenException(String.format("수정할 수 없는 일정 (%s) 입니다.", todo.getId()),
+            throw new ForbiddenException(String.format("수정/삭제 할 수 없는 일정 (%s) 입니다.", todo.getId()),
                     FORBIDDEN_TODO_STAGE_EXCEPTION);
         }
     }

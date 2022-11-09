@@ -40,4 +40,11 @@ public class Done extends AuditingTimeEntity {
     @Column(nullable = false, length = 30)
     @Enumerated(EnumType.STRING)
     private Status status;
+
+    public void delete() {
+        this.status = Status.DELETED;
+        if (this.getDoneReview() != null) {
+            this.getDoneReview().delete();
+        }
+    }
 }
