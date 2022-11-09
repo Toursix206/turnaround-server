@@ -3,6 +3,7 @@ package com.toursix.turnaround.service.activity;
 import com.toursix.turnaround.domain.activity.repository.ActivityRepository;
 import com.toursix.turnaround.domain.user.repository.UserRepository;
 import com.toursix.turnaround.service.activity.dto.request.GetActivitiesRequestDto;
+import com.toursix.turnaround.service.activity.dto.response.ActivityInfoResponse;
 import com.toursix.turnaround.service.activity.dto.response.ActivityPagingResponse;
 import com.toursix.turnaround.service.user.UserServiceUtils;
 import lombok.RequiredArgsConstructor;
@@ -24,5 +25,10 @@ public class ActivityRetrieveService {
         return ActivityPagingResponse.of(
                 activityRepository.findActivitiesByFilterConditionUsingPaging(request.getType(),
                         request.getCategory(), pageable));
+    }
+
+    public ActivityInfoResponse getActivityInfo(Long activityId, Long userId) {
+        UserServiceUtils.findUserById(userRepository, userId);
+        return ActivityInfoResponse.of(ActivityServiceUtils.findActivityById(activityRepository, activityId));
     }
 }

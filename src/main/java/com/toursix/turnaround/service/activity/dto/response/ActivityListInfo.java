@@ -3,7 +3,7 @@ package com.toursix.turnaround.service.activity.dto.response;
 import com.toursix.turnaround.domain.activity.Activity;
 import com.toursix.turnaround.domain.activity.ActivityCategory;
 import com.toursix.turnaround.domain.activity.ActivityType;
-import com.toursix.turnaround.domain.interior.InteriorType;
+import javax.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,29 +13,25 @@ import lombok.ToString;
 @ToString
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ActivityInfoResponse extends ActivityInfo {
+public class ActivityListInfo extends ActivityInfo {
 
-    // TODO rewardItem 확정되면 수정하기
-    private int point;
-    private InteriorType rewardItem;
+    private String imageUrl;
 
     @Builder(access = AccessLevel.PRIVATE)
-    public ActivityInfoResponse(Long activityId, ActivityCategory category, ActivityType type, String name,
-            int point, int broom, InteriorType rewardItem) {
+    public ActivityListInfo(Long activityId, ActivityCategory category, ActivityType type, String name, String imageUrl,
+            int broom) {
         super(activityId, category, type, name, broom);
-        this.point = point;
-        this.rewardItem = rewardItem;
+        this.imageUrl = imageUrl;
     }
 
-    public static ActivityInfoResponse of(Activity activity) {
-        return ActivityInfoResponse.builder()
+    public static ActivityListInfo of(@NotNull Activity activity) {
+        return ActivityListInfo.builder()
                 .activityId(activity.getId())
                 .category(activity.getCategory())
                 .type(activity.getType())
                 .name(activity.getName())
-                .point(activity.getPoint())
+                .imageUrl(activity.getImageUrl())
                 .broom(activity.getBroom())
-                .rewardItem(null)
                 .build();
     }
 }

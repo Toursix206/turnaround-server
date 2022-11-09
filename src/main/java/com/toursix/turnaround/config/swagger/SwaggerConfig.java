@@ -69,20 +69,21 @@ public class SwaggerConfig implements WebMvcConfigurer {
                 .build();
     }
 
+    // TODO 배포 시 required(true)
     private List<Parameter> getGlobalParameterTypes() {
         List<Parameter> global = new ArrayList<>();
         global.add(new ParameterBuilder()
                 .name("TurnaroundOsType")
                 .description("iOS/AOS")
                 .parameterType("header")
-                .required(true)
+                .required(false)
                 .modelRef(new ModelRef("string"))
                 .build());
         global.add(new ParameterBuilder()
                 .name("TurnaroundVersion")
                 .description("ex) 1.0.0")
                 .parameterType("header")
-                .required(true)
+                .required(false)
                 .modelRef(new ModelRef("string"))
                 .build());
         return global;

@@ -31,7 +31,7 @@ public class ActivityRepositoryImpl implements ActivityRepositoryCustom {
             @Nullable ActivityCategory category, Pageable pageable) {
         List<OrderSpecifier> orders = getAllOrderSpecifiersByActivity(pageable);
         List<Activity> activities = queryFactory
-                .selectFrom(activity).distinct()
+                .selectFrom(activity)
                 .where(
                         eqType(type),
                         eqCategory(category),
@@ -49,6 +49,16 @@ public class ActivityRepositoryImpl implements ActivityRepositoryCustom {
                         eqCategory(category),
                         activity.status.eq(Status.ACTIVE)
                 ).fetch().size());
+    }
+
+    @Override
+    public Activity findActivityById(Long activityId) {
+        return queryFactory.selectFrom(activity)
+                .where(
+                        activity.id.eq(activityId),
+                        activity.status.eq(Status.ACTIVE)
+                )
+                .fetchOne();
     }
 
     private BooleanExpression eqType(ActivityType type) {

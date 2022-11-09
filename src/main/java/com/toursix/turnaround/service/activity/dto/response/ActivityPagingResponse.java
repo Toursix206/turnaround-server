@@ -17,11 +17,11 @@ public class ActivityPagingResponse {
 
     private static final long LAST_PAGE = -1L;
 
-    private List<ActivityInfoResponse> contents = new ArrayList<>();
+    private List<ActivityListInfo> contents = new ArrayList<>();
     private long lastPage;
     private long nextPage;
 
-    private ActivityPagingResponse(List<ActivityInfoResponse> contents, long lastPage, long nextPage) {
+    private ActivityPagingResponse(List<ActivityListInfo> contents, long lastPage, long nextPage) {
         this.contents = contents;
         this.lastPage = lastPage;
         this.nextPage = nextPage;
@@ -45,9 +45,9 @@ public class ActivityPagingResponse {
         return new ActivityPagingResponse(getContents(activityPaging), lastPage, nextPage);
     }
 
-    private static List<ActivityInfoResponse> getContents(List<Activity> activityPaging) {
+    private static List<ActivityListInfo> getContents(List<Activity> activityPaging) {
         return activityPaging.stream()
-                .map(ActivityInfoResponse::of)
+                .map(ActivityListInfo::of)
                 .collect(Collectors.toList());
     }
 }

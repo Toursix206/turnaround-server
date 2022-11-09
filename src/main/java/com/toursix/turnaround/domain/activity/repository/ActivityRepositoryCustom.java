@@ -11,4 +11,6 @@ public interface ActivityRepositoryCustom {
 
     Page<Activity> findActivitiesByFilterConditionUsingPaging(ActivityType type,
             @Nullable ActivityCategory category, Pageable pageable);
+
+    Activity findActivityById(Long activityId);
 }

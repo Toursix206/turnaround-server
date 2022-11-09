@@ -58,6 +58,7 @@ public enum ErrorCode {
     NOT_FOUND_SPACE_CATEGORY_EXCEPTION(NOT_FOUND, "존재하지 않는 공간 카테고리입니다."),
     NOT_FOUND_SPACE_EXCEPTION(NOT_FOUND, "존재하지 않는 공간입니다."),
     NOT_FOUND_INTERIOR_EXCEPTION(NOT_FOUND, "존재하지 않는 인테리어입니다."),
+    NOT_FOUND_ACTIVITY_EXCEPTION(NOT_FOUND, "존재하지 않는 활동입니다."),
 
     /**
      * 405 Method Not Allowed
