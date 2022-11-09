@@ -14,15 +14,6 @@ import org.springframework.data.redis.core.RedisTemplate;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CommonAuthServiceUtils {
 
-    public static void resetConflictFcmToken(UserRepository userRepository, JwtUtils jwtProvider,
-            String fcmToken) {
-        User conflictFcmTokenUser = userRepository.findUserByFcmToken(fcmToken);
-        if (conflictFcmTokenUser != null) {
-            jwtProvider.expireRefreshToken(conflictFcmTokenUser.getId());
-            conflictFcmTokenUser.resetFcmToken();
-        }
-    }
-
     public static void validateUniqueLogin(RedisTemplate<String, Object> redisTemplate, User user) {
         String refreshToken = (String) redisTemplate.opsForValue()
                 .get(RedisKey.REFRESH_TOKEN + user.getId());

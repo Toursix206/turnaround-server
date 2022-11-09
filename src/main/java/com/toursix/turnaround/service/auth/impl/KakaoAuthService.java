@@ -8,6 +8,7 @@ import com.toursix.turnaround.domain.user.repository.UserRepository;
 import com.toursix.turnaround.external.client.kakao.KakaoApiClient;
 import com.toursix.turnaround.external.client.kakao.dto.response.KakaoProfileResponse;
 import com.toursix.turnaround.service.auth.AuthService;
+import com.toursix.turnaround.service.auth.CommonAuthService;
 import com.toursix.turnaround.service.auth.CommonAuthServiceUtils;
 import com.toursix.turnaround.service.auth.dto.request.LoginDto;
 import com.toursix.turnaround.service.auth.dto.request.SignUpDto;
@@ -28,6 +29,7 @@ public class KakaoAuthService implements AuthService {
     private final KakaoApiClient kakaoApiCaller;
     private final UserRepository userRepository;
     private final UserService userService;
+    private final CommonAuthService commonAuthService;
     private final JwtUtils jwtProvider;
     private final RedisTemplate<String, Object> redisTemplate;
 
@@ -44,8 +46,7 @@ public class KakaoAuthService implements AuthService {
                 HttpHeaderUtils.withBearerToken(request.getToken()));
         User user = UserServiceUtils.findUserBySocialIdAndSocialType(userRepository,
                 response.getId(), socialType);
-        CommonAuthServiceUtils.resetConflictFcmToken(userRepository, jwtProvider,
-                request.getFcmToken());
+        commonAuthService.resetConflictFcmToken(request.getFcmToken());
         CommonAuthServiceUtils.validateUniqueLogin(redisTemplate, user);
         user.updateFcmToken(request.getFcmToken());
         return user.getId();
@@ -57,8 +58,7 @@ public class KakaoAuthService implements AuthService {
                 HttpHeaderUtils.withBearerToken(request.getToken()));
         User user = UserServiceUtils.findUserBySocialIdAndSocialType(userRepository,
                 response.getId(), socialType);
-        CommonAuthServiceUtils.resetConflictFcmToken(userRepository, jwtProvider,
-                request.getFcmToken());
+        commonAuthService.resetConflictFcmToken(request.getFcmToken());
         CommonAuthServiceUtils.forceLogoutUser(redisTemplate, jwtProvider, user);
         user.updateFcmToken(request.getFcmToken());
         return user.getId();
