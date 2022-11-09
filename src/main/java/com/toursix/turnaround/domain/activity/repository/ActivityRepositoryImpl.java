@@ -1,6 +1,7 @@
 package com.toursix.turnaround.domain.activity.repository;
 
 import static com.toursix.turnaround.domain.activity.QActivity.activity;
+import static com.toursix.turnaround.domain.activity.QActivityGuide.activityGuide;
 
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
@@ -10,6 +11,7 @@ import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.toursix.turnaround.domain.activity.Activity;
 import com.toursix.turnaround.domain.activity.ActivityCategory;
+import com.toursix.turnaround.domain.activity.ActivityGuide;
 import com.toursix.turnaround.domain.activity.ActivityType;
 import com.toursix.turnaround.domain.common.Status;
 import java.util.ArrayList;
@@ -59,6 +61,15 @@ public class ActivityRepositoryImpl implements ActivityRepositoryCustom {
                         activity.status.eq(Status.ACTIVE)
                 )
                 .fetchOne();
+    }
+
+    @Override
+    public List<ActivityGuide> findActivityGuidesByActivity(Activity activity) {
+        return queryFactory.selectFrom(activityGuide)
+                .where(
+                        activityGuide.activity.eq(activity),
+                        activityGuide.status.eq(Status.ACTIVE)
+                ).fetch();
     }
 
     private BooleanExpression eqType(ActivityType type) {
