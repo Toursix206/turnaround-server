@@ -74,4 +74,19 @@ public class Todo extends AuditingTimeEntity {
                 .status(Status.ACTIVE)
                 .build();
     }
+
+    public void updateStartAt(LocalDateTime startAt) {
+        this.startAt = startAt;
+    }
+
+    public void updatePushStatus(PushStatus pushStatus) {
+        this.pushStatus = pushStatus;
+    }
+
+    public void delete() {
+        this.status = Status.DELETED;
+        if (this.getDone() != null) {
+            this.getDone().delete();
+        }
+    }
 }
