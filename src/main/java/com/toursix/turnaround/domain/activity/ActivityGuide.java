@@ -1,8 +1,11 @@
 package com.toursix.turnaround.domain.activity;
 
 import com.toursix.turnaround.domain.common.AuditingTimeEntity;
+import com.toursix.turnaround.domain.common.Status;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -27,4 +30,8 @@ public class ActivityGuide extends AuditingTimeEntity {
 
     @Column(nullable = false)
     private Integer step;
+
+    @Column(nullable = false, length = 30)
+    @Enumerated(EnumType.STRING)
+    private Status status;
 }
