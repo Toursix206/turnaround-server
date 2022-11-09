@@ -9,6 +9,7 @@ import com.toursix.turnaround.domain.user.User;
 import com.toursix.turnaround.domain.user.repository.UserRepository;
 import com.toursix.turnaround.service.activity.ActivityServiceUtils;
 import com.toursix.turnaround.service.todo.dto.request.CreateTodoRequestDto;
+import com.toursix.turnaround.service.todo.dto.request.UpdateTodoRequestDto;
 import com.toursix.turnaround.service.user.UserServiceUtils;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
@@ -31,5 +32,15 @@ public class TodoService {
         TodoServiceUtils.validateStartAt(request.getStartAt(), now, activity.getDuration());
         todoRepository.save(
                 Todo.newInstance(user.getOnboarding(), activity, request.getStartAt(), request.getPushStatus()));
+    }
+
+    public void updateTodo(UpdateTodoRequestDto request, Long todoId, Long userId) {
+        UserServiceUtils.findUserById(userRepository, userId);
+        LocalDateTime now = DateUtils.todayLocalDateTime();
+        Todo todo = TodoServiceUtils.findTodoById(todoRepository, todoId);
+        TodoServiceUtils.validateUpdatable(todo);
+        TodoServiceUtils.validateStartAt(request.getStartAt(), now, todo.getActivity().getDuration());
+        todo.updateStartAt(request.getStartAt());
+        todo.updatePushStatus(request.getPushStatus());
     }
 }

@@ -47,6 +47,7 @@ public enum ErrorCode {
     FORBIDDEN_FILE_TYPE_EXCEPTION(BAD_REQUEST, "허용되지 않은 파일 형식입니다."),
     FORBIDDEN_FILE_NAME_EXCEPTION(BAD_REQUEST, "허용되지 않은 파일 이름입니다."),
     FORBIDDEN_TODO_START_AT_EXCEPTION(FORBIDDEN, "정책에 위배되는 예약 시간입니다."),
+    FORBIDDEN_TODO_STAGE_EXCEPTION(FORBIDDEN, "수정할 수 없는 일정입니다."),
 
     /**
      * 404 Not Found
@@ -61,6 +62,7 @@ public enum ErrorCode {
     NOT_FOUND_INTERIOR_EXCEPTION(NOT_FOUND, "존재하지 않는 인테리어입니다."),
     NOT_FOUND_ACTIVITY_EXCEPTION(NOT_FOUND, "존재하지 않는 활동입니다."),
     NOT_FOUND_ACTIVITY_GUIDE_EXCEPTION(NOT_FOUND, "존재하지 않는 활동 가이드입니다."),
+    NOT_FOUND_TODO_EXCEPTION(NOT_FOUND, "존재하지 않는 todo 입니다."),
 
     /**
      * 405 Method Not Allowed
