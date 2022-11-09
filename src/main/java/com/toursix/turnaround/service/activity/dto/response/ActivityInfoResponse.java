@@ -3,9 +3,8 @@ package com.toursix.turnaround.service.activity.dto.response;
 import com.toursix.turnaround.domain.activity.Activity;
 import com.toursix.turnaround.domain.activity.ActivityCategory;
 import com.toursix.turnaround.domain.activity.ActivityType;
-import javax.validation.constraints.NotNull;
+import com.toursix.turnaround.domain.interior.InteriorType;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,26 +12,30 @@ import lombok.ToString;
 
 @ToString
 @Getter
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
-@Builder(access = AccessLevel.PRIVATE)
-public class ActivityInfoResponse {
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class ActivityInfoResponse extends ActivityInfo {
 
-    private Long activityId;
-    private ActivityCategory category;
-    private ActivityType activityType;
-    private String name;
-    private String imageUrl;
-    private int broom;
+    // TODO rewardItem 확정되면 수정하기
+    private int point;
+    private InteriorType rewardItem;
 
-    public static ActivityInfoResponse of(@NotNull Activity activity) {
+    @Builder(access = AccessLevel.PRIVATE)
+    public ActivityInfoResponse(Long activityId, ActivityCategory category, ActivityType type, String name,
+            int point, int broom, InteriorType rewardItem) {
+        super(activityId, category, type, name, broom);
+        this.point = point;
+        this.rewardItem = rewardItem;
+    }
+
+    public static ActivityInfoResponse of(Activity activity) {
         return ActivityInfoResponse.builder()
                 .activityId(activity.getId())
                 .category(activity.getCategory())
-                .activityType(activity.getType())
+                .type(activity.getType())
                 .name(activity.getName())
-                .imageUrl(activity.getImageUrl())
+                .point(activity.getPoint())
                 .broom(activity.getBroom())
+                .rewardItem(null)
                 .build();
     }
 }
