@@ -20,12 +20,16 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@Builder(access = AccessLevel.PRIVATE)
 public class Todo extends AuditingTimeEntity {
 
     @Id
@@ -53,9 +57,21 @@ public class Todo extends AuditingTimeEntity {
 
     @Column(nullable = false, length = 30)
     @Enumerated(EnumType.STRING)
-    private Status status;
+    private PushStatus pushStatus;
 
     @Column(nullable = false, length = 30)
     @Enumerated(EnumType.STRING)
-    private PushStatus pushStatus;
+    private Status status;
+
+    public static Todo newInstance(Onboarding onboarding, Activity activity, LocalDateTime startAt,
+            PushStatus pushStatus) {
+        return Todo.builder()
+                .onboarding(onboarding)
+                .activity(activity)
+                .stage(TodoStage.IN_PROGRESS)
+                .startAt(startAt)
+                .pushStatus(pushStatus)
+                .status(Status.ACTIVE)
+                .build();
+    }
 }

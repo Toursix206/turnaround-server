@@ -46,6 +46,7 @@ public enum ErrorCode {
     FORBIDDEN_EXCEPTION(FORBIDDEN, "허용하지 않는 요청입니다."),
     FORBIDDEN_FILE_TYPE_EXCEPTION(BAD_REQUEST, "허용되지 않은 파일 형식입니다."),
     FORBIDDEN_FILE_NAME_EXCEPTION(BAD_REQUEST, "허용되지 않은 파일 이름입니다."),
+    FORBIDDEN_TODO_START_AT_EXCEPTION(FORBIDDEN, "정책에 위배되는 예약 시간입니다."),
 
     /**
      * 404 Not Found
