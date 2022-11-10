@@ -2,6 +2,7 @@ package com.toursix.turnaround.domain.todo.repository;
 
 import static com.toursix.turnaround.domain.todo.QTodo.todo;
 
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.toursix.turnaround.domain.common.Status;
 import com.toursix.turnaround.domain.todo.Todo;
@@ -29,12 +30,28 @@ public class TodoRepositoryImpl implements TodoRepositoryCustom {
         return queryFactory.selectOne()
                 .from(todo)
                 .where(
-                        (todo.endAt.after(startAt).and(todo.endAt.before(endAt)).and(todo.status.eq(Status.ACTIVE)))
-                                .or(todo.startAt.after(startAt).and(todo.startAt.before(endAt))
-                                        .and(todo.status.eq(Status.ACTIVE)))
-                                .or(todo.startAt.loe(startAt).and(todo.endAt.goe(endAt))
-                                        .and(todo.status.eq(Status.ACTIVE)))
+                        startAtAndEndAtAreBetween(startAt, endAt)
+                                .or(startAtIsAfterStartAtAndBeforeEndAt(startAt, endAt))
+                                .or(endAtIsAfterStartAtAndBeforeEndAt(startAt, endAt))
                 )
                 .fetchFirst() != null;
+    }
+
+    private BooleanExpression startAtAndEndAtAreBetween(LocalDateTime startAt, LocalDateTime endAt) {
+        return todo.status.eq(Status.ACTIVE)
+                .and(todo.startAt.loe(startAt))
+                .and(todo.endAt.goe(endAt));
+    }
+
+    private BooleanExpression startAtIsAfterStartAtAndBeforeEndAt(LocalDateTime startAt, LocalDateTime endAt) {
+        return todo.status.eq(Status.ACTIVE)
+                .and(todo.startAt.after(startAt))
+                .and(todo.startAt.before(endAt));
+    }
+
+    private BooleanExpression endAtIsAfterStartAtAndBeforeEndAt(LocalDateTime startAt, LocalDateTime endAt) {
+        return todo.status.eq(Status.ACTIVE)
+                .and(todo.endAt.after(startAt))
+                .and(todo.endAt.before(endAt));
     }
 }
