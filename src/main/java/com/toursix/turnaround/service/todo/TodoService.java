@@ -29,18 +29,24 @@ public class TodoService {
         User user = UserServiceUtils.findUserById(userRepository, userId);
         Activity activity = ActivityServiceUtils.findActivityById(activityRepository, request.getActivityId());
         LocalDateTime now = DateUtils.todayLocalDateTime();
-        TodoServiceUtils.validateStartAt(request.getStartAt(), now, activity.getDuration());
+        LocalDateTime startAt = request.getStartAt();
+        LocalDateTime endAt = startAt.plusMinutes(activity.getDuration());
+        TodoServiceUtils.validateStartAt(startAt, now, activity.getDuration());
+        TodoServiceUtils.validateUniqueTodoTime(todoRepository, startAt, endAt);
         todoRepository.save(
-                Todo.newInstance(user.getOnboarding(), activity, request.getStartAt(), request.getPushStatus()));
+                Todo.newInstance(user.getOnboarding(), activity, startAt, request.getPushStatus()));
     }
 
     public void updateTodo(UpdateTodoRequestDto request, Long todoId, Long userId) {
         UserServiceUtils.findUserById(userRepository, userId);
-        LocalDateTime now = DateUtils.todayLocalDateTime();
         Todo todo = TodoServiceUtils.findTodoById(todoRepository, todoId);
+        LocalDateTime now = DateUtils.todayLocalDateTime();
+        LocalDateTime startAt = request.getStartAt();
+        LocalDateTime endAt = startAt.plusMinutes(todo.getActivity().getDuration());
         TodoServiceUtils.validateUpdatable(todo);
-        TodoServiceUtils.validateStartAt(request.getStartAt(), now, todo.getActivity().getDuration());
-        todo.updateStartAt(request.getStartAt());
+        TodoServiceUtils.validateStartAt(startAt, now, todo.getActivity().getDuration());
+        TodoServiceUtils.validateUniqueTodoTime(todoRepository, startAt, endAt);
+        todo.updateStartAt(startAt);
         todo.updatePushStatus(request.getPushStatus());
     }
 

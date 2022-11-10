@@ -1,9 +1,11 @@
 package com.toursix.turnaround.service.todo;
 
+import static com.toursix.turnaround.common.exception.ErrorCode.CONFLICT_TODO_TIME_EXCEPTION;
 import static com.toursix.turnaround.common.exception.ErrorCode.FORBIDDEN_TODO_STAGE_EXCEPTION;
 import static com.toursix.turnaround.common.exception.ErrorCode.NOT_FOUND_TODO_EXCEPTION;
+import static com.toursix.turnaround.common.exception.ErrorCode.VALIDATION_TODO_START_AT_EXCEPTION;
 
-import com.toursix.turnaround.common.exception.ErrorCode;
+import com.toursix.turnaround.common.exception.ConflictException;
 import com.toursix.turnaround.common.exception.ForbiddenException;
 import com.toursix.turnaround.common.exception.NotFoundException;
 import com.toursix.turnaround.common.exception.ValidationException;
@@ -23,25 +25,33 @@ public class TodoServiceUtils {
         LocalDate afterTwoWeeks = today.plusDays(14);
         LocalDateTime endAt = startAt.plusMinutes(duration);
 
-        // 활동 예약 시간이 과거일 경우
-        if (startAt.isBefore(now)) {
+        // 활동 예약 종료 시간이 과거일 경우
+        if (endAt.isBefore(now)) {
             throw new ValidationException(
                     String.format("정책에 위배되는 예약 시간입니다. startAt(%s) now(%s) duration(%s)", startAt, now, duration),
-                    ErrorCode.VALIDATION_TODO_START_AT_EXCEPTION);
+                    VALIDATION_TODO_START_AT_EXCEPTION);
         }
 
-        // 활동이 시작 날짜와 종료 날짜가 다를 경우
+        // 활동의 시작 날짜와 종료 날짜가 다를 경우
         if (startAt.getDayOfMonth() != endAt.getDayOfMonth()) {
             throw new ValidationException(
                     String.format("정책에 위배되는 예약 시간입니다. startAt(%s) now(%s) duration(%s)", startAt, now, duration),
-                    ErrorCode.VALIDATION_TODO_START_AT_EXCEPTION);
+                    VALIDATION_TODO_START_AT_EXCEPTION);
         }
 
         // 2주 이후의 날짜에 대해 예약을 할 경우
         if (startAt.toLocalDate().isAfter(afterTwoWeeks)) {
             throw new ValidationException(
                     String.format("정책에 위배되는 예약 시간입니다. startAt(%s) now(%s) duration(%s)", startAt, now, duration),
-                    ErrorCode.VALIDATION_TODO_START_AT_EXCEPTION);
+                    VALIDATION_TODO_START_AT_EXCEPTION);
+        }
+    }
+
+    public static void validateUniqueTodoTime(TodoRepository todoRepository,
+            LocalDateTime startAt, LocalDateTime endAt) {
+        if (todoRepository.existsByStartAtAndEndAt(startAt, endAt)) {
+            throw new ConflictException(String.format("다른 활동과 겹치는 일정입니다. startAt(%s) endAt(%s)", startAt, endAt),
+                    CONFLICT_TODO_TIME_EXCEPTION);
         }
     }
 
