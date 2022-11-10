@@ -52,6 +52,10 @@ public class Todo extends AuditingTimeEntity {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "Asia/Seoul")
     private LocalDateTime startAt;
 
+    @Column(nullable = false)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "Asia/Seoul")
+    private LocalDateTime endAt;
+
     @OneToOne(mappedBy = "todo", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Done done;
 
@@ -70,6 +74,7 @@ public class Todo extends AuditingTimeEntity {
                 .activity(activity)
                 .stage(TodoStage.IN_PROGRESS)
                 .startAt(startAt)
+                .endAt(startAt.plusMinutes(activity.getDuration()))
                 .pushStatus(pushStatus)
                 .status(Status.ACTIVE)
                 .build();
