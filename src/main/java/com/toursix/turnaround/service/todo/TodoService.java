@@ -5,6 +5,7 @@ import com.toursix.turnaround.domain.activity.Activity;
 import com.toursix.turnaround.domain.activity.repository.ActivityRepository;
 import com.toursix.turnaround.domain.todo.Todo;
 import com.toursix.turnaround.domain.todo.repository.TodoRepository;
+import com.toursix.turnaround.domain.user.Onboarding;
 import com.toursix.turnaround.domain.user.User;
 import com.toursix.turnaround.domain.user.repository.UserRepository;
 import com.toursix.turnaround.service.activity.ActivityServiceUtils;
@@ -27,33 +28,39 @@ public class TodoService {
 
     public void createTodo(CreateTodoRequestDto request, Long userId) {
         User user = UserServiceUtils.findUserById(userRepository, userId);
+        Onboarding onboarding = user.getOnboarding();
         Activity activity = ActivityServiceUtils.findActivityById(activityRepository, request.getActivityId());
         LocalDateTime now = DateUtils.todayLocalDateTime();
         LocalDateTime startAt = request.getStartAt();
         LocalDateTime endAt = startAt.plusMinutes(activity.getDuration());
         TodoServiceUtils.validateStartAt(startAt, now, activity.getDuration());
-        TodoServiceUtils.validateUniqueTodoTime(todoRepository, startAt, endAt);
-        todoRepository.save(
+        TodoServiceUtils.validateUniqueTodoTime(todoRepository, onboarding, startAt, endAt);
+        Todo todo = todoRepository.save(
                 Todo.newInstance(user.getOnboarding(), activity, startAt, request.getPushStatus()));
+        onboarding.addTodo(todo);
     }
 
     public void updateTodo(UpdateTodoRequestDto request, Long todoId, Long userId) {
-        UserServiceUtils.findUserById(userRepository, userId);
+        User user = UserServiceUtils.findUserById(userRepository, userId);
+        Onboarding onboarding = user.getOnboarding();
         Todo todo = TodoServiceUtils.findTodoById(todoRepository, todoId);
         LocalDateTime now = DateUtils.todayLocalDateTime();
         LocalDateTime startAt = request.getStartAt();
         LocalDateTime endAt = startAt.plusMinutes(todo.getActivity().getDuration());
         TodoServiceUtils.validateUpdatable(todo);
         TodoServiceUtils.validateStartAt(startAt, now, todo.getActivity().getDuration());
-        TodoServiceUtils.validateUniqueTodoTime(todoRepository, startAt, endAt);
+        TodoServiceUtils.validateUniqueTodoTime(todoRepository, onboarding, startAt, endAt);
         todo.updateStartAt(startAt);
         todo.updatePushStatus(request.getPushStatus());
+        onboarding.updateTodo(todo);
     }
 
     public void deleteTodo(Long todoId, Long userId) {
-        UserServiceUtils.findUserById(userRepository, userId);
+        User user = UserServiceUtils.findUserById(userRepository, userId);
+        Onboarding onboarding = user.getOnboarding();
         Todo todo = TodoServiceUtils.findTodoById(todoRepository, todoId);
         TodoServiceUtils.validateUpdatable(todo);
         todo.delete();
+        onboarding.deleteTodo(todo);
     }
 }
