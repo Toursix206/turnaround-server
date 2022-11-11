@@ -39,4 +39,8 @@ public class Item extends AuditingTimeEntity {
                 .status(Status.ACTIVE)
                 .build();
     }
+
+    public void addBroom(int broom) {
+        this.broom += broom;
+    }
 }

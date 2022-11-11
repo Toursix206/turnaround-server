@@ -39,4 +39,8 @@ public class Point extends AuditingTimeEntity {
                 .status(Status.ACTIVE)
                 .build();
     }
+
+    public void addAmount(int amount) {
+        this.amount += amount;
+    }
 }

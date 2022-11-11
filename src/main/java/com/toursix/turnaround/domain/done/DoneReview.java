@@ -3,6 +3,7 @@ package com.toursix.turnaround.domain.done;
 import com.toursix.turnaround.domain.activity.Activity;
 import com.toursix.turnaround.domain.common.AuditingTimeEntity;
 import com.toursix.turnaround.domain.common.Status;
+import com.toursix.turnaround.domain.todo.TodoStage;
 import com.toursix.turnaround.domain.user.Onboarding;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
@@ -63,6 +64,7 @@ public class DoneReview extends AuditingTimeEntity {
                 .onboarding(onboarding)
                 .activity(activity)
                 .done(done)
+                .rating(DoneReviewRating.of(0))
                 .isWritten(false)
                 .status(Status.ACTIVE)
                 .build();
@@ -70,5 +72,16 @@ public class DoneReview extends AuditingTimeEntity {
 
     public void delete() {
         this.status = Status.DELETED;
+    }
+
+    public void update(int score, String content) {
+        this.rating.setScore(score);
+        this.content = content;
+        this.isWritten = true;
+    }
+
+    public boolean checkTodoStage() {
+        return this.getDone().getTodo().getStage().equals(TodoStage.SUCCESS) ||
+                this.getDone().getTodo().getStage().equals(TodoStage.SUCCESS_REWARD);
     }
 }

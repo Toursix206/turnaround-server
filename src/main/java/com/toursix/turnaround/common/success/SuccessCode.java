@@ -22,6 +22,8 @@ public enum SuccessCode {
     LOGIN_SUCCESS(SuccessStatusCode.OK, "로그인 성공입니다."),
     REISSUE_TOKEN_SUCCESS(SuccessStatusCode.OK, "토큰 갱신 성공입니다."),
 
+    // 활동 리워드
+    UPDATE_REWARD_SUCCESS(SuccessStatusCode.OK, "인증 완료한 활동에 대한 리워드 획득 성공입니다."),
     /**
      * 201 CREATED
      */
