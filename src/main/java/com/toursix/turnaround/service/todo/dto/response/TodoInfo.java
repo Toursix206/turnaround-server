@@ -25,7 +25,7 @@ public class TodoInfo {
     private TodoStatus todoStatus;
     private String leftTime;
 
-    public static TodoInfo of(Todo todo, LocalDateTime now) {
+    public static TodoInfo of(LocalDateTime now, Todo todo) {
         return TodoInfo.builder()
                 .todoId(todo.getId())
                 .activityName(todo.getActivity().getName())
