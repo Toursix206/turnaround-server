@@ -35,6 +35,7 @@ public enum ErrorCode {
     VALIDATION_OS_EXCEPTION(BAD_REQUEST, "잘못된 OS 타입 요청입니다."),
     VALIDATION_VERSION_EXCEPTION(BAD_REQUEST, "잘못된 버전 형식입니다."),
     VALIDATION_TODO_START_AT_EXCEPTION(BAD_REQUEST, "정책에 위배되는 예약 시간입니다."),
+    VALIDATION_DONE_REVIEW_EXCEPTION(BAD_REQUEST, "활동 인증이 완료되지 않았습니다."),
 
     /**
      * 401 UnAuthorized

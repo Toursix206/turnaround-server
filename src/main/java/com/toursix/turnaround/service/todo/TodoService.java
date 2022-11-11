@@ -96,4 +96,25 @@ public class TodoService {
         onboarding.addDoneReview(doneReview);
         todo.setStage(TodoStage.SUCCESS);
     }
+
+    public void createDoneReviewForTodo(CreateDoneReviewRequestDto request, Long todoId, Long userId) {
+        User user = UserServiceUtils.findUserById(userRepository, userId);
+        Onboarding onboarding = user.getOnboarding();
+        Todo todo = TodoServiceUtils.findTodoById(todoRepository, todoId);
+        DoneReview doneReview = onboarding.getDoneReviews().stream()
+                .filter(DoneReview::checkTodoStage)
+                .filter(review -> review.getDone().equals(todo.getDone())).findFirst().orElseThrow(() -> {
+                    throw new ValidationException(String.format("인증이 완료된 활동 (%s) 이 아닙니다.", todo.getId()),
+                            VALIDATION_DONE_REVIEW_EXCEPTION);
+                });
+        doneReview.update(request.getRating(), request.getContent());
+        onboarding.updateDoneReview(doneReview);
+        giveTurningPointToUser(user, todo);
+    }
+
+    private void giveTurningPointToUser(User user, Todo todo) {
+        Point point = user.getPoint();
+        point.setAmount(todo.getActivity().getPoint());
+        user.setPoint(point);
+    }
 }

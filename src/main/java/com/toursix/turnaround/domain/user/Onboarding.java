@@ -106,8 +106,8 @@ public class Onboarding extends AuditingTimeEntity {
 
     public void addObtain(Obtain obtain) {
         this.obtains.add(obtain);
-    }    
-    
+    }
+
     public void addTodo(Todo todo) {
         this.todos.add(todo);
     }
@@ -119,8 +119,11 @@ public class Onboarding extends AuditingTimeEntity {
     public void deleteTodo(Todo todo) {
         this.todos.remove(todo);
     }
-    
+
     public void addDoneReview(DoneReview doneReview) {
         this.doneReviews.add(doneReview);
     }
-}
+
+    public void updateDoneReview(DoneReview doneReview) {
+        this.doneReviews.set(doneReviews.indexOf(doneReview), doneReview);
+    }

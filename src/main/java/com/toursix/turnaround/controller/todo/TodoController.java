@@ -5,6 +5,7 @@ import com.toursix.turnaround.common.dto.SuccessResponse;
 import com.toursix.turnaround.config.interceptor.Auth;
 import com.toursix.turnaround.config.resolver.UserId;
 import com.toursix.turnaround.service.todo.TodoService;
+import com.toursix.turnaround.service.todo.dto.request.CreateDoneReviewRequestDto;
 import com.toursix.turnaround.service.todo.dto.request.CreateTodoRequestDto;
 import com.toursix.turnaround.service.todo.dto.request.UpdateTodoRequestDto;
 import io.swagger.annotations.Api;
@@ -152,5 +153,40 @@ public class TodoController {
             @ApiIgnore @UserId Long userId) {
         todoService.createDoneForActivity(todoId, image, userId);
         return SuccessResponse.CREATED;
+    }
+
+    @ApiOperation(
+            value = "[인증] 활동 리뷰 작성 페이지 - 활동을 리뷰를 작성합니다.",
+            notes = "활동 인증을 하지 않은 경우, 400을 전달합니다."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "성공입니다."),
+            @ApiResponse(code = 400,
+                    message = "1. 별점을 입력해주세요. (rating)\n"
+                            + "2. 허용하지 않는 평점 범위를 입력하였습니다. (0 ~ 5)\n"
+                            + "3. 리뷰 내용을 입력해주세요. (content)\n"
+                            + "4. 리뷰 내용은 최소 10자 이상 입력해주세요. (content)\n"
+                            + "5. 활동 인증이 완료되지 않았습니다.",
+                    response = ErrorResponse.class),
+            @ApiResponse(code = 401, message = "토큰이 만료되었습니다. 다시 로그인 해주세요.", response = ErrorResponse.class),
+            @ApiResponse(
+                    code = 404,
+                    message = "1. 탈퇴했거나 존재하지 않는 유저입니다.\n"
+                            + "2. 존재하지 않는 todo 입니다.",
+                    response = ErrorResponse.class),
+            @ApiResponse(code = 409, message = "이미 존재하는 인증된 활동입니다.", response = ErrorResponse.class),
+            @ApiResponse(code = 500, message = "예상치 못한 서버 에러가 발생하였습니다.", response = ErrorResponse.class)
+    })
+    @Auth
+    @PostMapping("/todo/{todoId}/review")
+    public ResponseEntity<SuccessResponse<String>> createDoneReviewForTodo(
+            @ApiParam(name = "todoId", value = "리뷰 작성 todo 의 id", required = true, example = "1")
+            @PathVariable Long todoId,
+            @Valid @RequestBody CreateDoneReviewRequestDto request,
+            @ApiIgnore @UserId Long userId) {
+        todoService.createDoneReviewForTodo(request, todoId, userId);
+        return SuccessResponse.OK;
+    }
+        return SuccessResponse.OK;
     }
 }
