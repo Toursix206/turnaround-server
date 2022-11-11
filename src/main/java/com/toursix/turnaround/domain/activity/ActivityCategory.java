@@ -13,7 +13,7 @@ public enum ActivityCategory implements EnumModel {
     WASHER("세탁기"),
     KITCHEN("주방"),
     RESTROOM("화장실"),
-    SELF_DEVELOPMENT("자기개발"),
+    SELF_DEVELOPMENT("자기계발"),
     ETC("기타");
 
     private final String value;
