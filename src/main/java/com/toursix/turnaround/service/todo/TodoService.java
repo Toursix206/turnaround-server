@@ -1,8 +1,12 @@
 package com.toursix.turnaround.service.todo;
 
 import static com.toursix.turnaround.common.exception.ErrorCode.CONFLICT_TODO_DONE_EXCEPTION;
+import static com.toursix.turnaround.common.exception.ErrorCode.CONFLICT_TODO_REWARD_EXCEPTION;
+import static com.toursix.turnaround.common.exception.ErrorCode.VALIDATION_DONE_REVIEW_EXCEPTION;
+import static com.toursix.turnaround.common.exception.ErrorCode.VALIDATION_TODO_REWARD_EXCEPTION;
 
 import com.toursix.turnaround.common.exception.ConflictException;
+import com.toursix.turnaround.common.exception.ValidationException;
 import com.toursix.turnaround.common.type.FileType;
 import com.toursix.turnaround.common.util.DateUtils;
 import com.toursix.turnaround.domain.activity.Activity;
@@ -11,14 +15,18 @@ import com.toursix.turnaround.domain.done.Done;
 import com.toursix.turnaround.domain.done.DoneReview;
 import com.toursix.turnaround.domain.done.repository.DoneRepository;
 import com.toursix.turnaround.domain.done.repository.DoneReviewRepository;
+import com.toursix.turnaround.domain.item.Item;
 import com.toursix.turnaround.domain.todo.Todo;
+import com.toursix.turnaround.domain.todo.TodoStage;
 import com.toursix.turnaround.domain.todo.repository.TodoRepository;
 import com.toursix.turnaround.domain.user.Onboarding;
+import com.toursix.turnaround.domain.user.Point;
 import com.toursix.turnaround.domain.user.User;
 import com.toursix.turnaround.domain.user.repository.UserRepository;
 import com.toursix.turnaround.service.activity.ActivityServiceUtils;
 import com.toursix.turnaround.service.image.provider.S3Provider;
 import com.toursix.turnaround.service.image.provider.dto.request.ImageUploadFileRequest;
+import com.toursix.turnaround.service.todo.dto.request.CreateDoneReviewRequestDto;
 import com.toursix.turnaround.service.todo.dto.request.CreateTodoRequestDto;
 import com.toursix.turnaround.service.todo.dto.request.UpdateTodoRequestDto;
 import com.toursix.turnaround.service.user.UserServiceUtils;
@@ -97,6 +105,13 @@ public class TodoService {
         todo.setStage(TodoStage.SUCCESS);
     }
 
+    public void createItemForTodo(Long todoId, Long userId) {
+        User user = UserServiceUtils.findUserById(userRepository, userId);
+        Onboarding onboarding = user.getOnboarding();
+        Todo todo = TodoServiceUtils.findTodoById(todoRepository, todoId);
+        giveBroomByTodoToUser(onboarding, todo);
+    }
+
     public void createDoneReviewForTodo(CreateDoneReviewRequestDto request, Long todoId, Long userId) {
         User user = UserServiceUtils.findUserById(userRepository, userId);
         Onboarding onboarding = user.getOnboarding();
@@ -110,6 +125,23 @@ public class TodoService {
         doneReview.update(request.getRating(), request.getContent());
         onboarding.updateDoneReview(doneReview);
         giveTurningPointToUser(user, todo);
+    }
+
+    private void giveBroomByTodoToUser(Onboarding onboarding, Todo todo) {
+        if (todo.getStage() == TodoStage.FAIL || todo.getStage() == TodoStage.IN_PROGRESS) {
+            throw new ValidationException(String.format("실패한 활동 (%s) 은 리워드를 받을 수 없습니다.", todo.getId()),
+                    VALIDATION_TODO_REWARD_EXCEPTION);
+        }
+
+        if (todo.getStage() == TodoStage.SUCCESS_REWARD) {
+            throw new ConflictException(String.format("리워드를 받은 활동 (%s) 입니다.", todo.getId()),
+                    CONFLICT_TODO_REWARD_EXCEPTION);
+        }
+
+        Item item = onboarding.getItem();
+        item.setBroom(todo.getActivity().getBroom());
+        onboarding.setItem(item);
+        todo.setStage(TodoStage.SUCCESS_REWARD);
     }
 
     private void giveTurningPointToUser(User user, Todo todo) {

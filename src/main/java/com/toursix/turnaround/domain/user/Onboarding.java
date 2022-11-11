@@ -127,3 +127,8 @@ public class Onboarding extends AuditingTimeEntity {
     public void updateDoneReview(DoneReview doneReview) {
         this.doneReviews.set(doneReviews.indexOf(doneReview), doneReview);
     }
+
+    public void setItem(Item item) {
+        this.item = item;
+    }
+}

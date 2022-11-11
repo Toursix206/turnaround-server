@@ -36,6 +36,7 @@ public enum ErrorCode {
     VALIDATION_VERSION_EXCEPTION(BAD_REQUEST, "잘못된 버전 형식입니다."),
     VALIDATION_TODO_START_AT_EXCEPTION(BAD_REQUEST, "정책에 위배되는 예약 시간입니다."),
     VALIDATION_DONE_REVIEW_EXCEPTION(BAD_REQUEST, "활동 인증이 완료되지 않았습니다."),
+    VALIDATION_TODO_REWARD_EXCEPTION(BAD_REQUEST, "리워드를 받을 수 없는 활동입니다."),
 
     /**
      * 401 UnAuthorized
@@ -85,6 +86,7 @@ public enum ErrorCode {
     CONFLICT_NICKNAME_EXCEPTION(CONFLICT, "이미 존재하는 닉네임입니다."),
     CONFLICT_TODO_TIME_EXCEPTION(CONFLICT, "다른 활동과 겹치는 일정입니다."),
     CONFLICT_TODO_DONE_EXCEPTION(CONFLICT, "이미 존재하는 활동 인증입니다."),
+    CONFLICT_TODO_REWARD_EXCEPTION(CONFLICT, "이미 리워드를 받은 활동입니다."),
 
     /**
      * 415 Unsupported Media Type

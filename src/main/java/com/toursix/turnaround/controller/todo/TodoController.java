@@ -187,6 +187,31 @@ public class TodoController {
         todoService.createDoneReviewForTodo(request, todoId, userId);
         return SuccessResponse.OK;
     }
+
+    @ApiOperation(
+            value = "[인증] 활동 이벤트 페이지 - 완료된 활동의 리워드를 받습니다.",
+            notes = "실패하거나 진행 중인 활동으로 리워드를 받을 수 없는 경우, 400을 전달합니다.\n" +
+                    "이미 리워드를 받은 활동의 경우, 409를 전달합니다."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "성공입니다."),
+            @ApiResponse(code = 400, message = "리워드를 받을 수 없는 활동입니다.", response = ErrorResponse.class),
+            @ApiResponse(code = 401, message = "토큰이 만료되었습니다. 다시 로그인 해주세요.", response = ErrorResponse.class),
+            @ApiResponse(
+                    code = 404,
+                    message = "1. 탈퇴했거나 존재하지 않는 유저입니다.\n"
+                            + "2. 존재하지 않는 todo 입니다.",
+                    response = ErrorResponse.class),
+            @ApiResponse(code = 409, message = "이미 리워드를 받은 활동입니다.", response = ErrorResponse.class),
+            @ApiResponse(code = 500, message = "예상치 못한 서버 에러가 발생하였습니다.", response = ErrorResponse.class)
+    })
+    @Auth
+    @PutMapping("/todo/{todoId}/reward")
+    public ResponseEntity<SuccessResponse<String>> createItemForTodo(
+            @ApiParam(name = "todoId", value = "인증 완료된 todo 의 id", required = true, example = "1")
+            @PathVariable Long todoId,
+            @ApiIgnore @UserId Long userId) {
+        todoService.createItemForTodo(todoId, userId);
         return SuccessResponse.OK;
     }
 }
