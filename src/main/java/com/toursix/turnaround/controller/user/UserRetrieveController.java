@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
 
-@Api(tags = "Todo")
+@Api(tags = "User")
 @RestController
 @RequestMapping("/v1")
 @RequiredArgsConstructor
@@ -41,7 +41,7 @@ public class UserRetrieveController {
                 userRetrieveService.getMyPageSetting(userId));
     }
 
-    @ApiOperation(value = "[인증] 마이 페이지 - 마이페이 홈화면 조회합니다.")
+    @ApiOperation(value = "[인증] 마이 페이지 - 마이페이지 홈화면 조회합니다.")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "마이페이지 홈화면 조회 성공입니다."),
             @ApiResponse(code = 401, message = "토큰이 만료되었습니다. 다시 로그인 해주세요.", response = ErrorResponse.class),

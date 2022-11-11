@@ -18,7 +18,7 @@ public class MyPageSettingResponse {
     private boolean agreeBenefitAndEvent;
 
     @JsonProperty("agreeBenefitAndEvent")
-    public Boolean agreeBenefitAndEvent() {
+    public Boolean isAgreeBenefitAndEvent() {
         return agreeBenefitAndEvent;
     }
 
