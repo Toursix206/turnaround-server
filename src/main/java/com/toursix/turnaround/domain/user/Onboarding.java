@@ -107,4 +107,8 @@ public class Onboarding extends AuditingTimeEntity {
     public void addObtain(Obtain obtain) {
         this.obtains.add(obtain);
     }
+
+    public void addDoneReview(DoneReview doneReview) {
+        this.doneReviews.add(doneReview);
+    }
 }
