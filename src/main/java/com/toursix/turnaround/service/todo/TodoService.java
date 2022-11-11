@@ -29,6 +29,7 @@ import com.toursix.turnaround.service.image.provider.dto.request.ImageUploadFile
 import com.toursix.turnaround.service.todo.dto.request.CreateDoneReviewRequestDto;
 import com.toursix.turnaround.service.todo.dto.request.CreateTodoRequestDto;
 import com.toursix.turnaround.service.todo.dto.request.UpdateTodoRequestDto;
+import com.toursix.turnaround.service.todo.dto.response.RewardResponse;
 import com.toursix.turnaround.service.user.UserServiceUtils;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
@@ -105,23 +106,23 @@ public class TodoService {
         todo.setStage(TodoStage.SUCCESS);
     }
 
-    public void createItemForTodo(Long todoId, Long userId) {
+    public RewardResponse rewardToUser(Long todoId, Long userId) {
         User user = UserServiceUtils.findUserById(userRepository, userId);
         Onboarding onboarding = user.getOnboarding();
         Todo todo = TodoServiceUtils.findTodoById(todoRepository, todoId);
         giveBroomByTodoToUser(onboarding, todo);
+        return RewardResponse.of(todo.getActivity().getBroom());
     }
 
     public void createDoneReviewForTodo(CreateDoneReviewRequestDto request, Long todoId, Long userId) {
         User user = UserServiceUtils.findUserById(userRepository, userId);
         Onboarding onboarding = user.getOnboarding();
         Todo todo = TodoServiceUtils.findTodoById(todoRepository, todoId);
-        DoneReview doneReview = onboarding.getDoneReviews().stream()
-                .filter(DoneReview::checkTodoStage)
-                .filter(review -> review.getDone().equals(todo.getDone())).findFirst().orElseThrow(() -> {
-                    throw new ValidationException(String.format("인증이 완료된 활동 (%s) 이 아닙니다.", todo.getId()),
-                            VALIDATION_DONE_REVIEW_EXCEPTION);
-                });
+        DoneReview doneReview = todo.getDone().getDoneReview();
+        if (doneReview.checkTodoStage()) {
+            throw new ValidationException(String.format("인증이 완료된 활동 (%s) 이 아닙니다.", todo.getId()),
+                    VALIDATION_DONE_REVIEW_EXCEPTION);
+        }
         doneReview.update(request.getRating(), request.getContent());
         onboarding.updateDoneReview(doneReview);
         giveTurningPointToUser(user, todo);
@@ -139,14 +140,12 @@ public class TodoService {
         }
 
         Item item = onboarding.getItem();
-        item.setBroom(todo.getActivity().getBroom());
-        onboarding.setItem(item);
+        item.addBroom(todo.getActivity().getBroom());
         todo.setStage(TodoStage.SUCCESS_REWARD);
     }
 
     private void giveTurningPointToUser(User user, Todo todo) {
         Point point = user.getPoint();
-        point.setAmount(todo.getActivity().getPoint());
-        user.setPoint(point);
+        point.addAmount(todo.getActivity().getPoint());
     }
 }

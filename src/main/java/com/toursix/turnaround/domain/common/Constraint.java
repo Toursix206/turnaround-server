@@ -7,5 +7,5 @@ import lombok.NoArgsConstructor;
 public abstract class Constraint {
 
     public static final int ONBOARDING_NICKNAME_MAX = 8;
-    public static final int DONEREVIEW_CONTENT_MIN = 10;
+    public static final int DONE_REVIEW_CONTENT_MIN = 10;
 }

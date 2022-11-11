@@ -2,12 +2,14 @@ package com.toursix.turnaround.controller.todo;
 
 import com.toursix.turnaround.common.dto.ErrorResponse;
 import com.toursix.turnaround.common.dto.SuccessResponse;
+import com.toursix.turnaround.common.success.SuccessCode;
 import com.toursix.turnaround.config.interceptor.Auth;
 import com.toursix.turnaround.config.resolver.UserId;
 import com.toursix.turnaround.service.todo.TodoService;
 import com.toursix.turnaround.service.todo.dto.request.CreateDoneReviewRequestDto;
 import com.toursix.turnaround.service.todo.dto.request.CreateTodoRequestDto;
 import com.toursix.turnaround.service.todo.dto.request.UpdateTodoRequestDto;
+import com.toursix.turnaround.service.todo.dto.response.RewardResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -194,7 +196,7 @@ public class TodoController {
                     "이미 리워드를 받은 활동의 경우, 409를 전달합니다."
     )
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "성공입니다."),
+            @ApiResponse(code = 200, message = "인증 완료한 활동에 대한 리워드 획득 성공입니다."),
             @ApiResponse(code = 400, message = "리워드를 받을 수 없는 활동입니다.", response = ErrorResponse.class),
             @ApiResponse(code = 401, message = "토큰이 만료되었습니다. 다시 로그인 해주세요.", response = ErrorResponse.class),
             @ApiResponse(
@@ -207,11 +209,10 @@ public class TodoController {
     })
     @Auth
     @PutMapping("/todo/{todoId}/reward")
-    public ResponseEntity<SuccessResponse<String>> createItemForTodo(
+    public ResponseEntity<SuccessResponse<RewardResponse>> rewardToUser(
             @ApiParam(name = "todoId", value = "인증 완료된 todo 의 id", required = true, example = "1")
             @PathVariable Long todoId,
             @ApiIgnore @UserId Long userId) {
-        todoService.createItemForTodo(todoId, userId);
-        return SuccessResponse.OK;
+        return SuccessResponse.success(SuccessCode.UPDATE_REWARD_SUCCESS, todoService.rewardToUser(todoId, userId));
     }
 }

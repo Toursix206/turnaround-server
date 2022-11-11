@@ -77,8 +77,4 @@ public class User extends AuditingTimeEntity {
     public void resetFcmToken() {
         this.fcmToken = null;
     }
-
-    public void setPoint(Point point) {
-        this.point = point;
-    }
 }

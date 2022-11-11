@@ -15,6 +15,6 @@ public class CreateDoneReviewRequestDto {
     private Integer rating;
 
     @NotBlank(message = "{doneReview.content.notBlank}")
-    @Size(min = Constraint.DONEREVIEW_CONTENT_MIN, message = "{doneReview.content.min}")
+    @Size(min = Constraint.DONE_REVIEW_CONTENT_MIN, message = "{doneReview.content.min}")
     private String content;
 }
