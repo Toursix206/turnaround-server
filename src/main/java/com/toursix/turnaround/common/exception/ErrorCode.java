@@ -82,6 +82,7 @@ public enum ErrorCode {
     CONFLICT_LOGIN_EXCEPTION(CONFLICT, "이미 로그인 중인 유저입니다."),
     CONFLICT_NICKNAME_EXCEPTION(CONFLICT, "이미 존재하는 닉네임입니다."),
     CONFLICT_TODO_TIME_EXCEPTION(CONFLICT, "다른 활동과 겹치는 일정입니다."),
+    CONFLICT_TODO_DONE_EXCEPTION(CONFLICT, "이미 존재하는 활동 인증입니다."),
 
     /**
      * 415 Unsupported Media Type

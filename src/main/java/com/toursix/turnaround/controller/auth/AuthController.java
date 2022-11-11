@@ -76,7 +76,7 @@ public class AuthController {
         AuthService authService = authServiceProvider.getAuthService(request.getSocialType());
         Long userId = authService.signUp(request.toServiceDto());
         TokenResponse tokenInfo = createTokenService.createTokenInfo(userId);
-        return SuccessResponse.success(SuccessCode.SIGNUP_SUCCESS,
+        return SuccessResponse.success(SuccessCode.CREATED_USER_SUCCESS,
                 LoginResponse.of(userId, tokenInfo));
     }
 

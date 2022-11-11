@@ -15,12 +15,16 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@Builder(access = AccessLevel.PRIVATE)
 public class Done extends AuditingTimeEntity {
 
     @Id
@@ -40,6 +44,14 @@ public class Done extends AuditingTimeEntity {
     @Column(nullable = false, length = 30)
     @Enumerated(EnumType.STRING)
     private Status status;
+
+    public static Done newInstance(Todo todo, String imageUrl) {
+        return Done.builder()
+                .todo(todo)
+                .imageUrl(imageUrl)
+                .status(Status.ACTIVE)
+                .build();
+    }
 
     public void delete() {
         this.status = Status.DELETED;
