@@ -10,7 +10,7 @@ import lombok.Getter;
 @Getter
 public enum FileType {
 
-    ACTIVITY_CERTIFICATION_IMAGE("방촬영 이미지", "activity/certification/", FileContentType.IMAGE);
+    ACTIVITY_CERTIFICATION_IMAGE("활동 인증 이미지", "activity/certification/", FileContentType.IMAGE);
 
     private final String description;
     private final String directory;
