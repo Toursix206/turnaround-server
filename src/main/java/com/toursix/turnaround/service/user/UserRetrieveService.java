@@ -3,6 +3,7 @@ package com.toursix.turnaround.service.user;
 
 import com.toursix.turnaround.domain.user.User;
 import com.toursix.turnaround.domain.user.repository.UserRepository;
+import com.toursix.turnaround.service.user.dto.response.MyPageHomeResponse;
 import com.toursix.turnaround.service.user.dto.response.MyPageSettingResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,4 +21,8 @@ public class UserRetrieveService {
         return MyPageSettingResponse.of(user.getSetting().getAgreeActivityNotification());
     }
 
+    public MyPageHomeResponse getMyPageHome(Long userId) {
+        User user = UserServiceUtils.findUserById(userRepository, userId);
+        return MyPageHomeResponse.of(user);
+    }
 }

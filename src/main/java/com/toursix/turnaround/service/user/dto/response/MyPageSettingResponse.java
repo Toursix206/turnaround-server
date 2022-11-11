@@ -17,8 +17,8 @@ public class MyPageSettingResponse {
 
     private boolean agreeBenefitAndEvent;
 
-    @JsonProperty("isPushNotification")
-    public Boolean isPushNotification() {
+    @JsonProperty("agreeBenefitAndEvent")
+    public Boolean agreeBenefitAndEvent() {
         return agreeBenefitAndEvent;
     }
 
