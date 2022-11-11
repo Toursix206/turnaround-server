@@ -88,12 +88,12 @@ public class TodoService {
                     String.format("이미 존재하는 활동 (%s) 의 인증 (%s) 입니다.", todo.getId(), todo.getDone().getId()),
                     CONFLICT_TODO_DONE_EXCEPTION);
         }
-
         String imageUrl = s3Provider.uploadFile(ImageUploadFileRequest.of(FileType.ACTIVITY_CERTIFICATION_IMAGE),
                 image);
         Done done = doneRepository.save(Done.newInstance(todo, imageUrl));
         DoneReview doneReview = doneReviewRepository.save(
                 DoneReview.newInstance(onboarding, todo.getActivity(), done));
         onboarding.addDoneReview(doneReview);
+        todo.setStage(TodoStage.SUCCESS);
     }
 }

@@ -94,4 +94,8 @@ public class Todo extends AuditingTimeEntity {
             this.getDone().delete();
         }
     }
+
+    public void setStage(TodoStage stage) {
+        this.stage = stage;
+    }
 }
