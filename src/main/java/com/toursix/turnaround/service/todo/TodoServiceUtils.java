@@ -12,6 +12,7 @@ import com.toursix.turnaround.common.exception.ValidationException;
 import com.toursix.turnaround.domain.todo.Todo;
 import com.toursix.turnaround.domain.todo.TodoStage;
 import com.toursix.turnaround.domain.todo.repository.TodoRepository;
+import com.toursix.turnaround.domain.user.Onboarding;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
@@ -47,9 +48,9 @@ public class TodoServiceUtils {
         }
     }
 
-    public static void validateUniqueTodoTime(TodoRepository todoRepository,
+    public static void validateUniqueTodoTime(TodoRepository todoRepository, Onboarding onboarding,
             LocalDateTime startAt, LocalDateTime endAt) {
-        if (todoRepository.existsByStartAtAndEndAt(startAt, endAt)) {
+        if (todoRepository.existsByOnboardingAndStartAtAndEndAt(onboarding, startAt, endAt)) {
             throw new ConflictException(String.format("다른 활동과 겹치는 일정입니다. startAt(%s) endAt(%s)", startAt, endAt),
                     CONFLICT_TODO_TIME_EXCEPTION);
         }

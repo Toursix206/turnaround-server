@@ -107,4 +107,16 @@ public class Onboarding extends AuditingTimeEntity {
     public void addObtain(Obtain obtain) {
         this.obtains.add(obtain);
     }
+
+    public void addTodo(Todo todo) {
+        this.todos.add(todo);
+    }
+
+    public void updateTodo(Todo todo) {
+        this.todos.set(todos.indexOf(todo), todo);
+    }
+
+    public void deleteTodo(Todo todo) {
+        this.todos.remove(todo);
+    }
 }
