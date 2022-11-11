@@ -28,6 +28,7 @@ public enum ErrorCode {
     VALIDATION_ENUM_VALUE_EXCEPTION(BAD_REQUEST, "잘못된 Enum 값 입니다."),
     VALIDATION_REQUEST_MISSING_EXCEPTION(BAD_REQUEST, "필수적인 요청 값이 입력되지 않았습니다."),
     VALIDATION_WRONG_TYPE_EXCEPTION(BAD_REQUEST, "잘못된 타입이 입력되었습니다."),
+    VALIDATION_IMAGE_SIZE_EXCEPTION(BAD_REQUEST, "이미지가 (720x720) 보다 큽니다."),
     VALIDATION_SOCIAL_TYPE_EXCEPTION(BAD_REQUEST, "잘못된 소셜 프로바이더 입니다."),
     VALIDATION_SORT_TYPE_EXCEPTION(BAD_REQUEST, "허용하지 않는 정렬기준을 입력했습니다."),
     VALIDATION_RATING_RANGE_EXCEPTION(BAD_REQUEST, "허용하지 않는 평점 범위를 입력하였습니다. (0 ~ 5)"),
@@ -82,6 +83,7 @@ public enum ErrorCode {
     CONFLICT_LOGIN_EXCEPTION(CONFLICT, "이미 로그인 중인 유저입니다."),
     CONFLICT_NICKNAME_EXCEPTION(CONFLICT, "이미 존재하는 닉네임입니다."),
     CONFLICT_TODO_TIME_EXCEPTION(CONFLICT, "다른 활동과 겹치는 일정입니다."),
+    CONFLICT_TODO_DONE_EXCEPTION(CONFLICT, "이미 존재하는 활동 인증입니다."),
 
     /**
      * 415 Unsupported Media Type

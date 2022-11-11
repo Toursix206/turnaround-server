@@ -22,8 +22,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import springfox.documentation.annotations.ApiIgnore;
 
 @Api(tags = "Todo")
@@ -118,5 +120,37 @@ public class TodoController {
             @ApiIgnore @UserId Long userId) {
         todoService.deleteTodo(todoId, userId);
         return SuccessResponse.OK;
+    }
+
+    @ApiOperation(
+            value = "[인증] 활동 인증 페이지 - 활동을 인증합니다.",
+            notes = "이미지 파일이 없는 경우, 400을 보냅니다."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "생성 성공입니다."),
+            @ApiResponse(code = 400,
+                    message = "1. 필수적인 요청 값이 입력되지 않았습니다.\n"
+                            + "2. 허용되지 않은 파일 형식입니다.",
+                    response = ErrorResponse.class),
+            @ApiResponse(code = 401, message = "토큰이 만료되었습니다. 다시 로그인 해주세요.", response = ErrorResponse.class),
+            @ApiResponse(
+                    code = 404,
+                    message = "1. 탈퇴했거나 존재하지 않는 유저입니다.\n"
+                            + "2. 존재하지 않는 todo 입니다.",
+                    response = ErrorResponse.class),
+            @ApiResponse(code = 409, message = "이미 존재하는 인증된 활동입니다.", response = ErrorResponse.class),
+            @ApiResponse(code = 500, message = "예상치 못한 서버 에러가 발생하였습니다.", response = ErrorResponse.class)
+    })
+    @Auth
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping("/todo/{todoId}/done")
+    public ResponseEntity<SuccessResponse<String>> createDoneForActivity(
+            @ApiParam(name = "todoId", value = "인증할 todo 의 id", required = true, example = "1")
+            @PathVariable Long todoId,
+            @ApiParam(name = "image", value = "활동 인증 이미지")
+            @RequestPart(required = false) MultipartFile image,
+            @ApiIgnore @UserId Long userId) {
+        todoService.createDoneForActivity(todoId, image, userId);
+        return SuccessResponse.CREATED;
     }
 }
