@@ -1,15 +1,18 @@
 package com.toursix.turnaround.common.util;
 
-import java.time.Duration;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.WeekFields;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class DateUtils {
+
+    private static final WeekFields WEEK_FIELDS = WeekFields.of(DayOfWeek.MONDAY, 7);
 
     public static LocalDate todayLocalDate() {
         return LocalDate.now(ZoneId.of("Asia/Seoul"));
@@ -33,38 +36,16 @@ public class DateUtils {
         return now.getDayOfWeek().toString();
     }
 
-    public static boolean isSameDate(LocalDateTime localDateTime, LocalDate localDate) {
+    public static boolean isSameDate(LocalDateTime date1, LocalDateTime date2) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        return localDateTime.format(formatter).equals(localDate.format(formatter));
+        return date1.format(formatter).equals(date2.format(formatter));
     }
 
-    public static String passedTime(LocalDateTime now, LocalDateTime createdAt) {
-        Duration duration = Duration.between(createdAt, now);
-        long seconds = duration.getSeconds();
-        long minutes = seconds / 60;
-        long hours = minutes / 60;
-        long days = hours / 24;
-        long weeks = days / 7;
-        long months = days / 30;
-        long years = days / 365;
-        if (years != 0) {
-            return years + "년 전";
-        }
-        if (months != 0) {
-            return months + "달 전";
-        }
-        if (weeks != 0) {
-            return weeks + "주 전";
-        }
-        if (days != 0) {
-            return days + "일 전";
-        }
-        if (hours != 0) {
-            return hours + "시간 전";
-        }
-        if (minutes != 0) {
-            return minutes + "분 전";
-        }
-        return "방금";
+    public static boolean isSameWeek(LocalDateTime date1, LocalDateTime date2) {
+        return date1.get(WEEK_FIELDS.weekOfWeekBasedYear()) == date2.get(WEEK_FIELDS.weekOfWeekBasedYear());
+    }
+
+    public static boolean isTodayOrFuture(LocalDateTime now, LocalDateTime date) {
+        return isSameDate(now, date) || date.isAfter(now);
     }
 }
