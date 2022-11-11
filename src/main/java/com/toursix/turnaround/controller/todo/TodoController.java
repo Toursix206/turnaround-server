@@ -215,4 +215,22 @@ public class TodoController {
             @ApiIgnore @UserId Long userId) {
         return SuccessResponse.success(SuccessCode.UPDATE_REWARD_SUCCESS, todoService.rewardToUser(todoId, userId));
     }
+
+    @ApiOperation(
+            value = "[인증] 활동 이벤트 페이지 - 예약된 모든 활동의 알림을 끕니다.",
+            notes = "이미 모든 활동에 대한 알림이 꺼진 경우, 409을 전달합니다."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "성공입니다."),
+            @ApiResponse(code = 401, message = "토큰이 만료되었습니다. 다시 로그인 해주세요.", response = ErrorResponse.class),
+            @ApiResponse(code = 404, message = "탈퇴했거나 존재하지 않는 유저입니다.", response = ErrorResponse.class),
+            @ApiResponse(code = 409, message = "이미 모든 활동에 대한 알림이 꺼져있습니다.", response = ErrorResponse.class),
+            @ApiResponse(code = 500, message = "예상치 못한 서버 에러가 발생하였습니다.", response = ErrorResponse.class)
+    })
+    @Auth
+    @PutMapping("/todos/notification/off")
+    public ResponseEntity<SuccessResponse<String>> updateTodosNotificationByUser(@ApiIgnore @UserId Long userId) {
+        todoService.updateTodosNotificationByUser(userId);
+        return SuccessResponse.OK;
+    }
 }

@@ -88,6 +88,7 @@ public enum ErrorCode {
     CONFLICT_TODO_TIME_EXCEPTION(CONFLICT, "다른 활동과 겹치는 일정입니다."),
     CONFLICT_TODO_DONE_EXCEPTION(CONFLICT, "이미 존재하는 활동 인증입니다."),
     CONFLICT_TODO_REWARD_EXCEPTION(CONFLICT, "이미 리워드를 받은 활동입니다."),
+    CONFLICT_TODO_PUSH_STATUS_EXCEPTION(CONFLICT, "이미 모든 활동에 대한 알림이 꺼져있습니다."),
 
     /**
      * 415 Unsupported Media Type
