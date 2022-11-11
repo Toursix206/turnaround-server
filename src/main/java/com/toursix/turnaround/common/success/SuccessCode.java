@@ -17,7 +17,8 @@ public enum SuccessCode {
     GET_ACTIVITY_INFO_SUCCESS(SuccessStatusCode.OK, "활동 세부 내용 조회 성공입니다."),
     GET_ACTIVITY_GUIDE_INFO_SUCCESS(SuccessStatusCode.OK, "활동별 가이드 조회 성공입니다."),
     GET_TODO_MAIN_INFO_SUCCESS(SuccessStatusCode.OK, "활동 일정 리스트 조회 성공입니다."),
-    GET_MYPAGE_INFO_SUCCESS(SuccessStatusCode.OK, "마이페이지 설정 조회 성공입니다."),
+    GET_MYPAGE_SETTING_INFO_SUCCESS(SuccessStatusCode.OK, "마이페이지 설정 조회 성공입니다."),
+    GET_MYPAGE_HOME_INFO_SUCCESS(SuccessStatusCode.OK, "마이페이지 홈 조회 성공입니다."),
 
     // 인증
     LOGIN_SUCCESS(SuccessStatusCode.OK, "로그인 성공입니다."),
