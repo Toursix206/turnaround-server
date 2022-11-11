@@ -26,6 +26,7 @@ import com.toursix.turnaround.service.interior.InteriorServiceUtils;
 import com.toursix.turnaround.service.space.SpaceServiceUtils;
 import com.toursix.turnaround.service.user.dto.request.CreateUserRequestDto;
 import com.toursix.turnaround.service.user.dto.request.NicknameValidateRequestDto;
+import com.toursix.turnaround.service.user.dto.request.UpdateMyPageSettingRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -104,5 +105,11 @@ public class UserService {
         onboarding.addObtain(obtainBasicTable);
         onboarding.addObtain(obtainBasicWall);
         onboarding.addObtain(obtainBasicWindow);
+    }
+
+    public void updateMyPageSetting(UpdateMyPageSettingRequestDto request, Long userId) {
+        User user = UserServiceUtils.findUserById(userRepository, userId);
+        UserServiceUtils.validateIsPushState(request, user);
+        user.getSetting().setAgreeBenefitAndEvent(request.isAgreeBenefitAndEvent());
     }
 }

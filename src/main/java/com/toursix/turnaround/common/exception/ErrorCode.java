@@ -37,6 +37,7 @@ public enum ErrorCode {
     VALIDATION_TODO_START_AT_EXCEPTION(BAD_REQUEST, "정책에 위배되는 예약 시간입니다."),
     VALIDATION_DONE_REVIEW_EXCEPTION(BAD_REQUEST, "활동 인증이 완료되지 않았습니다."),
     VALIDATION_TODO_REWARD_EXCEPTION(BAD_REQUEST, "리워드를 받을 수 없는 활동입니다."),
+    VALIDATION_STATUS_EXCEPTION(BAD_REQUEST, "잘못된 알림 상태입니다."),
 
     /**
      * 401 UnAuthorized

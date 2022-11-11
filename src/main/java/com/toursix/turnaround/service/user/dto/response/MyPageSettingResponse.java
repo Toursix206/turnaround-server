@@ -15,7 +15,7 @@ import lombok.ToString;
 @Builder(access = AccessLevel.PRIVATE)
 public class MyPageSettingResponse {
 
-    private boolean agreeBenefitAndEvent;
+    private Boolean agreeBenefitAndEvent;
 
     @JsonProperty("agreeBenefitAndEvent")
     public Boolean isAgreeBenefitAndEvent() {

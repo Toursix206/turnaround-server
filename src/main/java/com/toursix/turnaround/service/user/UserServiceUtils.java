@@ -3,13 +3,16 @@ package com.toursix.turnaround.service.user;
 import static com.toursix.turnaround.common.exception.ErrorCode.CONFLICT_NICKNAME_EXCEPTION;
 import static com.toursix.turnaround.common.exception.ErrorCode.CONFLICT_USER_EXCEPTION;
 import static com.toursix.turnaround.common.exception.ErrorCode.NOT_FOUND_USER_EXCEPTION;
+import static com.toursix.turnaround.common.exception.ErrorCode.VALIDATION_STATUS_EXCEPTION;
 
 import com.toursix.turnaround.common.exception.ConflictException;
 import com.toursix.turnaround.common.exception.NotFoundException;
+import com.toursix.turnaround.common.exception.ValidationException;
 import com.toursix.turnaround.domain.user.User;
 import com.toursix.turnaround.domain.user.UserSocialType;
 import com.toursix.turnaround.domain.user.repository.OnbordingRepository;
 import com.toursix.turnaround.domain.user.repository.UserRepository;
+import com.toursix.turnaround.service.user.dto.request.UpdateMyPageSettingRequestDto;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -45,6 +48,15 @@ public class UserServiceUtils {
         if (onbordingRepository.existsByNickname(nickname)) {
             throw new ConflictException(String.format("이미 존재하는 닉네임 (%s) 입니다", nickname),
                     CONFLICT_NICKNAME_EXCEPTION);
+        }
+    }
+
+    public static void validateIsPushState(UpdateMyPageSettingRequestDto reqeust, User user) {
+        if (reqeust.isAgreeBenefitAndEvent() != null) {
+            if (reqeust.isAgreeBenefitAndEvent() == user.getSetting().getAgreeBenefitAndEvent()) {
+                throw new ValidationException(String.format("(%s) 유저의 알림 상태 중복입니다.", user.getId()),
+                        VALIDATION_STATUS_EXCEPTION);
+            }
         }
     }
 }

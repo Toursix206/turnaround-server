@@ -43,4 +43,8 @@ public class Setting extends AuditingTimeEntity {
                 .status(Status.ACTIVE)
                 .build();
     }
+
+    public void setAgreeBenefitAndEvent(boolean agreeBenefitAndEvent) {
+        this.agreeBenefitAndEvent = agreeBenefitAndEvent;
+    }
 }
