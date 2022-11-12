@@ -229,8 +229,8 @@ public class TodoController {
     })
     @Auth
     @PutMapping("/todos/notification/off")
-    public ResponseEntity<SuccessResponse<String>> updateTodosNotificationByUser(@ApiIgnore @UserId Long userId) {
-        todoService.updateTodosNotificationByUser(userId);
+    public ResponseEntity<SuccessResponse<String>> turnOffTodosNotificationByUser(@ApiIgnore @UserId Long userId) {
+        todoService.turnOffTodosNotificationByUser(userId);
         return SuccessResponse.OK;
     }
 }

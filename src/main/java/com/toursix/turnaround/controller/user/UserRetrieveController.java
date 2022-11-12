@@ -37,7 +37,7 @@ public class UserRetrieveController {
     @Auth
     @GetMapping("/user/setting")
     public ResponseEntity<SuccessResponse<MyPageSettingResponse>> getMyPageSetting(@ApiIgnore @UserId Long userId) {
-        return SuccessResponse.success(SuccessCode.GET_MYPAGE_SETTING_INFO_SUCCESS,
+        return SuccessResponse.success(SuccessCode.GET_MY_PAGE_SETTING_INFO_SUCCESS,
                 userRetrieveService.getMyPageSetting(userId));
     }
 
@@ -51,7 +51,7 @@ public class UserRetrieveController {
     @Auth
     @GetMapping("/user")
     public ResponseEntity<SuccessResponse<MyPageHomeResponse>> getMyPageHome(@ApiIgnore @UserId Long userId) {
-        return SuccessResponse.success(SuccessCode.GET_MYPAGE_HOME_INFO_SUCCESS,
+        return SuccessResponse.success(SuccessCode.GET_MY_PAGE_HOME_INFO_SUCCESS,
                 userRetrieveService.getMyPageHome(userId));
     }
 }

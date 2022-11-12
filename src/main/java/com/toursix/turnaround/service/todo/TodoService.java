@@ -130,7 +130,7 @@ public class TodoService {
         giveTurningPointToUser(user, todo);
     }
 
-    public void updateTodosNotificationByUser(Long userId) {
+    public void turnOffTodosNotificationByUser(Long userId) {
         User user = UserServiceUtils.findUserById(userRepository, userId);
         List<Todo> todos = user.getOnboarding().getTodos();
         TodoValidateUtils.validateTodoStatus(todos, user);
