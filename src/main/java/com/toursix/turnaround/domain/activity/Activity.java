@@ -42,6 +42,9 @@ public class Activity extends AuditingTimeEntity {
     @Column(nullable = false, length = 30)
     private String name;
 
+    @Column(nullable = false, length = 100)
+    private String description;
+
     @Column(nullable = false)
     private Integer broom;
 
