@@ -16,6 +16,7 @@ import com.toursix.turnaround.domain.done.DoneReview;
 import com.toursix.turnaround.domain.done.repository.DoneRepository;
 import com.toursix.turnaround.domain.done.repository.DoneReviewRepository;
 import com.toursix.turnaround.domain.item.Item;
+import com.toursix.turnaround.domain.todo.PushStatus;
 import com.toursix.turnaround.domain.todo.Todo;
 import com.toursix.turnaround.domain.todo.TodoStage;
 import com.toursix.turnaround.domain.todo.repository.TodoRepository;
@@ -32,6 +33,7 @@ import com.toursix.turnaround.service.todo.dto.request.UpdateTodoRequestDto;
 import com.toursix.turnaround.service.todo.dto.response.RewardResponse;
 import com.toursix.turnaround.service.user.UserServiceUtils;
 import java.time.LocalDateTime;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -57,8 +59,8 @@ public class TodoService {
         LocalDateTime now = DateUtils.todayLocalDateTime();
         LocalDateTime startAt = request.getStartAt();
         LocalDateTime endAt = startAt.plusMinutes(activity.getDuration());
-        TodoServiceUtils.validateStartAt(startAt, now, activity.getDuration());
-        TodoServiceUtils.validateUniqueTodoTime(todoRepository, onboarding, startAt, endAt);
+        TodoValidateUtils.validateStartAt(startAt, now, activity.getDuration());
+        TodoValidateUtils.validateUniqueTodoTime(todoRepository, onboarding, startAt, endAt);
         Todo todo = todoRepository.save(
                 Todo.newInstance(user.getOnboarding(), activity, startAt, request.getPushStatus()));
         onboarding.addTodo(todo);
@@ -71,9 +73,9 @@ public class TodoService {
         LocalDateTime now = DateUtils.todayLocalDateTime();
         LocalDateTime startAt = request.getStartAt();
         LocalDateTime endAt = startAt.plusMinutes(todo.getActivity().getDuration());
-        TodoServiceUtils.validateUpdatable(todo);
-        TodoServiceUtils.validateStartAt(startAt, now, todo.getActivity().getDuration());
-        TodoServiceUtils.validateUniqueTodoTime(todoRepository, onboarding, startAt, endAt);
+        TodoValidateUtils.validateUpdatable(todo);
+        TodoValidateUtils.validateStartAt(startAt, now, todo.getActivity().getDuration());
+        TodoValidateUtils.validateUniqueTodoTime(todoRepository, onboarding, startAt, endAt);
         todo.updateStartAt(startAt);
         todo.updatePushStatus(request.getPushStatus());
         onboarding.updateTodo(todo);
@@ -83,7 +85,7 @@ public class TodoService {
         User user = UserServiceUtils.findUserById(userRepository, userId);
         Onboarding onboarding = user.getOnboarding();
         Todo todo = TodoServiceUtils.findTodoById(todoRepository, todoId);
-        TodoServiceUtils.validateUpdatable(todo);
+        TodoValidateUtils.validateUpdatable(todo);
         todo.delete();
         onboarding.deleteTodo(todo);
     }
@@ -126,6 +128,15 @@ public class TodoService {
         doneReview.update(request.getRating(), request.getContent());
         onboarding.updateDoneReview(doneReview);
         giveTurningPointToUser(user, todo);
+    }
+
+    public void turnOffTodosNotificationByUser(Long userId) {
+        User user = UserServiceUtils.findUserById(userRepository, userId);
+        List<Todo> todos = user.getOnboarding().getTodos();
+        TodoValidateUtils.validateTodoStatus(todos, user);
+        todos.stream()
+                .filter(todo -> todo.getPushStatus() != PushStatus.OFF)
+                .forEach(todo -> todo.updatePushStatus(PushStatus.OFF));
     }
 
     private void giveBroomByTodoToUser(Onboarding onboarding, Todo todo) {
