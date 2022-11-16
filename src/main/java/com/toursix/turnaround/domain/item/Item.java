@@ -47,4 +47,8 @@ public class Item extends AuditingTimeEntity {
     public void useBroom() {
         this.broom -= 1;
     }
+
+    public void delete() {
+        this.status = Status.DELETED;
+    }
 }

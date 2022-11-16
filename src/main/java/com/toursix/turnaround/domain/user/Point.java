@@ -43,4 +43,8 @@ public class Point extends AuditingTimeEntity {
     public void addAmount(int amount) {
         this.amount += amount;
     }
+
+    public void delete() {
+        this.status = Status.DELETED;
+    }
 }

@@ -77,4 +77,11 @@ public class User extends AuditingTimeEntity {
     public void resetFcmToken() {
         this.fcmToken = null;
     }
+
+    public void delete() {
+        this.status = Status.DELETED;
+        this.onboarding.delete();
+        this.setting.delete();
+        this.point.delete();
+    }
 }

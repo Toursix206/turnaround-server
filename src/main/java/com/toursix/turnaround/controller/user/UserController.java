@@ -14,6 +14,7 @@ import io.swagger.annotations.ApiResponses;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -52,7 +53,7 @@ public class UserController {
         return SuccessResponse.OK;
     }
 
-    @ApiOperation(value = "[인증] 마이 페이지 - 마이페이 설정 상태를 수정합니다.")
+    @ApiOperation(value = "[인증] 마이 페이지 - 마이페이지 설정 상태를 수정합니다.")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "성공입니다."),
             @ApiResponse(code = 400,
@@ -68,6 +69,20 @@ public class UserController {
     public ResponseEntity<SuccessResponse<String>> updateMyPageSetting(
             @Valid @RequestBody UpdateMyPageSettingRequestDto request, @ApiIgnore @UserId Long userId) {
         userService.updateMyPageSetting(request, userId);
+        return SuccessResponse.OK;
+    }
+
+    @ApiOperation(value = "[인증] 마이 페이지 - 회원 탈퇴를 요청합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "성공입니다."),
+            @ApiResponse(code = 401, message = "토큰이 만료되었습니다. 다시 로그인 해주세요.", response = ErrorResponse.class),
+            @ApiResponse(code = 404, message = "탈퇴했거나 존재하지 않는 유저입니다.", response = ErrorResponse.class),
+            @ApiResponse(code = 500, message = "예상치 못한 서버 에러가 발생하였습니다.", response = ErrorResponse.class)
+    })
+    @Auth
+    @DeleteMapping("/user")
+    public ResponseEntity<SuccessResponse<String>> deleteUser(@ApiIgnore @UserId Long userId) {
+        userService.deleteUser(userId);
         return SuccessResponse.OK;
     }
 }
