@@ -28,7 +28,8 @@ public class SpaceCategory extends AuditingTimeEntity {
     private Long id;
 
     @Column(nullable = false, length = 30)
-    private String name;
+    @Enumerated(EnumType.STRING)
+    private SpaceCategoryType name;
 
     @OneToMany(fetch = FetchType.LAZY)
     private final List<InteriorCategory> interiorCategories = new ArrayList<>();

@@ -22,6 +22,8 @@ import lombok.ToString;
 @Builder(access = AccessLevel.PRIVATE)
 public class SpaceMainInfoResponse {
 
+    private String spaceType;
+    private int interiorCount;
     private int level;
     private int experience;
     private int broom;
@@ -49,6 +51,8 @@ public class SpaceMainInfoResponse {
 
     public static SpaceMainInfoResponse of(Onboarding onboarding, Acquire acquire) {
         return SpaceMainInfoResponse.builder()
+                .spaceType(acquire.getSpace().getCategory().getName().getValue())
+                .interiorCount(onboarding.getObtains().size())
                 .level(onboarding.getLevel())
                 //TODO 레벨, 경험치 정책 확정되면 수정
                 .experience(MathUtils.percent(onboarding.getExperience(), 100))
