@@ -13,6 +13,9 @@ public enum SuccessCode {
      */
     OK_SUCCESS(SuccessStatusCode.OK, "성공입니다."),
 
+    // 홈
+    GET_HOME_MAIN_INFO_SUCCESS(SuccessStatusCode.OK, "홈 메인 정보 조회 성공입니다."),
+
     // 방타버스
     GET_SPACE_MAIN_INFO_SUCCESS(SuccessStatusCode.OK, "방타버스 메인 정보 조회 성공입니다."),
 

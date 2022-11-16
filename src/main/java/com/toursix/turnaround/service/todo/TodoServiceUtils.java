@@ -32,6 +32,14 @@ public class TodoServiceUtils {
                 .collect(Collectors.toList());
     }
 
+    public static List<Todo> filterInProgressTodayTodos(LocalDateTime now, List<Todo> todos) {
+        return todos.stream()
+                .filter(todo -> todo.getStage() == TodoStage.IN_PROGRESS &&
+                        DateUtils.isSameDate(now, todo.getStartAt())
+                )
+                .collect(Collectors.toList());
+    }
+
     public static List<Todo> filterInProgressTodayOrFutureTodos(LocalDateTime now, List<Todo> todos) {
         return todos.stream()
                 .filter(todo -> todo.getStage() == TodoStage.IN_PROGRESS &&
