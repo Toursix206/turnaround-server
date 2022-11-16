@@ -1,6 +1,7 @@
 package com.toursix.turnaround.service.todo;
 
 import com.toursix.turnaround.common.util.DateUtils;
+import com.toursix.turnaround.domain.todo.PushStatus;
 import com.toursix.turnaround.domain.todo.Todo;
 import com.toursix.turnaround.domain.todo.TodoStage;
 import com.toursix.turnaround.domain.user.Onboarding;
@@ -34,10 +35,13 @@ public class TodoScheduledService {
         users.forEach(user -> {
             Onboarding onboarding = user.getOnboarding();
             List<Todo> todos = onboarding.getTodos().stream()
+                    .filter(todo -> todo.getPushStatus() == PushStatus.ON)
                     .filter(todo -> todo.getStage() == TodoStage.IN_PROGRESS)
                     .filter(todo -> DateUtils.isBeforeOneHour(now, todo.getStartAt()))
                     .collect(Collectors.toList());
-            todos.forEach(todo -> notificationService.sendBeforeOneHourTodoNotification(user, todo));
+            if (!todos.isEmpty()) {
+                notificationService.sendBeforeOneHourTodoNotification(user);
+            }
         });
     }
 
@@ -51,10 +55,13 @@ public class TodoScheduledService {
         users.forEach(user -> {
             Onboarding onboarding = user.getOnboarding();
             List<Todo> todos = onboarding.getTodos().stream()
+                    .filter(todo -> todo.getPushStatus() == PushStatus.ON)
                     .filter(todo -> todo.getStage() == TodoStage.IN_PROGRESS)
                     .filter(todo -> DateUtils.isSameTime(now, todo.getStartAt()))
                     .collect(Collectors.toList());
-            todos.forEach(todo -> notificationService.sendStartTodoNotification(user, todo));
+            if (!todos.isEmpty()) {
+                notificationService.sendStartTodoNotification(user);
+            }
         });
     }
 
@@ -68,10 +75,13 @@ public class TodoScheduledService {
         users.forEach(user -> {
             Onboarding onboarding = user.getOnboarding();
             List<Todo> todos = onboarding.getTodos().stream()
+                    .filter(todo -> todo.getPushStatus() == PushStatus.ON)
                     .filter(todo -> todo.getStage() == TodoStage.IN_PROGRESS)
                     .filter(todo -> todo.getEndAt().isBefore(now))
                     .collect(Collectors.toList());
-            todos.forEach(todo -> notificationService.sendRemindTodoNotification(user, todo));
+            if (!todos.isEmpty()) {
+                notificationService.sendRemindTodoNotification(user);
+            }
         });
     }
 
@@ -87,7 +97,9 @@ public class TodoScheduledService {
             List<Todo> todos = onboarding.getTodos().stream()
                     .filter(todo -> todo.getStage() == TodoStage.SUCCESS)
                     .collect(Collectors.toList());
-            todos.forEach(todo -> notificationService.sendRemindTodoNotification(user, todo));
+            if (!todos.isEmpty()) {
+                notificationService.sendRemindRewardNotification(user);
+            }
         });
     }
 }
