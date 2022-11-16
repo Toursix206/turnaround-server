@@ -56,7 +56,7 @@ public class UserController {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "성공입니다."),
             @ApiResponse(code = 400,
-                    message = "1. 유저의 알림 여부를 입력해주세요. (agreeBenefitAndEvent)\n"
+                    message = "1. 유저의 알림 여부를 입력해주세요. (agreeAllPushNotification)\n"
                             + "2. 잘못된 알림 상태입니다.",
                     response = ErrorResponse.class),
             @ApiResponse(code = 401, message = "토큰이 만료되었습니다. 다시 로그인 해주세요.", response = ErrorResponse.class),

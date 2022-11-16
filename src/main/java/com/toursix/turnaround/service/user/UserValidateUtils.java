@@ -32,8 +32,8 @@ public class UserValidateUtils {
     }
 
     public static void validateIsPushState(UpdateMyPageSettingRequestDto reqeust, User user) {
-        if (reqeust.getAgreeBenefitAndEvent() != null) {
-            if (reqeust.getAgreeBenefitAndEvent() == user.getSetting().getAgreeBenefitAndEvent()) {
+        if (reqeust.getAgreeAllPushNotification() != null) {
+            if (reqeust.getAgreeAllPushNotification() == user.getSetting().getAgreeAllPushNotification()) {
                 throw new ValidationException(String.format("(%s) 유저의 알림 상태 중복입니다.", user.getId()),
                         VALIDATION_STATUS_EXCEPTION);
             }
