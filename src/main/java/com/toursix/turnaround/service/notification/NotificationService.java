@@ -43,11 +43,22 @@ public class NotificationService {
         }
     }
 
+    public void sendInduceNewTodoNotification(User to) {
+        if (to.getSetting().getAgreeAllPushNotification()) {
+            firebaseCloudMessageService.sendMessageTo(to, PushMessage.INDUCE_NEW_TODO.getTitle(),
+                    induceNewTodoPushBody(to.getOnboarding()));
+        }
+    }
+
     private String beforeOneHourTodoPushBody(Onboarding onboarding) {
         return String.format("%s%s", onboarding.getNickname(), PushMessage.BEFORE_ONE_HOUR_TODO.getBody());
     }
 
     private String remindRewardPushBody(Onboarding onboarding) {
         return String.format("%s%s", onboarding.getNickname(), PushMessage.REMIND_REWARD.getBody());
+    }
+
+    private String induceNewTodoPushBody(Onboarding onboarding) {
+        return String.format("%s%s", onboarding.getNickname(), PushMessage.INDUCE_NEW_TODO.getBody());
     }
 }

@@ -8,6 +8,7 @@ import com.toursix.turnaround.domain.user.Onboarding;
 import com.toursix.turnaround.domain.user.User;
 import com.toursix.turnaround.domain.user.repository.UserRepository;
 import com.toursix.turnaround.service.notification.NotificationService;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -99,6 +100,24 @@ public class TodoScheduledService {
                     .collect(Collectors.toList());
             if (!todos.isEmpty()) {
                 notificationService.sendRemindRewardNotification(user);
+            }
+        });
+    }
+
+    /**
+     * 18시 0분 0초마다 실행
+     */
+    @Scheduled(cron = "0  0  18  *  *  *")
+    public void scheduledInduceNewTodos() {
+        LocalDate yesterday = DateUtils.yesterdayLocalDate();
+        List<User> users = userRepository.findAllActiveUser();
+        users.forEach(user -> {
+            Onboarding onboarding = user.getOnboarding();
+            List<Todo> todos = onboarding.getTodos().stream()
+                    .filter(todo -> yesterday.isEqual(todo.getStartAt().toLocalDate()))
+                    .collect(Collectors.toList());
+            if (todos.isEmpty()) {
+                notificationService.sendInduceNewTodoNotification(user);
             }
         });
     }
