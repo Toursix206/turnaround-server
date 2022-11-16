@@ -2,6 +2,7 @@ package com.toursix.turnaround.domain.user.repository;
 
 import com.toursix.turnaround.domain.user.User;
 import com.toursix.turnaround.domain.user.UserSocialType;
+import java.util.List;
 
 public interface UserRepositoryCustom {
 
@@ -12,4 +13,6 @@ public interface UserRepositoryCustom {
     User findUserBySocialIdAndSocialType(String socialId, UserSocialType socialType);
 
     User findUserByFcmToken(String fcmToken);
+
+    List<User> findAllActiveUser();
 }
