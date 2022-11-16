@@ -57,7 +57,7 @@ public class Obtain extends AuditingTimeEntity {
         return Obtain.builder()
                 .onboarding(onboarding)
                 .interior(interior)
-                .cleanLevel(CleanLevel.ONE)
+                .cleanLevel(CleanLevel.CLEAN)
                 .cleanScore(100)
                 .isEquipped(false)
                 .status(Status.ACTIVE)
@@ -70,5 +70,10 @@ public class Obtain extends AuditingTimeEntity {
 
     public void unequip() {
         this.isEquipped = false;
+    }
+
+    public void cleanInterior() {
+        this.cleanLevel = this.cleanLevel.increase();
+        this.cleanScore = this.cleanLevel.getMax();
     }
 }

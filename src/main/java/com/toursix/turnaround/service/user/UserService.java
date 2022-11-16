@@ -50,9 +50,9 @@ public class UserService {
     private final JwtUtils jwtProvider;
 
     public Long registerUser(CreateUserRequestDto request) {
-        UserServiceUtils.validateNotExistsUser(userRepository, request.getSocialId(),
+        UserValidateUtils.validateNotExistsUser(userRepository, request.getSocialId(),
                 request.getSocialType());
-        UserServiceUtils.validateNickname(onbordingRepository, request.getNickname());
+        UserValidateUtils.validateNickname(onbordingRepository, request.getNickname());
         User conflictFcmTokenUser = userRepository.findUserByFcmToken(request.getFcmToken());
         if (conflictFcmTokenUser != null) {
             jwtProvider.expireRefreshToken(conflictFcmTokenUser.getId());
@@ -73,7 +73,7 @@ public class UserService {
     }
 
     public void validateUniqueNickname(NicknameValidateRequestDto request) {
-        UserServiceUtils.validateNickname(onbordingRepository, request.getNickname());
+        UserValidateUtils.validateNickname(onbordingRepository, request.getNickname());
     }
 
     private void acquireBasicSpace(Onboarding onboarding) {
@@ -109,7 +109,7 @@ public class UserService {
 
     public void updateMyPageSetting(UpdateMyPageSettingRequestDto request, Long userId) {
         User user = UserServiceUtils.findUserById(userRepository, userId);
-        UserServiceUtils.validateIsPushState(request, user);
+        UserValidateUtils.validateIsPushState(request, user);
         user.getSetting().setAgreeBenefitAndEvent(request.getAgreeBenefitAndEvent());
     }
 }

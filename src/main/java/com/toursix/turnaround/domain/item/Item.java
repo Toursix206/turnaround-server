@@ -43,4 +43,8 @@ public class Item extends AuditingTimeEntity {
     public void addBroom(int broom) {
         this.broom += broom;
     }
+
+    public void useBroom() {
+        this.broom -= 1;
+    }
 }

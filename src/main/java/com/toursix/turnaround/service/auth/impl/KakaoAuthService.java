@@ -10,6 +10,7 @@ import com.toursix.turnaround.external.client.kakao.dto.response.KakaoProfileRes
 import com.toursix.turnaround.service.auth.AuthService;
 import com.toursix.turnaround.service.auth.CommonAuthService;
 import com.toursix.turnaround.service.auth.CommonAuthServiceUtils;
+import com.toursix.turnaround.service.auth.CommonAuthValidateUtils;
 import com.toursix.turnaround.service.auth.dto.request.LoginDto;
 import com.toursix.turnaround.service.auth.dto.request.SignUpDto;
 import com.toursix.turnaround.service.user.UserService;
@@ -48,7 +49,7 @@ public class KakaoAuthService implements AuthService {
         User user = UserServiceUtils.findUserBySocialIdAndSocialType(userRepository,
                 response.getId(), socialType);
         commonAuthService.resetConflictFcmToken(request.getFcmToken());
-        CommonAuthServiceUtils.validateUniqueLogin(redisTemplate, user);
+        CommonAuthValidateUtils.validateUniqueLogin(redisTemplate, user);
         user.updateFcmToken(request.getFcmToken());
         return user.getId();
     }

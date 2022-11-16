@@ -54,4 +54,8 @@ public class Acquire extends AuditingTimeEntity {
                 .status(Status.ACTIVE)
                 .build();
     }
+
+    public void updateCleanScore(int cleanScore) {
+        this.cleanScore = cleanScore;
+    }
 }
