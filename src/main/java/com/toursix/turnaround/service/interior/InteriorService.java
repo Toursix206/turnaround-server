@@ -1,6 +1,7 @@
 package com.toursix.turnaround.service.interior;
 
 import com.toursix.turnaround.common.util.MathUtils;
+import com.toursix.turnaround.domain.common.Constant;
 import com.toursix.turnaround.domain.interior.Obtain;
 import com.toursix.turnaround.domain.interior.repository.ObtainRepository;
 import com.toursix.turnaround.domain.item.Item;
@@ -34,7 +35,7 @@ public class InteriorService {
         item.useBroom();
         obtain.cleanInterior();
         onboarding.updateObtain(obtain);
-        onboarding.addExperience(10);
+        onboarding.addExperience(Constant.USE_BROOM_EXPERIENCE);
         //TODO 공간 여러개인 경우 고려
         Acquire acquire = onboarding.getAcquires().get(0);
         List<Obtain> obtains = onboarding.getObtains();
