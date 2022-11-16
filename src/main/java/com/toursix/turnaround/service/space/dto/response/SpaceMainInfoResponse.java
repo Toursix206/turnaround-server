@@ -3,6 +3,7 @@ package com.toursix.turnaround.service.space.dto.response;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.toursix.turnaround.common.util.MathUtils;
 import com.toursix.turnaround.domain.interior.CleanLevel;
+import com.toursix.turnaround.domain.interior.Obtain;
 import com.toursix.turnaround.domain.space.Acquire;
 import com.toursix.turnaround.domain.user.Onboarding;
 import java.util.List;
@@ -54,6 +55,7 @@ public class SpaceMainInfoResponse {
                 .broom(onboarding.getItem().getBroom())
                 .cleanScore(acquire.getCleanScore())
                 .interiors(onboarding.getObtains().stream()
+                        .filter(Obtain::getIsEquipped)
                         .map(obtain -> InteriorInfo.builder()
                                 .obtainId(obtain.getId())
                                 .interiorName(obtain.getInterior().getName())
