@@ -4,12 +4,12 @@ import static com.slack.api.model.block.Blocks.divider;
 import static com.slack.api.model.block.Blocks.section;
 import static com.slack.api.model.block.composition.BlockCompositions.markdownText;
 
-import com.toursix.turnaround.common.util.YamlPropertySourceFactory;
 import com.slack.api.Slack;
 import com.slack.api.methods.SlackApiException;
 import com.slack.api.model.Attachment;
 import com.slack.api.model.block.LayoutBlock;
 import com.slack.api.model.block.composition.TextObject;
+import com.toursix.turnaround.common.util.YamlPropertySourceFactory;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +25,7 @@ public class SlackService {
 
     private static final String SLACK_MESSAGE_TITLE = "🤯 *500 에러 발생*";
     private static final String ATTACHMENTS_COLOR = "#eb4034";
-    private static final String FILTER_STRING = "boilerplate";
+    private static final String FILTER_STRING = "com.toursix.turnaround";
     private static final String SLACK_ERROR_MESSAGE = "*Error Message:*\n";
     private static final String SLACK_ERROR_STACK = "*Error Stack:*\n";
 

@@ -78,7 +78,7 @@ public class UserService {
 
     private void acquireBasicSpace(Onboarding onboarding) {
         SpaceCategory smallRoomCategory = SpaceServiceUtils.findSpaceCategoryByName(spaceCategoryRepository,
-                SpaceCategoryType.SMALL_ROOM.getKey());
+                SpaceCategoryType.SMALL_SLEEPING_ROOM);
         Space smallRoomSpace = SpaceServiceUtils.findSpaceBySpaceCategory(spaceRepository, smallRoomCategory);
         Acquire acquire = acquireRepository.save(Acquire.newInstance(onboarding, smallRoomSpace));
         onboarding.addAcquire(acquire);
