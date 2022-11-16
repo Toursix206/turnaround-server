@@ -47,7 +47,7 @@ public class Onboarding extends AuditingTimeEntity {
     @Enumerated(EnumType.STRING)
     private OnboardingProfileType profileType;
 
-    @Column(unique = true, nullable = false, length = 30)
+    @Column(nullable = false, length = 30)
     private String nickname;
 
     @Column(length = 30)
@@ -134,5 +134,15 @@ public class Onboarding extends AuditingTimeEntity {
 
     public void addExperience(int value) {
         this.experience += value;
+    }
+
+    public void delete() {
+        this.status = Status.DELETED;
+        this.item.delete();
+        this.acquires.forEach(Acquire::delete);
+        this.obtains.forEach(Obtain::delete);
+        this.todos.forEach(Todo::delete);
+        this.doneReviews.forEach(DoneReview::delete);
+        this.scraps.forEach(Scrap::delete);
     }
 }

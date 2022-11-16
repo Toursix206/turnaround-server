@@ -112,4 +112,11 @@ public class UserService {
         UserValidateUtils.validateIsPushState(request, user);
         user.getSetting().setAllPushNotification(request.getAgreeAllPushNotification());
     }
+
+    public void deleteUser(Long userId) {
+        User user = UserServiceUtils.findUserById(userRepository, userId);
+        jwtProvider.expireRefreshToken(userId);
+        user.resetFcmToken();
+        user.delete();
+    }
 }

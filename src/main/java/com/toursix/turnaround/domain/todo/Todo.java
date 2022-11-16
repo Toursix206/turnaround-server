@@ -88,14 +88,14 @@ public class Todo extends AuditingTimeEntity {
         this.pushStatus = pushStatus;
     }
 
+    public void setStage(TodoStage stage) {
+        this.stage = stage;
+    }
+
     public void delete() {
         this.status = Status.DELETED;
         if (this.getDone() != null) {
             this.getDone().delete();
         }
-    }
-
-    public void setStage(TodoStage stage) {
-        this.stage = stage;
     }
 }

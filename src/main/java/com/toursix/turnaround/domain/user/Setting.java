@@ -51,4 +51,8 @@ public class Setting extends AuditingTimeEntity {
     public void setAllPushNotification(boolean agreeAllPushNotification) {
         this.agreeAllPushNotification = agreeAllPushNotification;
     }
+
+    public void delete() {
+        this.status = Status.DELETED;
+    }
 }

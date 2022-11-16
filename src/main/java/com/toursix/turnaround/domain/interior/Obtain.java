@@ -76,4 +76,8 @@ public class Obtain extends AuditingTimeEntity {
         this.cleanLevel = this.cleanLevel.increase();
         this.cleanScore = this.cleanLevel.getMax();
     }
+
+    public void delete() {
+        this.status = Status.DELETED;
+    }
 }
