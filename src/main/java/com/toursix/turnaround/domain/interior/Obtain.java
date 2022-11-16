@@ -71,4 +71,9 @@ public class Obtain extends AuditingTimeEntity {
     public void unequip() {
         this.isEquipped = false;
     }
+
+    public void cleanInterior() {
+        this.cleanLevel = this.cleanLevel.increase();
+        this.cleanScore = this.cleanLevel.getMax();
+    }
 }

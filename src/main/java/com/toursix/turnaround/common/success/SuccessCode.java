@@ -27,6 +27,9 @@ public enum SuccessCode {
     GET_TODO_MAIN_INFO_SUCCESS(SuccessStatusCode.OK, "활동 일정 리스트 조회 성공입니다."),
     GET_TODO_INFO_SUCCESS(SuccessStatusCode.OK, "활동 일정 세부 내용 조회 성공입니다."),
 
+    // 인테리어
+    UPDATE_INTERIOR_CLEAN_SCORE_SUCCESS(SuccessStatusCode.OK, "인테리어 청소 성공입니다."),
+
     // 마이페이지
     GET_MY_PAGE_SETTING_INFO_SUCCESS(SuccessStatusCode.OK, "마이페이지 설정 조회 성공입니다."),
     GET_MY_PAGE_HOME_INFO_SUCCESS(SuccessStatusCode.OK, "마이페이지 홈 조회 성공입니다."),

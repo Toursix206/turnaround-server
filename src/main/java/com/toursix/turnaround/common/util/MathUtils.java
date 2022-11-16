@@ -9,4 +9,8 @@ public class MathUtils {
     public static int percent(int part, int total) {
         return (int) ((double) part / (double) total * 100);
     }
+
+    public static int average(int total, int count) {
+        return total / count;
+    }
 }

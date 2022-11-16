@@ -26,4 +26,14 @@ public enum CleanLevel implements EnumModel {
     public String getValue() {
         return value;
     }
+
+    public CleanLevel increase() {
+        if (this == TWO) {
+            return ONE;
+        }
+        if (this == THREE) {
+            return TWO;
+        }
+        return ONE;
+    }
 }

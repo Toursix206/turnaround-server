@@ -38,6 +38,7 @@ public enum ErrorCode {
     VALIDATION_DONE_REVIEW_EXCEPTION(BAD_REQUEST, "활동 인증이 완료되지 않았습니다."),
     VALIDATION_TODO_REWARD_EXCEPTION(BAD_REQUEST, "리워드를 받을 수 없는 활동입니다."),
     VALIDATION_STATUS_EXCEPTION(BAD_REQUEST, "잘못된 알림 상태입니다."),
+    VALIDATION_OBTAIN_CLEAN_LEVEL_EXCEPTION(BAD_REQUEST, "이미 깨끗한 인테리어에는 빗자루를 사용할 수 없습니다."),
 
     /**
      * 401 UnAuthorized
@@ -52,6 +53,7 @@ public enum ErrorCode {
     FORBIDDEN_FILE_TYPE_EXCEPTION(BAD_REQUEST, "허용되지 않은 파일 형식입니다."),
     FORBIDDEN_FILE_NAME_EXCEPTION(BAD_REQUEST, "허용되지 않은 파일 이름입니다."),
     FORBIDDEN_TODO_STAGE_EXCEPTION(FORBIDDEN, "수정/삭제 할 수 없는 일정입니다."),
+    FORBIDDEN_NOT_ENOUGH_BROOM_EXCEPTION(FORBIDDEN, "사용 가능한 빗자루가 없습니다."),
 
     /**
      * 404 Not Found
@@ -64,6 +66,7 @@ public enum ErrorCode {
     NOT_FOUND_SPACE_CATEGORY_EXCEPTION(NOT_FOUND, "존재하지 않는 공간 카테고리입니다."),
     NOT_FOUND_SPACE_EXCEPTION(NOT_FOUND, "존재하지 않는 공간입니다."),
     NOT_FOUND_INTERIOR_EXCEPTION(NOT_FOUND, "존재하지 않는 인테리어입니다."),
+    NOT_FOUND_OBTAIN_EXCEPTION(NOT_FOUND, "존재하지 않는 obtain 입니다."),
     NOT_FOUND_ACTIVITY_EXCEPTION(NOT_FOUND, "존재하지 않는 활동입니다."),
     NOT_FOUND_ACTIVITY_GUIDE_EXCEPTION(NOT_FOUND, "존재하지 않는 활동 가이드입니다."),
     NOT_FOUND_TODO_EXCEPTION(NOT_FOUND, "존재하지 않는 todo 입니다."),
