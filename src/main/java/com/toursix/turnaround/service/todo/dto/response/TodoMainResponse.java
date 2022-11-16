@@ -2,6 +2,7 @@ package com.toursix.turnaround.service.todo.dto.response;
 
 import com.toursix.turnaround.domain.todo.Todo;
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.AccessLevel;
@@ -35,15 +36,19 @@ public class TodoMainResponse {
                 .thisWeekTodosCnt(thisWeekTodos.size())
                 .nextTodosCnt(nextTodos.size())
                 .successTodos(successTodos.stream()
+                        .sorted(Comparator.comparing(Todo::getStartAt))
                         .map(successTodo -> TodoInfo.of(now, successTodo))
                         .collect(Collectors.toList()))
                 .todayTodos(todayTodos.stream()
+                        .sorted(Comparator.comparing(Todo::getStartAt))
                         .map(todayTodo -> TodoInfo.of(now, todayTodo))
                         .collect(Collectors.toList()))
                 .thisWeekTodos(thisWeekTodos.stream()
+                        .sorted(Comparator.comparing(Todo::getStartAt))
                         .map(thisWeekTodo -> TodoInfo.of(now, thisWeekTodo))
                         .collect(Collectors.toList()))
                 .nextTodos(nextTodos.stream()
+                        .sorted(Comparator.comparing(Todo::getStartAt))
                         .map(nextTodo -> TodoInfo.of(now, nextTodo))
                         .collect(Collectors.toList()))
                 .build();
