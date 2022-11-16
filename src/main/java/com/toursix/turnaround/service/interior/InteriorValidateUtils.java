@@ -22,7 +22,7 @@ public class InteriorValidateUtils {
     }
 
     public static void validateCleanableInterior(Obtain obtain) {
-        if (obtain.getCleanLevel() == CleanLevel.ONE) {
+        if (obtain.getCleanLevel() == CleanLevel.CLEAN) {
             throw new ValidationException(String.format("이미 깨끗한 상태의 obtain (%s) 입니다.", obtain.getId()),
                     VALIDATION_OBTAIN_CLEAN_LEVEL_EXCEPTION);
         }

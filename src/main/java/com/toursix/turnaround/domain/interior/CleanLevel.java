@@ -8,9 +8,9 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public enum CleanLevel implements EnumModel {
-    ONE("가장 깨끗한 에셋", 100, 61),
-    TWO("더러운 에셋", 60, 31),
-    THREE("제일 더러운 에셋", 30, 0),
+    CLEAN("가장 깨끗한 에셋", 100, 61),
+    DIRTY("더러운 에셋", 60, 31),
+    VERY_DIRTY("제일 더러운 에셋", 30, 0),
     ;
 
     private final String value;
@@ -28,12 +28,12 @@ public enum CleanLevel implements EnumModel {
     }
 
     public CleanLevel increase() {
-        if (this == TWO) {
-            return ONE;
+        if (this == DIRTY) {
+            return CLEAN;
         }
-        if (this == THREE) {
-            return TWO;
+        if (this == VERY_DIRTY) {
+            return DIRTY;
         }
-        return ONE;
+        return CLEAN;
     }
 }

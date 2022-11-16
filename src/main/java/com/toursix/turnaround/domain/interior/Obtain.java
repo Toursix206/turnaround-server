@@ -57,7 +57,7 @@ public class Obtain extends AuditingTimeEntity {
         return Obtain.builder()
                 .onboarding(onboarding)
                 .interior(interior)
-                .cleanLevel(CleanLevel.ONE)
+                .cleanLevel(CleanLevel.CLEAN)
                 .cleanScore(100)
                 .isEquipped(false)
                 .status(Status.ACTIVE)

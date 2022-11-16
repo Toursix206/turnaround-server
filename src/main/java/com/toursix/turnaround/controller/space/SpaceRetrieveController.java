@@ -30,7 +30,7 @@ public class SpaceRetrieveController {
             value = "[인증] 방타버스 페이지 - 방타버스 메인 페이지에 필요한 정보를 조회합니다.",
             notes = "레벨, 빗자루, 청결도, 인테리어들의 청결도 상태를 조회합니다.\n" +
                     "MVP에서 제공되는 인테리어 이름 - BASIC_BED, BASIC_TABLE, BASIC_WALL, BASIC_WINDOW\n" +
-                    "청결도 상태 높은 순서 - ONE, TWO, THREE"
+                    "청결도 상태 높은 순서 - CLEAN, DIRTY, VERY_DIRTY"
     )
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "방타버스 메인 정보 조회 성공입니다."),
