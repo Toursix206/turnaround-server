@@ -14,11 +14,11 @@ import lombok.ToString;
 @Builder(access = AccessLevel.PRIVATE)
 public class MyPageSettingResponse {
 
-    private Boolean agreeBenefitAndEvent;
+    private Boolean agreeAllPushNotification;
 
-    public static MyPageSettingResponse of(boolean agreeBenefitAndEvent) {
+    public static MyPageSettingResponse of(boolean agreeAllPushNotification) {
         return MyPageSettingResponse.builder()
-                .agreeBenefitAndEvent(agreeBenefitAndEvent)
+                .agreeAllPushNotification(agreeAllPushNotification)
                 .build();
     }
 }

@@ -27,6 +27,9 @@ public class Setting extends AuditingTimeEntity {
     private Long id;
 
     @Column(nullable = false, length = 30)
+    private Boolean agreeAllPushNotification;
+
+    @Column(nullable = false, length = 30)
     private Boolean agreeBenefitAndEvent;
 
     @Column(nullable = false, length = 30)
@@ -38,13 +41,14 @@ public class Setting extends AuditingTimeEntity {
 
     public static Setting newInstance() {
         return Setting.builder()
+                .agreeAllPushNotification(true)
                 .agreeBenefitAndEvent(true)
                 .agreeActivityNotification(true)
                 .status(Status.ACTIVE)
                 .build();
     }
 
-    public void setAgreeBenefitAndEvent(boolean agreeBenefitAndEvent) {
-        this.agreeBenefitAndEvent = agreeBenefitAndEvent;
+    public void setAllPushNotification(boolean agreeAllPushNotification) {
+        this.agreeAllPushNotification = agreeAllPushNotification;
     }
 }

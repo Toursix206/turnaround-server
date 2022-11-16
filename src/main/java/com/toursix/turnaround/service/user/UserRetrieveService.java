@@ -18,7 +18,7 @@ public class UserRetrieveService {
 
     public MyPageSettingResponse getMyPageSetting(Long userId) {
         User user = UserServiceUtils.findUserById(userRepository, userId);
-        return MyPageSettingResponse.of(user.getSetting().getAgreeBenefitAndEvent());
+        return MyPageSettingResponse.of(user.getSetting().getAgreeAllPushNotification());
     }
 
     public MyPageHomeResponse getMyPageHome(Long userId) {

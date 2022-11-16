@@ -11,6 +11,6 @@ import lombok.ToString;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class UpdateMyPageSettingRequestDto {
 
-    @NotNull(message = "{user.agreeBenefitAndEvent.notNull}")
-    private Boolean agreeBenefitAndEvent;
+    @NotNull(message = "{user.agreeAllPushNotification.notNull}")
+    private Boolean agreeAllPushNotification;
 }

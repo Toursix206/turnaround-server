@@ -110,6 +110,6 @@ public class UserService {
     public void updateMyPageSetting(UpdateMyPageSettingRequestDto request, Long userId) {
         User user = UserServiceUtils.findUserById(userRepository, userId);
         UserValidateUtils.validateIsPushState(request, user);
-        user.getSetting().setAgreeBenefitAndEvent(request.getAgreeBenefitAndEvent());
+        user.getSetting().setAllPushNotification(request.getAgreeAllPushNotification());
     }
 }
