@@ -50,6 +50,13 @@ public class NotificationService {
         }
     }
 
+    public void sendTooDirtyNotification(User to) {
+        if (to.getSetting().getAgreeAllPushNotification()) {
+            firebaseCloudMessageService.sendMessageTo(to, PushMessage.TOO_DIRTY.getTitle(),
+                    tooDirtyPushBody(to.getOnboarding()));
+        }
+    }
+
     private String beforeOneHourTodoPushBody(Onboarding onboarding) {
         return String.format("%s%s", onboarding.getNickname(), PushMessage.BEFORE_ONE_HOUR_TODO.getBody());
     }
@@ -60,5 +67,9 @@ public class NotificationService {
 
     private String induceNewTodoPushBody(Onboarding onboarding) {
         return String.format("%s%s", onboarding.getNickname(), PushMessage.INDUCE_NEW_TODO.getBody());
+    }
+
+    private String tooDirtyPushBody(Onboarding onboarding) {
+        return String.format("%s%s", onboarding.getNickname(), PushMessage.TOO_DIRTY.getBody());
     }
 }

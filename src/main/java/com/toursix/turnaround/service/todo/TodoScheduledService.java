@@ -1,6 +1,8 @@
 package com.toursix.turnaround.service.todo;
 
 import com.toursix.turnaround.common.util.DateUtils;
+import com.toursix.turnaround.domain.interior.CleanLevel;
+import com.toursix.turnaround.domain.interior.Obtain;
 import com.toursix.turnaround.domain.todo.PushStatus;
 import com.toursix.turnaround.domain.todo.Todo;
 import com.toursix.turnaround.domain.todo.TodoStage;
@@ -118,6 +120,27 @@ public class TodoScheduledService {
                     .collect(Collectors.toList());
             if (todos.isEmpty()) {
                 notificationService.sendInduceNewTodoNotification(user);
+            }
+        });
+    }
+
+    /**
+     * 11시 0분 0초마다 실행
+     */
+    @Scheduled(cron = "0  0  11  *  *  *")
+    public void scheduledTooDirty() {
+        List<User> users = userRepository.findAllActiveUser();
+        users.forEach(user -> {
+            Onboarding onboarding = user.getOnboarding();
+            List<Obtain> obtains = onboarding.getObtains().stream()
+                    .filter(Obtain::getIsEquipped)
+                    .collect(Collectors.toList());
+            List<Obtain> tooDirtyobtains = onboarding.getObtains().stream()
+                    .filter(Obtain::getIsEquipped)
+                    .filter(obtain -> obtain.getCleanLevel() == CleanLevel.VERY_DIRTY)
+                    .collect(Collectors.toList());
+            if (obtains.size() == tooDirtyobtains.size()) {
+                notificationService.sendTooDirtyNotification(user);
             }
         });
     }
