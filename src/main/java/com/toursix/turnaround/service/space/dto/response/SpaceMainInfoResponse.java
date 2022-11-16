@@ -1,5 +1,6 @@
 package com.toursix.turnaround.service.space.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.toursix.turnaround.common.util.MathUtils;
 import com.toursix.turnaround.domain.interior.CleanLevel;
 import com.toursix.turnaround.domain.space.Acquire;
@@ -37,6 +38,12 @@ public class SpaceMainInfoResponse {
         private Long obtainId;
         private String interiorName;
         private CleanLevel interiorCleanLevel;
+        private boolean isCleanable;
+
+        @JsonProperty("isCleanable")
+        public boolean isCleanable() {
+            return isCleanable;
+        }
     }
 
     public static SpaceMainInfoResponse of(Onboarding onboarding, Acquire acquire) {
@@ -51,6 +58,7 @@ public class SpaceMainInfoResponse {
                                 .obtainId(obtain.getId())
                                 .interiorName(obtain.getInterior().getName())
                                 .interiorCleanLevel(obtain.getCleanLevel())
+                                .isCleanable(obtain.getCleanLevel() != CleanLevel.CLEAN)
                                 .build())
                         .collect(Collectors.toList()))
                 .build();
