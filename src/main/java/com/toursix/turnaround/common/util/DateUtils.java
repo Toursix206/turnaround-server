@@ -55,4 +55,8 @@ public class DateUtils {
         Duration duration = Duration.between(now.truncatedTo(ChronoUnit.MINUTES), date.truncatedTo(ChronoUnit.MINUTES));
         return now.isBefore(date) && duration.getSeconds() == 60 * 60;
     }
+
+    public static boolean isSameTime(LocalDateTime now, LocalDateTime date) {
+        return now.truncatedTo(ChronoUnit.MINUTES).isEqual(date.truncatedTo(ChronoUnit.MINUTES));
+    }
 }

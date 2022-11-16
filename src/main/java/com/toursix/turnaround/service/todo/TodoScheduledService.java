@@ -40,4 +40,21 @@ public class TodoScheduledService {
             todos.forEach(todo -> notificationService.sendBeforeOneHourTodoNotification(user, todo));
         });
     }
+
+    /**
+     * 5분마다 실행
+     */
+    @Scheduled(cron = "0  0/5  *  *  *  *")
+    public void scheduledStartTodos() {
+        LocalDateTime now = DateUtils.todayLocalDateTime();
+        List<User> users = userRepository.findAllActiveUser();
+        users.forEach(user -> {
+            Onboarding onboarding = user.getOnboarding();
+            List<Todo> todos = onboarding.getTodos().stream()
+                    .filter(todo -> todo.getStage() == TodoStage.IN_PROGRESS)
+                    .filter(todo -> DateUtils.isSameTime(now, todo.getStartAt()))
+                    .collect(Collectors.toList());
+            todos.forEach(todo -> notificationService.sendStartTodoNotification(user, todo));
+        });
+    }
 }

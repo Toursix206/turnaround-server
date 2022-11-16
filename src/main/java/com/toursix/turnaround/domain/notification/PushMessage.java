@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 public enum PushMessage implements EnumModel {
 
     BEFORE_ONE_HOUR_TODO("오늘의 활동 시작", "님 1시간 뒤 오늘의 턴어라운드를 시작해요"),
-    ;
+    START_TODO("오늘의 활동 시작", "지금 바로 활동을 시작하세요.");
 
     private final String title;
     private final String body;

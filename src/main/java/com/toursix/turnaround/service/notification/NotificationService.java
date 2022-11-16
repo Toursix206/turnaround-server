@@ -24,6 +24,13 @@ public class NotificationService {
         }
     }
 
+    public void sendStartTodoNotification(User to, Todo todo) {
+        if (to.getSetting().getAgreeAllPushNotification() && todo.getPushStatus() == PushStatus.ON) {
+            firebaseCloudMessageService.sendMessageTo(to, PushMessage.START_TODO.getTitle(),
+                    PushMessage.START_TODO.getBody());
+        }
+    }
+
     private String beforeOneHourTodoPushBody(Onboarding onboarding) {
         return String.format("%s%s", onboarding.getNickname(), PushMessage.BEFORE_ONE_HOUR_TODO.getBody());
     }
