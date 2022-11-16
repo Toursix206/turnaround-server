@@ -74,4 +74,20 @@ public class TodoScheduledService {
             todos.forEach(todo -> notificationService.sendRemindTodoNotification(user, todo));
         });
     }
+
+    /**
+     * 22시 0분 0초마다 실행
+     */
+    @Scheduled(cron = "0  0  22  *  *  *")
+    public void scheduledRemindRewards() {
+        LocalDateTime now = DateUtils.todayLocalDateTime();
+        List<User> users = userRepository.findAllActiveUser();
+        users.forEach(user -> {
+            Onboarding onboarding = user.getOnboarding();
+            List<Todo> todos = onboarding.getTodos().stream()
+                    .filter(todo -> todo.getStage() == TodoStage.SUCCESS)
+                    .collect(Collectors.toList());
+            todos.forEach(todo -> notificationService.sendRemindTodoNotification(user, todo));
+        });
+    }
 }

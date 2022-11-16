@@ -38,7 +38,18 @@ public class NotificationService {
         }
     }
 
+    public void sendRemindRewardNotification(User to, Todo todo) {
+        if (to.getSetting().getAgreeAllPushNotification()) {
+            firebaseCloudMessageService.sendMessageTo(to, PushMessage.REMIND_REWARD.getTitle(),
+                    remindRewardPushBody(to.getOnboarding()));
+        }
+    }
+
     private String beforeOneHourTodoPushBody(Onboarding onboarding) {
         return String.format("%s%s", onboarding.getNickname(), PushMessage.BEFORE_ONE_HOUR_TODO.getBody());
+    }
+
+    private String remindRewardPushBody(Onboarding onboarding) {
+        return String.format("%s%s", onboarding.getNickname(), PushMessage.REMIND_REWARD.getBody());
     }
 }
