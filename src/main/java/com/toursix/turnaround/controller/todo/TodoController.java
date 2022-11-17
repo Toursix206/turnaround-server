@@ -174,7 +174,8 @@ public class TodoController {
             @ApiResponse(
                     code = 404,
                     message = "1. 탈퇴했거나 존재하지 않는 유저입니다.\n"
-                            + "2. 존재하지 않는 todo 입니다.",
+                            + "2. 존재하지 않는 todo 입니다.\n"
+                            + "3. 활동 인증이 완료되지 않았습니다.",
                     response = ErrorResponse.class),
             @ApiResponse(code = 409, message = "이미 존재하는 인증된 활동입니다.", response = ErrorResponse.class),
             @ApiResponse(code = 500, message = "예상치 못한 서버 에러가 발생하였습니다.", response = ErrorResponse.class)
