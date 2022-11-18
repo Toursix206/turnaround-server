@@ -2,10 +2,12 @@ package com.toursix.turnaround.service.todo;
 
 import static com.toursix.turnaround.common.exception.ErrorCode.CONFLICT_TODO_DONE_EXCEPTION;
 import static com.toursix.turnaround.common.exception.ErrorCode.CONFLICT_TODO_REWARD_EXCEPTION;
+import static com.toursix.turnaround.common.exception.ErrorCode.NOT_FOUND_DONE_EXCEPTION;
 import static com.toursix.turnaround.common.exception.ErrorCode.VALIDATION_DONE_REVIEW_EXCEPTION;
 import static com.toursix.turnaround.common.exception.ErrorCode.VALIDATION_TODO_REWARD_EXCEPTION;
 
 import com.toursix.turnaround.common.exception.ConflictException;
+import com.toursix.turnaround.common.exception.NotFoundException;
 import com.toursix.turnaround.common.exception.ValidationException;
 import com.toursix.turnaround.common.type.FileType;
 import com.toursix.turnaround.common.util.DateUtils;
@@ -120,7 +122,12 @@ public class TodoService {
         User user = UserServiceUtils.findUserById(userRepository, userId);
         Onboarding onboarding = user.getOnboarding();
         Todo todo = TodoServiceUtils.findTodoById(todoRepository, todoId);
-        DoneReview doneReview = todo.getDone().getDoneReview();
+        Done done = todo.getDone();
+        if (done == null) {
+            throw new NotFoundException(String.format("인증이 완료된 활동 (%s) 이 아닙니다.", todo.getId()),
+                    NOT_FOUND_DONE_EXCEPTION);
+        }
+        DoneReview doneReview = done.getDoneReview();
         if (doneReview.checkTodoStage()) {
             throw new ValidationException(String.format("인증이 완료된 활동 (%s) 이 아닙니다.", todo.getId()),
                     VALIDATION_DONE_REVIEW_EXCEPTION);

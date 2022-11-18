@@ -70,6 +70,7 @@ public enum ErrorCode {
     NOT_FOUND_ACTIVITY_EXCEPTION(NOT_FOUND, "존재하지 않는 활동입니다."),
     NOT_FOUND_ACTIVITY_GUIDE_EXCEPTION(NOT_FOUND, "존재하지 않는 활동 가이드입니다."),
     NOT_FOUND_TODO_EXCEPTION(NOT_FOUND, "존재하지 않는 todo 입니다."),
+    NOT_FOUND_DONE_EXCEPTION(NOT_FOUND, "활동 인증이 완료되지 않았습니다."),
 
     /**
      * 405 Method Not Allowed
