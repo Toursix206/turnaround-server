@@ -1,10 +1,12 @@
 package com.toursix.turnaround.common.util;
 
 import java.time.DayOfWeek;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.time.temporal.WeekFields;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -47,5 +49,14 @@ public class DateUtils {
 
     public static boolean isTodayOrFuture(LocalDateTime now, LocalDateTime date) {
         return isSameDate(now, date) || date.isAfter(now);
+    }
+
+    public static boolean isBeforeOneHour(LocalDateTime now, LocalDateTime date) {
+        Duration duration = Duration.between(now.truncatedTo(ChronoUnit.MINUTES), date.truncatedTo(ChronoUnit.MINUTES));
+        return now.isBefore(date) && duration.getSeconds() == 60 * 60;
+    }
+
+    public static boolean isSameTime(LocalDateTime now, LocalDateTime date) {
+        return now.truncatedTo(ChronoUnit.MINUTES).isEqual(date.truncatedTo(ChronoUnit.MINUTES));
     }
 }

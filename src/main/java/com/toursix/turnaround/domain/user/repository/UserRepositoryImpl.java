@@ -6,6 +6,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.toursix.turnaround.domain.common.Status;
 import com.toursix.turnaround.domain.user.User;
 import com.toursix.turnaround.domain.user.UserSocialType;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -56,5 +57,15 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
                         user.status.eq(Status.ACTIVE)
                 )
                 .fetchOne();
+    }
+
+    @Override
+    public List<User> findAllActiveUser() {
+        return queryFactory
+                .selectFrom(user)
+                .where(
+                        user.status.eq(Status.ACTIVE)
+                )
+                .fetch();
     }
 }
