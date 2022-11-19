@@ -14,6 +14,7 @@ import com.toursix.turnaround.service.firebase.dto.request.FcmMessage;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,9 @@ import org.springframework.stereotype.Service;
 @Service
 @PropertySource(value = "classpath:application-firebase.yml", factory = YamlPropertySourceFactory.class, ignoreResourceNotFound = true)
 public class FirebaseCloudMessageService {
+
+    @Value("${cloud.firebase.config.path}")
+    private String firebaseConfigPath;
 
     private final ObjectMapper objectMapper;
     private final FirebaseApiClient firebaseApiCaller;
@@ -74,7 +78,6 @@ public class FirebaseCloudMessageService {
     }
 
     private String getAccessToken() {
-        String firebaseConfigPath = "firebase/firebase_service_key.json";
         try {
             GoogleCredentials googleCredentials = GoogleCredentials
                     .fromStream(new ClassPathResource(firebaseConfigPath).getInputStream())

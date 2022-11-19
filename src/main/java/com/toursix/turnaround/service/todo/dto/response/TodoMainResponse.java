@@ -23,10 +23,10 @@ public class TodoMainResponse {
     private int todayTodosCnt;
     private int thisWeekTodosCnt;
     private int nextTodosCnt;
-    private List<TodoInfo> successTodos;
-    private List<TodoInfo> todayTodos;
-    private List<TodoInfo> thisWeekTodos;
-    private List<TodoInfo> nextTodos;
+    private List<TodoListInfo> successTodos;
+    private List<TodoListInfo> todayTodos;
+    private List<TodoListInfo> thisWeekTodos;
+    private List<TodoListInfo> nextTodos;
 
     public static TodoMainResponse of(LocalDateTime now, List<Todo> successTodos, List<Todo> todayTodos,
             List<Todo> thisWeekTodos, List<Todo> nextTodos) {
@@ -37,19 +37,19 @@ public class TodoMainResponse {
                 .nextTodosCnt(nextTodos.size())
                 .successTodos(successTodos.stream()
                         .sorted(Comparator.comparing(Todo::getStartAt))
-                        .map(successTodo -> TodoInfo.of(now, successTodo))
+                        .map(successTodo -> TodoListInfo.of(now, successTodo))
                         .collect(Collectors.toList()))
                 .todayTodos(todayTodos.stream()
                         .sorted(Comparator.comparing(Todo::getStartAt))
-                        .map(todayTodo -> TodoInfo.of(now, todayTodo))
+                        .map(todayTodo -> TodoListInfo.of(now, todayTodo))
                         .collect(Collectors.toList()))
                 .thisWeekTodos(thisWeekTodos.stream()
                         .sorted(Comparator.comparing(Todo::getStartAt))
-                        .map(thisWeekTodo -> TodoInfo.of(now, thisWeekTodo))
+                        .map(thisWeekTodo -> TodoListInfo.of(now, thisWeekTodo))
                         .collect(Collectors.toList()))
                 .nextTodos(nextTodos.stream()
                         .sorted(Comparator.comparing(Todo::getStartAt))
-                        .map(nextTodo -> TodoInfo.of(now, nextTodo))
+                        .map(nextTodo -> TodoListInfo.of(now, nextTodo))
                         .collect(Collectors.toList()))
                 .build();
     }
