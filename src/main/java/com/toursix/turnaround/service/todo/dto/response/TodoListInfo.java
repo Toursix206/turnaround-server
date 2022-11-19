@@ -6,7 +6,6 @@ import com.toursix.turnaround.domain.todo.TodoStatus;
 import com.toursix.turnaround.service.todo.TodoServiceUtils;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,23 +14,26 @@ import lombok.ToString;
 @ToString
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor(access = AccessLevel.PROTECTED)
-@Builder(access = AccessLevel.PRIVATE)
-public class TodoInfo {
+public class TodoListInfo extends TodoInfo {
 
-    private Long todoId;
-    private String activityName;
-    private ActivityCategory activityCategory;
-    private TodoStatus todoStatus;
-    private String leftTime;
+    private int duration;
 
-    public static TodoInfo of(LocalDateTime now, Todo todo) {
-        return TodoInfo.builder()
+    @Builder(access = AccessLevel.PRIVATE)
+    public TodoListInfo(Long todoId, String activityName, ActivityCategory activityCategory, TodoStatus todoStatus,
+            String leftTime,
+            int duration) {
+        super(todoId, activityName, activityCategory, todoStatus, leftTime);
+        this.duration = duration;
+    }
+
+    public static TodoListInfo of(LocalDateTime now, Todo todo) {
+        return TodoListInfo.builder()
                 .todoId(todo.getId())
                 .activityName(todo.getActivity().getName())
                 .activityCategory(todo.getActivity().getCategory())
                 .todoStatus(TodoStatus.get(now, todo))
                 .leftTime(TodoServiceUtils.leftTime(now, todo))
+                .duration(todo.getActivity().getDuration())
                 .build();
     }
 }
