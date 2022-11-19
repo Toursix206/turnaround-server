@@ -68,7 +68,7 @@ public class TodoServiceUtils {
                 .collect(Collectors.toList());
     }
 
-    public static String leftTime(LocalDateTime now, Todo todo) {
+    public static String todoInfoLeftTime(LocalDateTime now, Todo todo) {
         if (todo.getStage() == TodoStage.SUCCESS) {
             return "눌러서 리워드 받기";
         }
@@ -85,6 +85,22 @@ public class TodoServiceUtils {
         long days = hours / 24;
         if (days == 0) {
             return String.format("%02d:%02d:%02d", hours, minutes % 60, seconds % 60);
+        }
+        Period period = Period.between(now.toLocalDate(), todo.getStartAt().toLocalDate());
+        return "D-" + period.getDays();
+    }
+
+    public static String todoDetailInfoLeftTime(LocalDateTime now, Todo todo) {
+        if (now.isAfter(todo.getStartAt())) {
+            return "0시간 0분";
+        }
+        Duration duration = Duration.between(now, todo.getStartAt());
+        long seconds = duration.getSeconds();
+        long minutes = seconds / 60;
+        long hours = minutes / 60;
+        long days = hours / 24;
+        if (days == 0) {
+            return String.format("%d시간 %d분", hours, minutes % 60);
         }
         Period period = Period.between(now.toLocalDate(), todo.getStartAt().toLocalDate());
         return "D-" + period.getDays();

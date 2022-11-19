@@ -36,7 +36,8 @@ public class TodoRetrieveService {
 
     public TodoInfoResponse getTodoInfo(Long todoId, Long userId) {
         UserServiceUtils.findUserById(userRepository, userId);
+        LocalDateTime now = DateUtils.todayLocalDateTime();
         Todo todo = TodoServiceUtils.findTodoById(todoRepository, todoId);
-        return TodoInfoResponse.of(todo);
+        return TodoInfoResponse.of(now, todo);
     }
 }

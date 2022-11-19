@@ -32,7 +32,7 @@ public class TodoListInfo extends TodoInfo {
                 .activityName(todo.getActivity().getName())
                 .activityCategory(todo.getActivity().getCategory())
                 .todoStatus(TodoStatus.get(now, todo))
-                .leftTime(TodoServiceUtils.leftTime(now, todo))
+                .leftTime(TodoServiceUtils.todoInfoLeftTime(now, todo))
                 .duration(todo.getActivity().getDuration())
                 .build();
     }
