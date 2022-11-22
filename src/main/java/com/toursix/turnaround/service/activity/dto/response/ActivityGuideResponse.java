@@ -38,12 +38,14 @@ public class ActivityGuideResponse {
     public static class ActivityGuideInfo {
 
         private int step;
+        private String title;
         private String content;
         private String imageUrl;
 
         public static ActivityGuideInfo of(ActivityGuide activityGuide) {
             return ActivityGuideInfo.builder()
                     .step(activityGuide.getStep())
+                    .title(activityGuide.getTitle())
                     .content(activityGuide.getContent())
                     .imageUrl(activityGuide.getImageUrl())
                     .build();
