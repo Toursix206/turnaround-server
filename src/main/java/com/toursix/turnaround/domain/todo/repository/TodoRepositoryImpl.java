@@ -4,6 +4,7 @@ import static com.toursix.turnaround.domain.todo.QTodo.todo;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.toursix.turnaround.domain.activity.Activity;
 import com.toursix.turnaround.domain.common.Status;
 import com.toursix.turnaround.domain.todo.Todo;
 import com.toursix.turnaround.domain.user.Onboarding;
@@ -39,6 +40,18 @@ public class TodoRepositoryImpl implements TodoRepositoryCustom {
                                 .or(endAtIsAfterStartAtAndBeforeEndAt(startAt, endAt))
                 )
                 .fetchFirst() != null;
+    }
+
+    @Override
+    public boolean existsByOnboardingAndActivityStartAt(Onboarding onboarding, Activity activity,
+            LocalDateTime startAt) {
+        return !queryFactory.selectFrom(todo)
+                .where(
+                        todo.onboarding.eq(onboarding),
+                        todo.status.eq(Status.ACTIVE),
+                        todo.activity.eq(activity),
+                        todo.startAt.loe(startAt)
+                ).fetch().isEmpty();
     }
 
     private BooleanExpression startAtAndEndAtAreBetween(LocalDateTime startAt, LocalDateTime endAt) {
