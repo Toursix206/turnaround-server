@@ -28,7 +28,7 @@ public class ActivityGuide extends AuditingTimeEntity {
     @Column(nullable = false, length = 100)
     private String title;
 
-    @Column(nullable = false, length = 100)
+    @Column(length = 100)
     private String content;
 
     @Column(nullable = false, length = 300)
