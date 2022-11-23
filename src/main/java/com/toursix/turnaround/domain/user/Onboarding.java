@@ -136,6 +136,10 @@ public class Onboarding extends AuditingTimeEntity {
         this.experience += value;
     }
 
+    public void updateLevel(int level) {
+        this.level = level;
+    }
+
     public void delete() {
         this.status = Status.DELETED;
         this.item.delete();
