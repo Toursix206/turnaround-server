@@ -67,16 +67,41 @@ public class TodoRetrieveController {
                 todoRetrieveService.getTodoInfo(todoId, userId));
     }
 
-    @ApiOperation(value = "[인증] 활동 페이지 - 활동 가이드 내용을 조회합니다.")
+    @ApiOperation(
+            value = "[인증] 활동 이벤트 페이지 - 활동 시작 가능 여부를 조회합니다.",
+            notes = "활동 시작이 가능할 경우 200, 다른 활동과 시간이 겹쳐 활동 시작이 불가능할 경우 409를 드립니다."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "성공입니다."),
+            @ApiResponse(code = 401, message = "토큰이 만료되었습니다. 다시 로그인 해주세요.", response = ErrorResponse.class),
+            @ApiResponse(code = 404,
+                    message = "1. 존재하지 않는 활동입니다.\n"
+                            + "2. 존재하지 않는 todo 입니다.\n"
+                            + "3. 탈퇴했거나 존재하지 않는 유저입니다.",
+                    response = ErrorResponse.class),
+            @ApiResponse(code = 409, message = "다른 활동과 겹치는 일정입니다.", response = ErrorResponse.class),
+            @ApiResponse(code = 500, message = "예상치 못한 서버 에러가 발생하였습니다.", response = ErrorResponse.class)
+    })
+    @Auth
+    @GetMapping("/todo/{todoId}/guide/able")
+    public ResponseEntity<SuccessResponse<String>> getTodoAbleStart(
+            @ApiParam(name = "todoId", value = "활동 시작을 진행할 todo 의 id", required = true, example = "1")
+            @PathVariable Long todoId,
+            @ApiIgnore @UserId Long userId) {
+        todoRetrieveService.getTodoAbleStart(todoId, userId);
+        return SuccessResponse.OK;
+    }
+
+    @ApiOperation(value = "[인증] 활동 가이드 페이지 - 활동 가이드 내용을 조회합니다.")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "활동별 가이드 조회 성공입니다."),
             @ApiResponse(code = 401, message = "토큰이 만료되었습니다. 다시 로그인 해주세요.", response = ErrorResponse.class),
             @ApiResponse(code = 404,
                     message = "1. 존재하지 않는 활동입니다.\n"
-                            + "2. 존재하지 않는 활동 가이드입니다.\n"
-                            + "3. 탈퇴했거나 존재하지 않는 유저입니다.",
+                            + "2. 존재하지 않는 todo 입니다.\n"
+                            + "3. 존재하지 않는 활동 가이드입니다.\n"
+                            + "4. 탈퇴했거나 존재하지 않는 유저입니다.",
                     response = ErrorResponse.class),
-            @ApiResponse(code = 409, message = "다른 활동과 겹치는 일정입니다.", response = ErrorResponse.class),
             @ApiResponse(code = 500, message = "예상치 못한 서버 에러가 발생하였습니다.", response = ErrorResponse.class)
     })
     @Auth
