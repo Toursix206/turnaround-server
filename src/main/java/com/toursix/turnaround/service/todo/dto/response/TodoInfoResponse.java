@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.toursix.turnaround.domain.activity.ActivityCategory;
 import com.toursix.turnaround.domain.activity.ActivityType;
 import com.toursix.turnaround.domain.interior.InteriorType;
+import com.toursix.turnaround.domain.todo.PushStatus;
 import com.toursix.turnaround.domain.todo.Todo;
 import com.toursix.turnaround.service.activity.dto.response.ActivityInfo;
 import com.toursix.turnaround.service.todo.TodoServiceUtils;
@@ -24,6 +25,7 @@ public class TodoInfoResponse extends ActivityInfo {
     private InteriorType rewardItem;
     private String leftTime;
     private boolean isAfterStartAt;
+    private PushStatus pushStatus;
 
     @JsonProperty("isAfterStartAt")
     public boolean isAfterStartAt() {
@@ -32,12 +34,14 @@ public class TodoInfoResponse extends ActivityInfo {
 
     @Builder(access = AccessLevel.PRIVATE)
     public TodoInfoResponse(Long activityId, ActivityCategory category, ActivityType type, String name,
-            int point, int broom, InteriorType rewardItem, String leftTime, boolean isAfterStartAt) {
+            int point, int broom, InteriorType rewardItem, String leftTime, boolean isAfterStartAt,
+            PushStatus pushStatus) {
         super(activityId, category, type, name, broom);
         this.point = point;
         this.rewardItem = rewardItem;
         this.leftTime = leftTime;
         this.isAfterStartAt = isAfterStartAt;
+        this.pushStatus = pushStatus;
     }
 
     public static TodoInfoResponse of(LocalDateTime now, Todo todo) {
@@ -51,6 +55,7 @@ public class TodoInfoResponse extends ActivityInfo {
                 .rewardItem(null)
                 .leftTime(TodoServiceUtils.todoDetailInfoLeftTime(now, todo))
                 .isAfterStartAt(now.isAfter(todo.getStartAt()))
+                .pushStatus(todo.getPushStatus())
                 .build();
     }
 }
