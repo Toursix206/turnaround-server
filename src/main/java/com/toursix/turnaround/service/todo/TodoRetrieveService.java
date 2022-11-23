@@ -12,6 +12,7 @@ import com.toursix.turnaround.domain.todo.repository.TodoRepository;
 import com.toursix.turnaround.domain.user.Onboarding;
 import com.toursix.turnaround.domain.user.User;
 import com.toursix.turnaround.domain.user.repository.UserRepository;
+import com.toursix.turnaround.service.activity.ActivityServiceUtils;
 import com.toursix.turnaround.service.activity.dto.response.ActivityGuideResponse;
 import com.toursix.turnaround.service.activity.dto.response.ActivityGuideResponse.ActivityGuideInfo;
 import com.toursix.turnaround.service.todo.dto.response.TodoInfoResponse;
@@ -51,7 +52,7 @@ public class TodoRetrieveService {
         return TodoInfoResponse.of(now, todo);
     }
 
-    public ActivityGuideResponse getTodoGuide(Long todoId, Long userId) {
+    public void getTodoAbleStart(Long todoId, Long userId) {
         User user = UserServiceUtils.findUserById(userRepository, userId);
         Onboarding onboarding = user.getOnboarding();
         Todo todo = TodoServiceUtils.findTodoById(todoRepository, todoId);
@@ -61,6 +62,13 @@ public class TodoRetrieveService {
             TodoValidateUtils.validateUniqueTodoTime(todoRepository, onboarding, todo, now,
                     now.plusMinutes(activity.getDuration()));
         }
+    }
+
+    public ActivityGuideResponse getTodoGuide(Long todoId, Long userId) {
+        UserServiceUtils.findUserById(userRepository, userId);
+        Todo todo = TodoServiceUtils.findTodoById(todoRepository, todoId);
+        Activity activity = todo.getActivity();
+        ActivityServiceUtils.findActivityById(activityRepository, activity.getId());
         List<ActivityGuide> activityGuide = activityRepository.findActivityGuidesByActivity(activity);
         if (activityGuide.isEmpty()) {
             throw new NotFoundException(String.format("존재하지 않는 활동 가이드 (%s) 입니다", activity.getId()),
