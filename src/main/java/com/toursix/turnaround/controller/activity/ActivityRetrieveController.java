@@ -8,11 +8,9 @@ import com.toursix.turnaround.config.resolver.UserId;
 import com.toursix.turnaround.config.validator.AllowedSortProperties;
 import com.toursix.turnaround.service.activity.ActivityRetrieveService;
 import com.toursix.turnaround.service.activity.dto.request.GetActivitiesRequestDto;
-import com.toursix.turnaround.service.activity.dto.response.ActivityGuideResponse;
 import com.toursix.turnaround.service.activity.dto.response.ActivityPagingResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +18,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
@@ -58,26 +55,5 @@ public class ActivityRetrieveController {
             @ApiIgnore @UserId Long userId) {
         return SuccessResponse.success(SuccessCode.GET_ACTIVITIES_INFO_SUCCESS,
                 activityRetrieveService.getActivitiesUsingPaging(request, pageable, userId));
-    }
-
-    @ApiOperation(value = "[인증] 활동 페이지 - 활동 가이드 내용을 조회합니다.")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "활동별 가이드 조회 성공입니다."),
-            @ApiResponse(code = 401, message = "토큰이 만료되었습니다. 다시 로그인 해주세요.", response = ErrorResponse.class),
-            @ApiResponse(code = 404,
-                    message = "1. 존재하지 않는 활동입니다.\n"
-                            + "2. 존재하지 않는 활동 가이드입니다.\n"
-                            + "3. 탈퇴했거나 존재하지 않는 유저입니다.",
-                    response = ErrorResponse.class),
-            @ApiResponse(code = 500, message = "예상치 못한 서버 에러가 발생하였습니다.", response = ErrorResponse.class)
-    })
-    @Auth
-    @GetMapping("/activity/{activityId}/guide")
-    public ResponseEntity<SuccessResponse<ActivityGuideResponse>> getActivityGuide(
-            @ApiParam(name = "activityId", value = "조회할 activity 의 id", required = true, example = "1")
-            @PathVariable Long activityId,
-            @ApiIgnore @UserId Long userId) {
-        return SuccessResponse.success(SuccessCode.GET_ACTIVITY_GUIDE_INFO_SUCCESS,
-                activityRetrieveService.getActivityGuide(activityId, userId));
     }
 }
