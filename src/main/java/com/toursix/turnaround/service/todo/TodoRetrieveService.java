@@ -58,7 +58,7 @@ public class TodoRetrieveService {
         Activity activity = todo.getActivity();
         LocalDateTime now = DateUtils.todayLocalDateTime();
         if (now.isBefore(todo.getStartAt())) {
-            TodoValidateUtils.validateUniqueTodoTime(todoRepository, onboarding, now,
+            TodoValidateUtils.validateUniqueTodoTime(todoRepository, onboarding, todo, now,
                     now.plusMinutes(activity.getDuration()));
         }
         List<ActivityGuide> activityGuide = activityRepository.findActivityGuidesByActivity(activity);

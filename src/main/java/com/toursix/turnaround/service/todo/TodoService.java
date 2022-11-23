@@ -62,7 +62,7 @@ public class TodoService {
         LocalDateTime startAt = request.getStartAt();
         LocalDateTime endAt = startAt.plusMinutes(activity.getDuration());
         TodoValidateUtils.validateStartAt(startAt, now, activity.getDuration());
-        TodoValidateUtils.validateUniqueTodoTime(todoRepository, onboarding, startAt, endAt);
+        TodoValidateUtils.validateUniqueTodoTime(todoRepository, onboarding, null, startAt, endAt);
         Todo todo = todoRepository.save(
                 Todo.newInstance(user.getOnboarding(), activity, startAt, request.getPushStatus()));
         onboarding.addTodo(todo);
@@ -77,7 +77,7 @@ public class TodoService {
         LocalDateTime endAt = startAt.plusMinutes(todo.getActivity().getDuration());
         TodoValidateUtils.validateUpdatable(todo);
         TodoValidateUtils.validateStartAt(startAt, now, todo.getActivity().getDuration());
-        TodoValidateUtils.validateUniqueTodoTime(todoRepository, onboarding, startAt, endAt);
+        TodoValidateUtils.validateUniqueTodoTime(todoRepository, onboarding, todo, startAt, endAt);
         todo.updateStartAt(startAt);
         todo.updatePushStatus(request.getPushStatus());
         onboarding.updateTodo(todo);
