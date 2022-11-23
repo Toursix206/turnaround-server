@@ -8,5 +8,6 @@ public interface TodoRepositoryCustom {
 
     Todo findTodoById(Long todoId);
 
-    boolean existsByOnboardingAndStartAtAndEndAt(Onboarding onboarding, LocalDateTime startAt, LocalDateTime endAt);
+    boolean existsByOnboardingAndTodoAndStartAtAndEndAt(Onboarding onboarding, Todo todo, LocalDateTime startAt,
+            LocalDateTime endAt);
 }

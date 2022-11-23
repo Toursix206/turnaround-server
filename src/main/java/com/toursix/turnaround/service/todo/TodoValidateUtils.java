@@ -51,9 +51,9 @@ public class TodoValidateUtils {
         }
     }
 
-    public static void validateUniqueTodoTime(TodoRepository todoRepository, Onboarding onboarding,
+    public static void validateUniqueTodoTime(TodoRepository todoRepository, Onboarding onboarding, Todo todo,
             LocalDateTime startAt, LocalDateTime endAt) {
-        if (todoRepository.existsByOnboardingAndStartAtAndEndAt(onboarding, startAt, endAt)) {
+        if (todoRepository.existsByOnboardingAndTodoAndStartAtAndEndAt(onboarding, todo, startAt, endAt)) {
             throw new ConflictException(String.format("다른 활동과 겹치는 일정입니다. startAt(%s) endAt(%s)", startAt, endAt),
                     CONFLICT_TODO_TIME_EXCEPTION);
         }

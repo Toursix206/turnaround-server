@@ -5,6 +5,7 @@ import com.toursix.turnaround.common.dto.SuccessResponse;
 import com.toursix.turnaround.common.success.SuccessCode;
 import com.toursix.turnaround.config.interceptor.Auth;
 import com.toursix.turnaround.config.resolver.UserId;
+import com.toursix.turnaround.service.activity.dto.response.ActivityGuideResponse;
 import com.toursix.turnaround.service.todo.TodoRetrieveService;
 import com.toursix.turnaround.service.todo.dto.response.TodoInfoResponse;
 import com.toursix.turnaround.service.todo.dto.response.TodoMainResponse;
@@ -64,5 +65,27 @@ public class TodoRetrieveController {
             @ApiIgnore @UserId Long userId) {
         return SuccessResponse.success(SuccessCode.GET_TODO_INFO_SUCCESS,
                 todoRetrieveService.getTodoInfo(todoId, userId));
+    }
+
+    @ApiOperation(value = "[인증] 활동 페이지 - 활동 가이드 내용을 조회합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "활동별 가이드 조회 성공입니다."),
+            @ApiResponse(code = 401, message = "토큰이 만료되었습니다. 다시 로그인 해주세요.", response = ErrorResponse.class),
+            @ApiResponse(code = 404,
+                    message = "1. 존재하지 않는 활동입니다.\n"
+                            + "2. 존재하지 않는 활동 가이드입니다.\n"
+                            + "3. 탈퇴했거나 존재하지 않는 유저입니다.",
+                    response = ErrorResponse.class),
+            @ApiResponse(code = 409, message = "다른 활동과 겹치는 일정입니다.", response = ErrorResponse.class),
+            @ApiResponse(code = 500, message = "예상치 못한 서버 에러가 발생하였습니다.", response = ErrorResponse.class)
+    })
+    @Auth
+    @GetMapping("/todo/{todoId}/guide")
+    public ResponseEntity<SuccessResponse<ActivityGuideResponse>> getActivityGuide(
+            @ApiParam(name = "todoId", value = "활동 시작을 진행할 todo 의 id", required = true, example = "1")
+            @PathVariable Long todoId,
+            @ApiIgnore @UserId Long userId) {
+        return SuccessResponse.success(SuccessCode.GET_ACTIVITY_GUIDE_INFO_SUCCESS,
+                todoRetrieveService.getTodoGuide(todoId, userId));
     }
 }

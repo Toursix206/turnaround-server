@@ -27,11 +27,13 @@ public class TodoRepositoryImpl implements TodoRepositoryCustom {
     }
 
     @Override
-    public boolean existsByOnboardingAndStartAtAndEndAt(Onboarding onboarding, LocalDateTime startAt,
+    public boolean existsByOnboardingAndTodoAndStartAtAndEndAt(Onboarding onboarding, Todo nowTodo,
+            LocalDateTime startAt,
             LocalDateTime endAt) {
         return queryFactory.selectOne()
                 .from(todo)
                 .where(
+                        neTodo(nowTodo),
                         todo.onboarding.eq(onboarding),
                         todo.status.eq(Status.ACTIVE),
                         startAtAndEndAtAreBetween(startAt, endAt)
@@ -39,6 +41,13 @@ public class TodoRepositoryImpl implements TodoRepositoryCustom {
                                 .or(endAtIsAfterStartAtAndBeforeEndAt(startAt, endAt))
                 )
                 .fetchFirst() != null;
+    }
+
+    private BooleanExpression neTodo(Todo nowTodo) {
+        if (nowTodo == null) {
+            return null;
+        }
+        return todo.id.ne(nowTodo.getId());
     }
 
     private BooleanExpression startAtAndEndAtAreBetween(LocalDateTime startAt, LocalDateTime endAt) {
