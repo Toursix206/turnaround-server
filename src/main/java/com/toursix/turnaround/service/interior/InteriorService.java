@@ -8,6 +8,8 @@ import com.toursix.turnaround.domain.item.Item;
 import com.toursix.turnaround.domain.space.Acquire;
 import com.toursix.turnaround.domain.user.Onboarding;
 import com.toursix.turnaround.domain.user.User;
+import com.toursix.turnaround.domain.user.UserLevel;
+import com.toursix.turnaround.domain.user.repository.UserLevelRepository;
 import com.toursix.turnaround.domain.user.repository.UserRepository;
 import com.toursix.turnaround.service.space.dto.response.SpaceMainInfoResponse;
 import com.toursix.turnaround.service.user.UserServiceUtils;
@@ -24,6 +26,7 @@ public class InteriorService {
 
     private final UserRepository userRepository;
     private final ObtainRepository obtainRepository;
+    private final UserLevelRepository userLevelRepository;
 
     public SpaceMainInfoResponse updateCleanScore(Long obtainId, Long userId) {
         User user = UserServiceUtils.findUserById(userRepository, userId);
@@ -36,6 +39,9 @@ public class InteriorService {
         obtain.cleanInterior();
         onboarding.updateObtain(obtain);
         onboarding.addExperience(Constant.USE_BROOM_EXPERIENCE);
+        int experience = onboarding.getExperience();
+        UserLevel userLevel = userLevelRepository.findLevelByExperience(experience);
+        onboarding.updateLevel(userLevel.getLevel());
         //TODO 공간 여러개인 경우 고려
         Acquire acquire = onboarding.getAcquires().get(0);
         List<Obtain> obtains = onboarding.getObtains();
