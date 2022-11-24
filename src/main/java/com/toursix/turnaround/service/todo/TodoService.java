@@ -31,6 +31,7 @@ import com.toursix.turnaround.service.image.provider.S3Provider;
 import com.toursix.turnaround.service.image.provider.dto.request.ImageUploadFileRequest;
 import com.toursix.turnaround.service.todo.dto.request.CreateDoneReviewRequestDto;
 import com.toursix.turnaround.service.todo.dto.request.CreateTodoRequestDto;
+import com.toursix.turnaround.service.todo.dto.request.UpdateTodoPushStateRequestDto;
 import com.toursix.turnaround.service.todo.dto.request.UpdateTodoRequestDto;
 import com.toursix.turnaround.service.todo.dto.response.RewardResponse;
 import com.toursix.turnaround.service.user.UserServiceUtils;
@@ -81,6 +82,13 @@ public class TodoService {
         todo.updateStartAt(startAt);
         todo.updatePushStatus(request.getPushStatus());
         onboarding.updateTodo(todo);
+    }
+
+    public void updateTodoByPushState(UpdateTodoPushStateRequestDto request, Long todoId, Long userId) {
+        User user = UserServiceUtils.findUserById(userRepository, userId);
+        Todo todo = TodoServiceUtils.findTodoById(todoRepository, todoId);
+        TodoValidateUtils.validateTodoByTodoStatus(todo, request.getPushStatus(), user);
+        todo.updatePushStatus(request.getPushStatus());
     }
 
     public void deleteTodo(Long todoId, Long userId) {
@@ -140,7 +148,7 @@ public class TodoService {
     public void turnOffTodosNotificationByUser(Long userId) {
         User user = UserServiceUtils.findUserById(userRepository, userId);
         List<Todo> todos = user.getOnboarding().getTodos();
-        TodoValidateUtils.validateTodoStatus(todos, user);
+        TodoValidateUtils.validateTodosByTodoStatus(todos, user);
         todos.stream()
                 .filter(todo -> todo.getPushStatus() != PushStatus.OFF)
                 .forEach(todo -> todo.updatePushStatus(PushStatus.OFF));

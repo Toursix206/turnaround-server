@@ -8,6 +8,7 @@ import com.toursix.turnaround.config.resolver.UserId;
 import com.toursix.turnaround.service.todo.TodoService;
 import com.toursix.turnaround.service.todo.dto.request.CreateDoneReviewRequestDto;
 import com.toursix.turnaround.service.todo.dto.request.CreateTodoRequestDto;
+import com.toursix.turnaround.service.todo.dto.request.UpdateTodoPushStateRequestDto;
 import com.toursix.turnaround.service.todo.dto.request.UpdateTodoRequestDto;
 import com.toursix.turnaround.service.todo.dto.response.RewardResponse;
 import io.swagger.annotations.Api;
@@ -97,6 +98,36 @@ public class TodoController {
             @PathVariable Long todoId,
             @ApiIgnore @UserId Long userId) {
         todoService.updateTodo(request, todoId, userId);
+        return SuccessResponse.OK;
+    }
+
+    @ApiOperation(
+            value = "[인증] 활동 이벤트 페이지 - 활동 시간의 푸시 알림 여부를 수정합니다.",
+            notes = "기존의 푸시 알림 설정 값과 동일한 경우, 400을 전달합니다.\n" +
+                    "알림 여부는 PushState (ON, OFF) 값으로 보내주세요."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "성공입니다."),
+            @ApiResponse(code = 400,
+                    message = "1. 활동의 알림 여부를 입력해주세요. (pushStatus)\n"
+                            + "2. 잘못된 알림 상태입니다.",
+                    response = ErrorResponse.class),
+            @ApiResponse(code = 401, message = "토큰이 만료되었습니다. 다시 로그인 해주세요.", response = ErrorResponse.class),
+            @ApiResponse(
+                    code = 404,
+                    message = "1. 탈퇴했거나 존재하지 않는 유저입니다.\n"
+                            + "2. 존재하지 않는 todo 입니다.",
+                    response = ErrorResponse.class),
+            @ApiResponse(code = 500, message = "예상치 못한 서버 에러가 발생하였습니다.", response = ErrorResponse.class)
+    })
+    @Auth
+    @PutMapping("/todo/{todoId}/push")
+    public ResponseEntity<SuccessResponse<String>> updateTodoByPushState(
+            @Valid @RequestBody UpdateTodoPushStateRequestDto request,
+            @ApiParam(name = "todoId", value = "수정할 todo 의 id", required = true, example = "1")
+            @PathVariable Long todoId,
+            @ApiIgnore @UserId Long userId) {
+        todoService.updateTodoByPushState(request, todoId, userId);
         return SuccessResponse.OK;
     }
 

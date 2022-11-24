@@ -3,6 +3,7 @@ package com.toursix.turnaround.service.todo;
 import static com.toursix.turnaround.common.exception.ErrorCode.CONFLICT_TODO_PUSH_STATUS_EXCEPTION;
 import static com.toursix.turnaround.common.exception.ErrorCode.CONFLICT_TODO_TIME_EXCEPTION;
 import static com.toursix.turnaround.common.exception.ErrorCode.FORBIDDEN_TODO_STAGE_EXCEPTION;
+import static com.toursix.turnaround.common.exception.ErrorCode.VALIDATION_STATUS_EXCEPTION;
 import static com.toursix.turnaround.common.exception.ErrorCode.VALIDATION_TODO_START_AT_EXCEPTION;
 
 import com.toursix.turnaround.common.exception.ConflictException;
@@ -66,12 +67,19 @@ public class TodoValidateUtils {
         }
     }
 
-    public static void validateTodoStatus(List<Todo> todos, User user) {
+    public static void validateTodosByTodoStatus(List<Todo> todos, User user) {
         List<Todo> todosWithPushStatusOff = todos.stream().filter(todo -> todo.getPushStatus() == PushStatus.OFF)
                 .collect(Collectors.toList());
         if (todosWithPushStatusOff.size() == todos.size()) {
             throw new ConflictException(String.format("유저 (%s) 의 모든 활동에 대한 알림이 이미 꺼져있습니다.", user.getId()),
                     CONFLICT_TODO_PUSH_STATUS_EXCEPTION);
+        }
+    }
+
+    public static void validateTodoByTodoStatus(Todo todo, PushStatus requestPushStatus, User user) {
+        if (todo.getPushStatus() == requestPushStatus) {
+            throw new ValidationException(String.format("유저 (%s) 의 해당 활동에 대한 알림 상태 중복입니다.", user.getId()),
+                    VALIDATION_STATUS_EXCEPTION);
         }
     }
 }
