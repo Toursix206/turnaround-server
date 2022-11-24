@@ -7,7 +7,9 @@ import com.toursix.turnaround.common.util.DateUtils;
 import com.toursix.turnaround.domain.activity.Activity;
 import com.toursix.turnaround.domain.activity.ActivityGuide;
 import com.toursix.turnaround.domain.activity.repository.ActivityRepository;
+import com.toursix.turnaround.domain.todo.DoneReview;
 import com.toursix.turnaround.domain.todo.Todo;
+import com.toursix.turnaround.domain.todo.repository.DoneReviewRepository;
 import com.toursix.turnaround.domain.todo.repository.TodoRepository;
 import com.toursix.turnaround.domain.user.Onboarding;
 import com.toursix.turnaround.domain.user.User;
@@ -15,6 +17,7 @@ import com.toursix.turnaround.domain.user.repository.UserRepository;
 import com.toursix.turnaround.service.activity.ActivityServiceUtils;
 import com.toursix.turnaround.service.activity.dto.response.ActivityGuideResponse;
 import com.toursix.turnaround.service.activity.dto.response.ActivityGuideResponse.ActivityGuideInfo;
+import com.toursix.turnaround.service.todo.dto.response.DoneReviewInfoResponse;
 import com.toursix.turnaround.service.todo.dto.response.TodoInfoResponse;
 import com.toursix.turnaround.service.todo.dto.response.TodoMainResponse;
 import com.toursix.turnaround.service.user.UserServiceUtils;
@@ -32,6 +35,7 @@ public class TodoRetrieveService {
     private final UserRepository userRepository;
     private final TodoRepository todoRepository;
     private final ActivityRepository activityRepository;
+    private final DoneReviewRepository doneReviewRepository;
 
     public TodoMainResponse getTodoMainInfo(Long userId) {
         User user = UserServiceUtils.findUserById(userRepository, userId);
@@ -75,5 +79,11 @@ public class TodoRetrieveService {
                     NOT_FOUND_ACTIVITY_GUIDE_EXCEPTION);
         }
         return ActivityGuideResponse.of(activity.getId(), activity.getName(), ActivityGuideInfo.of(activityGuide));
+    }
+
+    public DoneReviewInfoResponse getTodoDoneReview(Long doneReviewId, Long userId) {
+        UserServiceUtils.findUserById(userRepository, userId);
+        DoneReview doneReview = TodoServiceUtils.findDoneReviewById(doneReviewRepository, doneReviewId);
+        return DoneReviewInfoResponse.of(doneReview);
     }
 }

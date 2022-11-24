@@ -1,26 +1,25 @@
 package com.toursix.turnaround.service.todo;
 
 import static com.toursix.turnaround.common.exception.ErrorCode.CONFLICT_TODO_DONE_EXCEPTION;
+import static com.toursix.turnaround.common.exception.ErrorCode.CONFLICT_TODO_DONE_REVIEW_EXCEPTION;
 import static com.toursix.turnaround.common.exception.ErrorCode.CONFLICT_TODO_REWARD_EXCEPTION;
-import static com.toursix.turnaround.common.exception.ErrorCode.NOT_FOUND_DONE_EXCEPTION;
-import static com.toursix.turnaround.common.exception.ErrorCode.VALIDATION_DONE_REVIEW_EXCEPTION;
+import static com.toursix.turnaround.common.exception.ErrorCode.VALIDATION_TODO_DONE_REVIEW_EXCEPTION;
 import static com.toursix.turnaround.common.exception.ErrorCode.VALIDATION_TODO_REWARD_EXCEPTION;
 
 import com.toursix.turnaround.common.exception.ConflictException;
-import com.toursix.turnaround.common.exception.NotFoundException;
 import com.toursix.turnaround.common.exception.ValidationException;
 import com.toursix.turnaround.common.type.FileType;
 import com.toursix.turnaround.common.util.DateUtils;
 import com.toursix.turnaround.domain.activity.Activity;
 import com.toursix.turnaround.domain.activity.repository.ActivityRepository;
-import com.toursix.turnaround.domain.done.Done;
-import com.toursix.turnaround.domain.done.DoneReview;
-import com.toursix.turnaround.domain.done.repository.DoneRepository;
-import com.toursix.turnaround.domain.done.repository.DoneReviewRepository;
 import com.toursix.turnaround.domain.item.Item;
+import com.toursix.turnaround.domain.todo.Done;
+import com.toursix.turnaround.domain.todo.DoneReview;
 import com.toursix.turnaround.domain.todo.PushStatus;
 import com.toursix.turnaround.domain.todo.Todo;
 import com.toursix.turnaround.domain.todo.TodoStage;
+import com.toursix.turnaround.domain.todo.repository.DoneRepository;
+import com.toursix.turnaround.domain.todo.repository.DoneReviewRepository;
 import com.toursix.turnaround.domain.todo.repository.TodoRepository;
 import com.toursix.turnaround.domain.user.Onboarding;
 import com.toursix.turnaround.domain.user.Point;
@@ -33,6 +32,7 @@ import com.toursix.turnaround.service.todo.dto.request.CreateDoneReviewRequestDt
 import com.toursix.turnaround.service.todo.dto.request.CreateTodoRequestDto;
 import com.toursix.turnaround.service.todo.dto.request.UpdateTodoPushStateRequestDto;
 import com.toursix.turnaround.service.todo.dto.request.UpdateTodoRequestDto;
+import com.toursix.turnaround.service.todo.dto.response.DoneResponse;
 import com.toursix.turnaround.service.todo.dto.response.RewardResponse;
 import com.toursix.turnaround.service.user.UserServiceUtils;
 import java.time.LocalDateTime;
@@ -100,7 +100,7 @@ public class TodoService {
         onboarding.deleteTodo(todo);
     }
 
-    public void createDoneForActivity(Long todoId, MultipartFile image, Long userId) {
+    public DoneResponse createDoneForActivity(Long todoId, MultipartFile image, Long userId) {
         User user = UserServiceUtils.findUserById(userRepository, userId);
         Onboarding onboarding = user.getOnboarding();
         Todo todo = TodoServiceUtils.findTodoById(todoRepository, todoId);
@@ -116,6 +116,7 @@ public class TodoService {
                 DoneReview.newInstance(onboarding, todo.getActivity(), done));
         onboarding.addDoneReview(doneReview);
         todo.setStage(TodoStage.SUCCESS);
+        return DoneResponse.of(doneReview.getId());
     }
 
     public RewardResponse rewardToUser(Long todoId, Long userId) {
@@ -126,23 +127,22 @@ public class TodoService {
         return RewardResponse.of(todo.getActivity().getBroom());
     }
 
-    public void createDoneReviewForTodo(CreateDoneReviewRequestDto request, Long todoId, Long userId) {
+    public void createDoneReviewForTodo(CreateDoneReviewRequestDto request, Long doneReviewId, Long userId) {
         User user = UserServiceUtils.findUserById(userRepository, userId);
         Onboarding onboarding = user.getOnboarding();
-        Todo todo = TodoServiceUtils.findTodoById(todoRepository, todoId);
-        Done done = todo.getDone();
-        if (done == null) {
-            throw new NotFoundException(String.format("인증이 완료된 활동 (%s) 이 아닙니다.", todo.getId()),
-                    NOT_FOUND_DONE_EXCEPTION);
+        DoneReview doneReview = TodoServiceUtils.findDoneReviewById(doneReviewRepository, doneReviewId);
+        Done done = doneReview.getDone();
+        if (!doneReview.checkTodoStage()) {
+            throw new ValidationException(String.format("인증이 완료된 활동 (%s) 이 아닙니다.", done.getId()),
+                    VALIDATION_TODO_DONE_REVIEW_EXCEPTION);
         }
-        DoneReview doneReview = done.getDoneReview();
-        if (doneReview.checkTodoStage()) {
-            throw new ValidationException(String.format("인증이 완료된 활동 (%s) 이 아닙니다.", todo.getId()),
-                    VALIDATION_DONE_REVIEW_EXCEPTION);
+        if (doneReview.getIsWritten()) {
+            throw new ConflictException(String.format("이미 리뷰가 작성된 활동 (%s) 입니다.", done.getId()),
+                    CONFLICT_TODO_DONE_REVIEW_EXCEPTION);
         }
         doneReview.update(request.getRating(), request.getContent());
         onboarding.updateDoneReview(doneReview);
-        giveTurningPointToUser(user, todo);
+        giveTurningPointToUser(user, doneReview.getActivity());
     }
 
     public void turnOffTodosNotificationByUser(Long userId) {
@@ -170,8 +170,8 @@ public class TodoService {
         todo.setStage(TodoStage.SUCCESS_REWARD);
     }
 
-    private void giveTurningPointToUser(User user, Todo todo) {
+    private void giveTurningPointToUser(User user, Activity activity) {
         Point point = user.getPoint();
-        point.addAmount(todo.getActivity().getPoint());
+        point.addAmount(activity.getPoint());
     }
 }

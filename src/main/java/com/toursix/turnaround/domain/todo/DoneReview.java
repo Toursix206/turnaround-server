@@ -1,9 +1,8 @@
-package com.toursix.turnaround.domain.done;
+package com.toursix.turnaround.domain.todo;
 
 import com.toursix.turnaround.domain.activity.Activity;
 import com.toursix.turnaround.domain.common.AuditingTimeEntity;
 import com.toursix.turnaround.domain.common.Status;
-import com.toursix.turnaround.domain.todo.TodoStage;
 import com.toursix.turnaround.domain.user.Onboarding;
 import javax.persistence.Column;
 import javax.persistence.Embedded;

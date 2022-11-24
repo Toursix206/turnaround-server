@@ -1,12 +1,15 @@
 package com.toursix.turnaround.service.todo;
 
+import static com.toursix.turnaround.common.exception.ErrorCode.NOT_FOUND_TODO_DONE_REVIEW_EXCEPTION;
 import static com.toursix.turnaround.common.exception.ErrorCode.NOT_FOUND_TODO_EXCEPTION;
 
 import com.toursix.turnaround.common.exception.NotFoundException;
 import com.toursix.turnaround.common.util.DateUtils;
 import com.toursix.turnaround.domain.common.Status;
+import com.toursix.turnaround.domain.todo.DoneReview;
 import com.toursix.turnaround.domain.todo.Todo;
 import com.toursix.turnaround.domain.todo.TodoStage;
+import com.toursix.turnaround.domain.todo.repository.DoneReviewRepository;
 import com.toursix.turnaround.domain.todo.repository.TodoRepository;
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -36,6 +39,15 @@ public class TodoServiceUtils {
             throw new NotFoundException(String.format("존재하지 않는 todo (%s) 입니다", todoId), NOT_FOUND_TODO_EXCEPTION);
         }
         return todo;
+    }
+
+    public static DoneReview findDoneReviewById(DoneReviewRepository doneReviewRepository, Long doneReviewId) {
+        DoneReview doneReview = doneReviewRepository.findDoneReviewById(doneReviewId);
+        if (doneReview == null) {
+            throw new NotFoundException(String.format("존재하지 않는 doneReview (%s) 입니다", doneReviewId),
+                    NOT_FOUND_TODO_DONE_REVIEW_EXCEPTION);
+        }
+        return doneReview;
     }
 
     public static List<Todo> filterSuccessTodos(List<Todo> todos) {

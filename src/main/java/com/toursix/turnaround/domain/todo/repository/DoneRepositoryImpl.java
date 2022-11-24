@@ -1,4 +1,4 @@
-package com.toursix.turnaround.domain.done.repository;
+package com.toursix.turnaround.domain.todo.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;

@@ -10,6 +10,7 @@ import com.toursix.turnaround.service.todo.dto.request.CreateDoneReviewRequestDt
 import com.toursix.turnaround.service.todo.dto.request.CreateTodoRequestDto;
 import com.toursix.turnaround.service.todo.dto.request.UpdateTodoPushStateRequestDto;
 import com.toursix.turnaround.service.todo.dto.request.UpdateTodoRequestDto;
+import com.toursix.turnaround.service.todo.dto.response.DoneResponse;
 import com.toursix.turnaround.service.todo.dto.response.RewardResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -161,7 +162,7 @@ public class TodoController {
             notes = "이미지 파일이 없는 경우, 400을 보냅니다."
     )
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "생성 성공입니다."),
+            @ApiResponse(code = 201, message = "활동 인증 성공입니다."),
             @ApiResponse(code = 400,
                     message = "1. 필수적인 요청 값이 입력되지 않았습니다.\n"
                             + "2. 허용되지 않은 파일 형식입니다.",
@@ -178,19 +179,20 @@ public class TodoController {
     @Auth
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/todo/{todoId}/done")
-    public ResponseEntity<SuccessResponse<String>> createDoneForActivity(
+    public ResponseEntity<SuccessResponse<DoneResponse>> createDoneForActivity(
             @ApiParam(name = "todoId", value = "인증할 todo 의 id", required = true, example = "1")
             @PathVariable Long todoId,
             @ApiParam(name = "image", value = "활동 인증 이미지")
             @RequestPart(required = false) MultipartFile image,
             @ApiIgnore @UserId Long userId) {
-        todoService.createDoneForActivity(todoId, image, userId);
-        return SuccessResponse.CREATED;
+        return SuccessResponse.success(SuccessCode.CREATED_TODO_DONE_SUCCESS,
+                todoService.createDoneForActivity(todoId, image, userId));
     }
 
     @ApiOperation(
-            value = "[인증] 활동 리뷰 작성 페이지 - 활동을 리뷰를 작성합니다.",
-            notes = "활동 인증을 하지 않은 경우, 400을 전달합니다."
+            value = "[인증] 활동 리뷰 작성 페이지 - 활동의 리뷰를 작성합니다.",
+            notes = "활동 인증을 하지 않은 경우, 400을 전달합니다.\n" +
+                    "리뷰가 이미 존재할 경우 409를 전달합니다."
     )
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "성공입니다."),
@@ -199,26 +201,26 @@ public class TodoController {
                             + "2. 허용하지 않는 평점 범위를 입력하였습니다. (0 ~ 5)\n"
                             + "3. 리뷰 내용을 입력해주세요. (content)\n"
                             + "4. 리뷰 내용은 최소 10자 이상 입력해주세요. (content)\n"
-                            + "5. 활동 인증이 완료되지 않았습니다.",
+                            + "5. 활동 인증이 완료되지 않았습니다.\n"
+                            + "6. 이미 존재하는 활동 리뷰입니다.",
                     response = ErrorResponse.class),
             @ApiResponse(code = 401, message = "토큰이 만료되었습니다. 다시 로그인 해주세요.", response = ErrorResponse.class),
             @ApiResponse(
                     code = 404,
                     message = "1. 탈퇴했거나 존재하지 않는 유저입니다.\n"
-                            + "2. 존재하지 않는 todo 입니다.\n"
-                            + "3. 활동 인증이 완료되지 않았습니다.",
+                            + "2. 존재하지 않는 todo 입니다.",
                     response = ErrorResponse.class),
             @ApiResponse(code = 409, message = "이미 존재하는 인증된 활동입니다.", response = ErrorResponse.class),
             @ApiResponse(code = 500, message = "예상치 못한 서버 에러가 발생하였습니다.", response = ErrorResponse.class)
     })
     @Auth
-    @PostMapping("/todo/{todoId}/review")
+    @PostMapping("/todo/done/review/{doneReviewId}")
     public ResponseEntity<SuccessResponse<String>> createDoneReviewForTodo(
-            @ApiParam(name = "todoId", value = "리뷰 작성 todo 의 id", required = true, example = "1")
-            @PathVariable Long todoId,
+            @ApiParam(name = "doneReviewId", value = "인증된 활동 done 의 리뷰 id", required = true, example = "1")
+            @PathVariable Long doneReviewId,
             @Valid @RequestBody CreateDoneReviewRequestDto request,
             @ApiIgnore @UserId Long userId) {
-        todoService.createDoneReviewForTodo(request, todoId, userId);
+        todoService.createDoneReviewForTodo(request, doneReviewId, userId);
         return SuccessResponse.OK;
     }
 

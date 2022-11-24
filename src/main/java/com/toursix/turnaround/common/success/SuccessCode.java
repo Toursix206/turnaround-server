@@ -26,6 +26,7 @@ public enum SuccessCode {
     // 예약 활동
     GET_TODO_MAIN_INFO_SUCCESS(SuccessStatusCode.OK, "활동 일정 리스트 조회 성공입니다."),
     GET_TODO_INFO_SUCCESS(SuccessStatusCode.OK, "활동 일정 세부 내용 조회 성공입니다."),
+    GET_TODO_DONE_REVIEW_SUCCESS(SuccessStatusCode.OK, "해당 활동의 리뷰 조회 성공입니다."),
 
     // 인테리어
     UPDATE_INTERIOR_CLEAN_SCORE_SUCCESS(SuccessStatusCode.OK, "인테리어 청소 성공입니다."),
@@ -45,6 +46,7 @@ public enum SuccessCode {
      * 201 CREATED
      */
     CREATED_SUCCESS(SuccessStatusCode.CREATED, "생성 성공입니다."),
+    CREATED_TODO_DONE_SUCCESS(SuccessStatusCode.CREATED, "활동 인증 성공입니다."),
 
     // 인증
     CREATED_USER_SUCCESS(SuccessStatusCode.CREATED, "회원가입 성공입니다."),

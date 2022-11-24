@@ -7,6 +7,7 @@ import com.toursix.turnaround.config.interceptor.Auth;
 import com.toursix.turnaround.config.resolver.UserId;
 import com.toursix.turnaround.service.activity.dto.response.ActivityGuideResponse;
 import com.toursix.turnaround.service.todo.TodoRetrieveService;
+import com.toursix.turnaround.service.todo.dto.response.DoneReviewInfoResponse;
 import com.toursix.turnaround.service.todo.dto.response.TodoInfoResponse;
 import com.toursix.turnaround.service.todo.dto.response.TodoMainResponse;
 import io.swagger.annotations.Api;
@@ -112,5 +113,29 @@ public class TodoRetrieveController {
             @ApiIgnore @UserId Long userId) {
         return SuccessResponse.success(SuccessCode.GET_ACTIVITY_GUIDE_INFO_SUCCESS,
                 todoRetrieveService.getTodoGuide(todoId, userId));
+    }
+
+    @ApiOperation(value = "[인증] 리뷰 작성 페이지 - 활동의 리뷰를 조회합니다.",
+            notes = "활동에 대해 인증을 성공할 경우 doneReviewId를 전달합니다.\n" +
+                    "해당 doneReviewId를 path parameter 로 보내주세요.\n" +
+                    "작성되지 않은 경우 isWritten 이 false 이고 다른 데이터는 null 입니다."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "해당 활동의 리뷰 조회 성공입니다."),
+            @ApiResponse(code = 401, message = "토큰이 만료되었습니다. 다시 로그인 해주세요.", response = ErrorResponse.class),
+            @ApiResponse(code = 404,
+                    message = "1. 탈퇴했거나 존재하지 않는 유저입니다.\n"
+                            + "2. 존재하지 않는 인증된 활동의 review 입니다.",
+                    response = ErrorResponse.class),
+            @ApiResponse(code = 500, message = "예상치 못한 서버 에러가 발생하였습니다.", response = ErrorResponse.class)
+    })
+    @Auth
+    @GetMapping("/todo/done/review/{doneReviewId}")
+    public ResponseEntity<SuccessResponse<DoneReviewInfoResponse>> getTodoDoneReview(
+            @ApiParam(name = "doneReviewId", value = "인증된 활동 done 의 리뷰 id", required = true, example = "1")
+            @PathVariable Long doneReviewId,
+            @ApiIgnore @UserId Long userId) {
+        return SuccessResponse.success(SuccessCode.GET_TODO_DONE_REVIEW_SUCCESS,
+                todoRetrieveService.getTodoDoneReview(doneReviewId, userId));
     }
 }

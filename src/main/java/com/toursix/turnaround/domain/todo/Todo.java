@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.toursix.turnaround.domain.activity.Activity;
 import com.toursix.turnaround.domain.common.AuditingTimeEntity;
 import com.toursix.turnaround.domain.common.Status;
-import com.toursix.turnaround.domain.done.Done;
 import com.toursix.turnaround.domain.user.Onboarding;
 import java.time.LocalDateTime;
 import javax.persistence.CascadeType;
