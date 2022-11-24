@@ -2,12 +2,10 @@ package com.toursix.turnaround.service.todo;
 
 import static com.toursix.turnaround.common.exception.ErrorCode.CONFLICT_TODO_DONE_EXCEPTION;
 import static com.toursix.turnaround.common.exception.ErrorCode.CONFLICT_TODO_REWARD_EXCEPTION;
-import static com.toursix.turnaround.common.exception.ErrorCode.NOT_FOUND_DONE_EXCEPTION;
 import static com.toursix.turnaround.common.exception.ErrorCode.VALIDATION_DONE_REVIEW_EXCEPTION;
 import static com.toursix.turnaround.common.exception.ErrorCode.VALIDATION_TODO_REWARD_EXCEPTION;
 
 import com.toursix.turnaround.common.exception.ConflictException;
-import com.toursix.turnaround.common.exception.NotFoundException;
 import com.toursix.turnaround.common.exception.ValidationException;
 import com.toursix.turnaround.common.type.FileType;
 import com.toursix.turnaround.common.util.DateUtils;
@@ -128,23 +126,18 @@ public class TodoService {
         return RewardResponse.of(todo.getActivity().getBroom());
     }
 
-    public void createDoneReviewForTodo(CreateDoneReviewRequestDto request, Long todoId, Long userId) {
+    public void createDoneReviewForTodo(CreateDoneReviewRequestDto request, Long doneReviewId, Long userId) {
         User user = UserServiceUtils.findUserById(userRepository, userId);
         Onboarding onboarding = user.getOnboarding();
-        Todo todo = TodoServiceUtils.findTodoById(todoRepository, todoId);
-        Done done = todo.getDone();
-        if (done == null) {
-            throw new NotFoundException(String.format("인증이 완료된 활동 (%s) 이 아닙니다.", todo.getId()),
-                    NOT_FOUND_DONE_EXCEPTION);
-        }
-        DoneReview doneReview = done.getDoneReview();
+        DoneReview doneReview = TodoServiceUtils.findDoneReviewById(doneReviewRepository, doneReviewId);
+        Done done = doneReview.getDone();
         if (doneReview.checkTodoStage()) {
-            throw new ValidationException(String.format("인증이 완료된 활동 (%s) 이 아닙니다.", todo.getId()),
+            throw new ValidationException(String.format("인증이 완료된 활동 (%s) 이 아닙니다.", done.getId()),
                     VALIDATION_DONE_REVIEW_EXCEPTION);
         }
         doneReview.update(request.getRating(), request.getContent());
         onboarding.updateDoneReview(doneReview);
-        giveTurningPointToUser(user, todo);
+        giveTurningPointToUser(user, doneReview.getActivity());
     }
 
     public void turnOffTodosNotificationByUser(Long userId) {
@@ -172,8 +165,8 @@ public class TodoService {
         todo.setStage(TodoStage.SUCCESS_REWARD);
     }
 
-    private void giveTurningPointToUser(User user, Todo todo) {
+    private void giveTurningPointToUser(User user, Activity activity) {
         Point point = user.getPoint();
-        point.addAmount(todo.getActivity().getPoint());
+        point.addAmount(activity.getPoint());
     }
 }

@@ -214,13 +214,13 @@ public class TodoController {
             @ApiResponse(code = 500, message = "예상치 못한 서버 에러가 발생하였습니다.", response = ErrorResponse.class)
     })
     @Auth
-    @PostMapping("/todo/{todoId}/review")
+    @PostMapping("/todo/done/review/{doneReviewId}")
     public ResponseEntity<SuccessResponse<String>> createDoneReviewForTodo(
-            @ApiParam(name = "todoId", value = "리뷰 작성 todo 의 id", required = true, example = "1")
-            @PathVariable Long todoId,
+            @ApiParam(name = "doneReviewId", value = "인증된 활동 done 의 리뷰 id", required = true, example = "1")
+            @PathVariable Long doneReviewId,
             @Valid @RequestBody CreateDoneReviewRequestDto request,
             @ApiIgnore @UserId Long userId) {
-        todoService.createDoneReviewForTodo(request, todoId, userId);
+        todoService.createDoneReviewForTodo(request, doneReviewId, userId);
         return SuccessResponse.OK;
     }
 
