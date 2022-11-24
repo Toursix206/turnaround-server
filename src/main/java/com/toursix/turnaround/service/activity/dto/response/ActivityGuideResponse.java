@@ -1,6 +1,7 @@
 package com.toursix.turnaround.service.activity.dto.response;
 
 import com.toursix.turnaround.domain.activity.ActivityGuide;
+import com.toursix.turnaround.domain.common.Status;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -53,6 +54,7 @@ public class ActivityGuideResponse {
 
         public static List<ActivityGuideInfo> of(List<ActivityGuide> activityGuides) {
             return activityGuides.stream().sorted(Comparator.comparing(ActivityGuide::getStep))
+                    .filter(activityGuide -> activityGuide.getStatus() == Status.ACTIVE)
                     .map(ActivityGuideInfo::of).collect(Collectors.toList());
         }
     }

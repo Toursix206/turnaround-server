@@ -1,6 +1,7 @@
 package com.toursix.turnaround.service.todo;
 
 import com.toursix.turnaround.common.util.DateUtils;
+import com.toursix.turnaround.domain.common.Status;
 import com.toursix.turnaround.domain.interior.CleanLevel;
 import com.toursix.turnaround.domain.interior.Obtain;
 import com.toursix.turnaround.domain.todo.PushStatus;
@@ -98,6 +99,7 @@ public class TodoScheduledService {
         users.forEach(user -> {
             Onboarding onboarding = user.getOnboarding();
             List<Todo> todos = onboarding.getTodos().stream()
+                    .filter(todo -> todo.getStatus() == Status.ACTIVE)
                     .filter(todo -> todo.getStage() == TodoStage.SUCCESS)
                     .collect(Collectors.toList());
             if (!todos.isEmpty()) {
@@ -116,6 +118,7 @@ public class TodoScheduledService {
         users.forEach(user -> {
             Onboarding onboarding = user.getOnboarding();
             List<Todo> todos = onboarding.getTodos().stream()
+                    .filter(todo -> todo.getStatus() == Status.ACTIVE)
                     .filter(todo -> yesterday.isEqual(todo.getStartAt().toLocalDate()))
                     .collect(Collectors.toList());
             if (todos.isEmpty()) {
@@ -133,9 +136,11 @@ public class TodoScheduledService {
         users.forEach(user -> {
             Onboarding onboarding = user.getOnboarding();
             List<Obtain> obtains = onboarding.getObtains().stream()
+                    .filter(obtain -> obtain.getStatus() == Status.ACTIVE)
                     .filter(Obtain::getIsEquipped)
                     .collect(Collectors.toList());
             List<Obtain> tooDirtyobtains = onboarding.getObtains().stream()
+                    .filter(obtain -> obtain.getStatus() == Status.ACTIVE)
                     .filter(Obtain::getIsEquipped)
                     .filter(obtain -> obtain.getCleanLevel() == CleanLevel.VERY_DIRTY)
                     .collect(Collectors.toList());

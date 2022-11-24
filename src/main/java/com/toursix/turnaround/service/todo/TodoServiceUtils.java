@@ -4,6 +4,7 @@ import static com.toursix.turnaround.common.exception.ErrorCode.NOT_FOUND_TODO_E
 
 import com.toursix.turnaround.common.exception.NotFoundException;
 import com.toursix.turnaround.common.util.DateUtils;
+import com.toursix.turnaround.domain.common.Status;
 import com.toursix.turnaround.domain.todo.Todo;
 import com.toursix.turnaround.domain.todo.TodoStage;
 import com.toursix.turnaround.domain.todo.repository.TodoRepository;
@@ -39,12 +40,14 @@ public class TodoServiceUtils {
 
     public static List<Todo> filterSuccessTodos(List<Todo> todos) {
         return todos.stream()
+                .filter(todo -> todo.getStatus() == Status.ACTIVE)
                 .filter(todo -> todo.getStage() == TodoStage.SUCCESS)
                 .collect(Collectors.toList());
     }
 
     public static List<Todo> filterInProgressTodayTodos(LocalDateTime now, List<Todo> todos) {
         return todos.stream()
+                .filter(todo -> todo.getStatus() == Status.ACTIVE)
                 .filter(todo -> todo.getStage() == TodoStage.IN_PROGRESS &&
                         DateUtils.isSameDate(now, todo.getStartAt())
                 )
@@ -53,6 +56,7 @@ public class TodoServiceUtils {
 
     public static List<Todo> filterInProgressTodayOrFutureTodos(LocalDateTime now, List<Todo> todos) {
         return todos.stream()
+                .filter(todo -> todo.getStatus() == Status.ACTIVE)
                 .filter(todo -> todo.getStage() == TodoStage.IN_PROGRESS &&
                         DateUtils.isTodayOrFuture(now, todo.getStartAt())
                 )
@@ -61,12 +65,14 @@ public class TodoServiceUtils {
 
     public static List<Todo> filterTodayTodos(LocalDateTime now, List<Todo> todos) {
         return todos.stream()
+                .filter(todo -> todo.getStatus() == Status.ACTIVE)
                 .filter(todo -> DateUtils.isSameDate(now, todo.getStartAt()))
                 .collect(Collectors.toList());
     }
 
     public static List<Todo> filterThisWeekTodos(LocalDateTime now, List<Todo> todos) {
         return todos.stream()
+                .filter(todo -> todo.getStatus() == Status.ACTIVE)
                 .filter(todo -> !DateUtils.isSameDate(now, todo.getStartAt()) &&
                         DateUtils.isSameWeek(now, todo.getStartAt())
                 )
@@ -75,6 +81,7 @@ public class TodoServiceUtils {
 
     public static List<Todo> filterNextTodos(LocalDateTime now, List<Todo> todos) {
         return todos.stream()
+                .filter(todo -> todo.getStatus() == Status.ACTIVE)
                 .filter(todo -> !DateUtils.isSameWeek(now, todo.getStartAt()))
                 .collect(Collectors.toList());
     }
