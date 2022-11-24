@@ -1,4 +1,4 @@
-package com.toursix.turnaround.domain.done;
+package com.toursix.turnaround.domain.todo;
 
 import static com.toursix.turnaround.common.exception.ErrorCode.VALIDATION_RATING_RANGE_EXCEPTION;
 

@@ -1,10 +1,10 @@
-package com.toursix.turnaround.domain.done.repository;
+package com.toursix.turnaround.domain.todo.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class DoneReviewRepositoryImpl implements DoneReviewRepositoryCustom {
+public class DoneRepositoryImpl implements DoneRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
 }

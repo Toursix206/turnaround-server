@@ -1,8 +1,7 @@
-package com.toursix.turnaround.domain.done;
+package com.toursix.turnaround.domain.todo;
 
 import com.toursix.turnaround.domain.common.AuditingTimeEntity;
 import com.toursix.turnaround.domain.common.Status;
-import com.toursix.turnaround.domain.todo.Todo;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;

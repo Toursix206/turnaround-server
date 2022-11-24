@@ -2,7 +2,7 @@ package com.toursix.turnaround.domain.activity;
 
 import com.toursix.turnaround.domain.common.AuditingTimeEntity;
 import com.toursix.turnaround.domain.common.Status;
-import com.toursix.turnaround.domain.done.DoneReview;
+import com.toursix.turnaround.domain.todo.DoneReview;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
