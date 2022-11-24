@@ -22,6 +22,7 @@ public enum SuccessCode {
     // 활동
     GET_ACTIVITIES_INFO_SUCCESS(SuccessStatusCode.OK, "활동 리스트 조회 성공입니다."),
     GET_ACTIVITY_GUIDE_INFO_SUCCESS(SuccessStatusCode.OK, "활동별 가이드 조회 성공입니다."),
+    GET_ACTIVITY_DONE_REVIEW_POINT_SUCCESS(SuccessStatusCode.OK, "해당 활동의 리뷰 포인트 조회 성공입니다."),
 
     // 예약 활동
     GET_TODO_MAIN_INFO_SUCCESS(SuccessStatusCode.OK, "활동 일정 리스트 조회 성공입니다."),
