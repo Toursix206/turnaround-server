@@ -2,6 +2,7 @@ package com.toursix.turnaround.service.interior;
 
 import com.toursix.turnaround.common.util.MathUtils;
 import com.toursix.turnaround.domain.common.Constant;
+import com.toursix.turnaround.domain.common.Status;
 import com.toursix.turnaround.domain.interior.Obtain;
 import com.toursix.turnaround.domain.interior.repository.ObtainRepository;
 import com.toursix.turnaround.domain.item.Item;
@@ -47,6 +48,7 @@ public class InteriorService {
         List<Obtain> obtains = onboarding.getObtains();
         List<Obtain> equippedObtains = obtains.stream()
                 .filter(Obtain::getIsEquipped)
+                .filter(equippedObtain -> equippedObtain.getStatus() == Status.ACTIVE)
                 .collect(Collectors.toList());
         int total = equippedObtains.stream()
                 .mapToInt(Obtain::getCleanScore)
