@@ -70,6 +70,7 @@ public enum ErrorCode {
     NOT_FOUND_ACTIVITY_EXCEPTION(NOT_FOUND, "존재하지 않는 활동입니다."),
     NOT_FOUND_ACTIVITY_GUIDE_EXCEPTION(NOT_FOUND, "존재하지 않는 활동 가이드입니다."),
     NOT_FOUND_TODO_EXCEPTION(NOT_FOUND, "존재하지 않는 todo 입니다."),
+    NOT_FOUND_TODO_DONE_REVIEW_EXCEPTION(NOT_FOUND, "존재하지 않는 인증된 활동의 review 입니다."),
     NOT_FOUND_DONE_EXCEPTION(NOT_FOUND, "활동 인증이 완료되지 않았습니다."),
 
     /**
@@ -91,6 +92,7 @@ public enum ErrorCode {
     CONFLICT_NICKNAME_EXCEPTION(CONFLICT, "이미 존재하는 닉네임입니다."),
     CONFLICT_TODO_TIME_EXCEPTION(CONFLICT, "다른 활동과 겹치는 일정입니다."),
     CONFLICT_TODO_DONE_EXCEPTION(CONFLICT, "이미 존재하는 활동 인증입니다."),
+    CONFLICT_TODO_DONE_REVIEW_EXCEPTION(CONFLICT, "이미 존재하는 활동 리뷰입니다."),
     CONFLICT_TODO_REWARD_EXCEPTION(CONFLICT, "이미 리워드를 받은 활동입니다."),
     CONFLICT_TODO_PUSH_STATUS_EXCEPTION(CONFLICT, "이미 모든 활동에 대한 알림이 꺼져있습니다."),
 

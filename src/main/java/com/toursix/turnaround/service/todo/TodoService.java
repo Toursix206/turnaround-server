@@ -1,6 +1,7 @@
 package com.toursix.turnaround.service.todo;
 
 import static com.toursix.turnaround.common.exception.ErrorCode.CONFLICT_TODO_DONE_EXCEPTION;
+import static com.toursix.turnaround.common.exception.ErrorCode.CONFLICT_TODO_DONE_REVIEW_EXCEPTION;
 import static com.toursix.turnaround.common.exception.ErrorCode.CONFLICT_TODO_REWARD_EXCEPTION;
 import static com.toursix.turnaround.common.exception.ErrorCode.VALIDATION_DONE_REVIEW_EXCEPTION;
 import static com.toursix.turnaround.common.exception.ErrorCode.VALIDATION_TODO_REWARD_EXCEPTION;
@@ -131,9 +132,13 @@ public class TodoService {
         Onboarding onboarding = user.getOnboarding();
         DoneReview doneReview = TodoServiceUtils.findDoneReviewById(doneReviewRepository, doneReviewId);
         Done done = doneReview.getDone();
-        if (doneReview.checkTodoStage()) {
+        if (!doneReview.checkTodoStage()) {
             throw new ValidationException(String.format("인증이 완료된 활동 (%s) 이 아닙니다.", done.getId()),
                     VALIDATION_DONE_REVIEW_EXCEPTION);
+        }
+        if (doneReview.getIsWritten()) {
+            throw new ConflictException(String.format("이미 리뷰가 작성된 활동 (%s) 입니다.", done.getId()),
+                    CONFLICT_TODO_DONE_REVIEW_EXCEPTION);
         }
         doneReview.update(request.getRating(), request.getContent());
         onboarding.updateDoneReview(doneReview);
