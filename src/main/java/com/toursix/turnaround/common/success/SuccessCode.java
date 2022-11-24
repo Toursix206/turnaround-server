@@ -22,11 +22,11 @@ public enum SuccessCode {
     // 활동
     GET_ACTIVITIES_INFO_SUCCESS(SuccessStatusCode.OK, "활동 리스트 조회 성공입니다."),
     GET_ACTIVITY_GUIDE_INFO_SUCCESS(SuccessStatusCode.OK, "활동별 가이드 조회 성공입니다."),
-    GET_ACTIVITY_DONE_REVIEW_POINT_SUCCESS(SuccessStatusCode.OK, "해당 활동의 리뷰 포인트 조회 성공입니다."),
 
     // 예약 활동
     GET_TODO_MAIN_INFO_SUCCESS(SuccessStatusCode.OK, "활동 일정 리스트 조회 성공입니다."),
     GET_TODO_INFO_SUCCESS(SuccessStatusCode.OK, "활동 일정 세부 내용 조회 성공입니다."),
+    GET_TODO_DONE_REVIEW_SUCCESS(SuccessStatusCode.OK, "해당 활동의 리뷰 조회 성공입니다."),
 
     // 인테리어
     UPDATE_INTERIOR_CLEAN_SCORE_SUCCESS(SuccessStatusCode.OK, "인테리어 청소 성공입니다."),

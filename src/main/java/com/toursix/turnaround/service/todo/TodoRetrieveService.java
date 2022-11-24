@@ -17,7 +17,7 @@ import com.toursix.turnaround.domain.user.repository.UserRepository;
 import com.toursix.turnaround.service.activity.ActivityServiceUtils;
 import com.toursix.turnaround.service.activity.dto.response.ActivityGuideResponse;
 import com.toursix.turnaround.service.activity.dto.response.ActivityGuideResponse.ActivityGuideInfo;
-import com.toursix.turnaround.service.todo.dto.response.DoneReviewPointResponse;
+import com.toursix.turnaround.service.todo.dto.response.DoneReviewInfoResponse;
 import com.toursix.turnaround.service.todo.dto.response.TodoInfoResponse;
 import com.toursix.turnaround.service.todo.dto.response.TodoMainResponse;
 import com.toursix.turnaround.service.user.UserServiceUtils;
@@ -81,12 +81,9 @@ public class TodoRetrieveService {
         return ActivityGuideResponse.of(activity.getId(), activity.getName(), ActivityGuideInfo.of(activityGuide));
     }
 
-    public DoneReviewPointResponse getTodoDoneReviewPoint(Long doneReviewId, Long userId) {
-        User user = UserServiceUtils.findUserById(userRepository, userId);
+    public DoneReviewInfoResponse getTodoDoneReview(Long doneReviewId, Long userId) {
+        UserServiceUtils.findUserById(userRepository, userId);
         DoneReview doneReview = TodoServiceUtils.findDoneReviewById(doneReviewRepository, doneReviewId);
-        LocalDateTime doneDate = doneReview.getDone().getCreatedAt();
-        Activity activity = doneReview.getActivity();
-        return DoneReviewPointResponse.of(activity.getName(), DateUtils.parseYearAndMonthAndDay(doneDate),
-                activity.getPoint());
+        return DoneReviewInfoResponse.of(doneReview);
     }
 }
