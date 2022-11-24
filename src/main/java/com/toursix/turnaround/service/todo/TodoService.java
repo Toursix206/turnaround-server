@@ -33,6 +33,7 @@ import com.toursix.turnaround.service.todo.dto.request.CreateDoneReviewRequestDt
 import com.toursix.turnaround.service.todo.dto.request.CreateTodoRequestDto;
 import com.toursix.turnaround.service.todo.dto.request.UpdateTodoPushStateRequestDto;
 import com.toursix.turnaround.service.todo.dto.request.UpdateTodoRequestDto;
+import com.toursix.turnaround.service.todo.dto.response.DoneResponse;
 import com.toursix.turnaround.service.todo.dto.response.RewardResponse;
 import com.toursix.turnaround.service.user.UserServiceUtils;
 import java.time.LocalDateTime;
@@ -100,7 +101,7 @@ public class TodoService {
         onboarding.deleteTodo(todo);
     }
 
-    public void createDoneForActivity(Long todoId, MultipartFile image, Long userId) {
+    public DoneResponse createDoneForActivity(Long todoId, MultipartFile image, Long userId) {
         User user = UserServiceUtils.findUserById(userRepository, userId);
         Onboarding onboarding = user.getOnboarding();
         Todo todo = TodoServiceUtils.findTodoById(todoRepository, todoId);
@@ -116,6 +117,7 @@ public class TodoService {
                 DoneReview.newInstance(onboarding, todo.getActivity(), done));
         onboarding.addDoneReview(doneReview);
         todo.setStage(TodoStage.SUCCESS);
+        return DoneResponse.of(doneReview.getId());
     }
 
     public RewardResponse rewardToUser(Long todoId, Long userId) {

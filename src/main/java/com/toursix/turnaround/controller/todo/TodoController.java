@@ -10,6 +10,7 @@ import com.toursix.turnaround.service.todo.dto.request.CreateDoneReviewRequestDt
 import com.toursix.turnaround.service.todo.dto.request.CreateTodoRequestDto;
 import com.toursix.turnaround.service.todo.dto.request.UpdateTodoPushStateRequestDto;
 import com.toursix.turnaround.service.todo.dto.request.UpdateTodoRequestDto;
+import com.toursix.turnaround.service.todo.dto.response.DoneResponse;
 import com.toursix.turnaround.service.todo.dto.response.RewardResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -161,7 +162,7 @@ public class TodoController {
             notes = "이미지 파일이 없는 경우, 400을 보냅니다."
     )
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "생성 성공입니다."),
+            @ApiResponse(code = 201, message = "활동 인증 성공입니다."),
             @ApiResponse(code = 400,
                     message = "1. 필수적인 요청 값이 입력되지 않았습니다.\n"
                             + "2. 허용되지 않은 파일 형식입니다.",
@@ -178,14 +179,15 @@ public class TodoController {
     @Auth
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/todo/{todoId}/done")
-    public ResponseEntity<SuccessResponse<String>> createDoneForActivity(
+    public ResponseEntity<SuccessResponse<DoneResponse>> createDoneForActivity(
             @ApiParam(name = "todoId", value = "인증할 todo 의 id", required = true, example = "1")
             @PathVariable Long todoId,
             @ApiParam(name = "image", value = "활동 인증 이미지")
             @RequestPart(required = false) MultipartFile image,
             @ApiIgnore @UserId Long userId) {
         todoService.createDoneForActivity(todoId, image, userId);
-        return SuccessResponse.CREATED;
+        return SuccessResponse.success(SuccessCode.CREATED_TODO_DONE_SUCCESS,
+                todoService.createDoneForActivity(todoId, image, userId));
     }
 
     @ApiOperation(

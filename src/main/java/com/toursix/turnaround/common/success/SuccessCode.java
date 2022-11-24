@@ -45,6 +45,7 @@ public enum SuccessCode {
      * 201 CREATED
      */
     CREATED_SUCCESS(SuccessStatusCode.CREATED, "생성 성공입니다."),
+    CREATED_TODO_DONE_SUCCESS(SuccessStatusCode.CREATED, "활동 인증 성공입니다."),
 
     // 인증
     CREATED_USER_SUCCESS(SuccessStatusCode.CREATED, "회원가입 성공입니다."),
