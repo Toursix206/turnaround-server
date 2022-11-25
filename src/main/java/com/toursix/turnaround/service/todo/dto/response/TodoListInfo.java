@@ -1,6 +1,7 @@
 package com.toursix.turnaround.service.todo.dto.response;
 
 import com.toursix.turnaround.domain.activity.ActivityCategory;
+import com.toursix.turnaround.domain.todo.PushStatus;
 import com.toursix.turnaround.domain.todo.Todo;
 import com.toursix.turnaround.domain.todo.TodoStatus;
 import com.toursix.turnaround.service.todo.TodoServiceUtils;
@@ -17,13 +18,14 @@ import lombok.ToString;
 public class TodoListInfo extends TodoInfo {
 
     private int duration;
+    private PushStatus pushStatus;
 
     @Builder(access = AccessLevel.PRIVATE)
     public TodoListInfo(Long todoId, String activityName, ActivityCategory activityCategory, TodoStatus todoStatus,
-            String leftTime,
-            int duration) {
+            String leftTime, int duration, PushStatus pushStatus) {
         super(todoId, activityName, activityCategory, todoStatus, leftTime);
         this.duration = duration;
+        this.pushStatus = pushStatus;
     }
 
     public static TodoListInfo of(LocalDateTime now, Todo todo) {
@@ -34,6 +36,7 @@ public class TodoListInfo extends TodoInfo {
                 .todoStatus(TodoStatus.get(now, todo))
                 .leftTime(TodoServiceUtils.todoInfoLeftTime(now, todo))
                 .duration(todo.getActivity().getDuration())
+                .pushStatus(todo.getPushStatus())
                 .build();
     }
 }
