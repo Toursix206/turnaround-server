@@ -51,7 +51,11 @@ public class TodoController {
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "생성 성공입니다."),
             @ApiResponse(code = 401, message = "토큰이 만료되었습니다. 다시 로그인 해주세요.", response = ErrorResponse.class),
-            @ApiResponse(code = 400, message = "정책에 위배되는 예약 시간입니다.", response = ErrorResponse.class),
+            @ApiResponse(code = 400,
+                    message = "1. \uD83D\uDE25 예약실패! 자정을 넘기는 활동은 할 수 없어요.\n"
+                            + "2. \uD83D\uDE25 지금 이전으로는 예약을 못해요.\n"
+                            + "3. \uD83D\uDE25 예약 실패! 2주 뒤로는 예약을 못해요.",
+                    response = ErrorResponse.class),
             @ApiResponse(
                     code = 404,
                     message = "1. 탈퇴했거나 존재하지 않는 유저입니다.\n"
@@ -80,7 +84,11 @@ public class TodoController {
     )
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "성공입니다."),
-            @ApiResponse(code = 400, message = "정책에 위배되는 예약 시간입니다.", response = ErrorResponse.class),
+            @ApiResponse(code = 400,
+                    message = "1. \uD83D\uDE25 예약실패! 자정을 넘기는 활동은 할 수 없어요.\n"
+                            + "2. \uD83D\uDE25 지금 이전으로는 예약을 못해요.\n"
+                            + "3. \uD83D\uDE25 예약 실패! 2주 뒤로는 예약을 못해요.",
+                    response = ErrorResponse.class),
             @ApiResponse(code = 401, message = "토큰이 만료되었습니다. 다시 로그인 해주세요.", response = ErrorResponse.class),
             @ApiResponse(code = 403, message = "수정/삭제 할 수 없는 일정입니다.", response = ErrorResponse.class),
             @ApiResponse(
