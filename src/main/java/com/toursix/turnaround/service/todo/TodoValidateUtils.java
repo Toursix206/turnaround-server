@@ -4,6 +4,8 @@ import static com.toursix.turnaround.common.exception.ErrorCode.CONFLICT_TODO_PU
 import static com.toursix.turnaround.common.exception.ErrorCode.CONFLICT_TODO_TIME_EXCEPTION;
 import static com.toursix.turnaround.common.exception.ErrorCode.FORBIDDEN_TODO_STAGE_EXCEPTION;
 import static com.toursix.turnaround.common.exception.ErrorCode.VALIDATION_STATUS_EXCEPTION;
+import static com.toursix.turnaround.common.exception.ErrorCode.VALIDATION_TODO_AFTER_START_AT_EXCEPTION;
+import static com.toursix.turnaround.common.exception.ErrorCode.VALIDATION_TODO_BEFORE_START_AT_EXCEPTION;
 import static com.toursix.turnaround.common.exception.ErrorCode.VALIDATION_TODO_START_AT_EXCEPTION;
 
 import com.toursix.turnaround.common.exception.ConflictException;
@@ -34,7 +36,7 @@ public class TodoValidateUtils {
         if (endAt.isBefore(now)) {
             throw new ValidationException(
                     String.format("정책에 위배되는 예약 시간입니다. startAt(%s) now(%s) duration(%s)", startAt, now, duration),
-                    VALIDATION_TODO_START_AT_EXCEPTION);
+                    VALIDATION_TODO_BEFORE_START_AT_EXCEPTION);
         }
 
         // 활동의 시작 날짜와 종료 날짜가 다를 경우
@@ -48,7 +50,7 @@ public class TodoValidateUtils {
         if (startAt.toLocalDate().isAfter(afterTwoWeeks)) {
             throw new ValidationException(
                     String.format("정책에 위배되는 예약 시간입니다. startAt(%s) now(%s) duration(%s)", startAt, now, duration),
-                    VALIDATION_TODO_START_AT_EXCEPTION);
+                    VALIDATION_TODO_AFTER_START_AT_EXCEPTION);
         }
     }
 
