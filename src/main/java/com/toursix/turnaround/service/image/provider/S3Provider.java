@@ -14,7 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Component
 public class S3Provider {
 
-    private static final int MAX_FILE_SIZE = 51840; // 720 * 720
+    private static final int MAX_FILE_SIZE = 518400; // 720 * 720
 
     private final S3FileStorageClient fileStorageClient;
 
@@ -37,6 +37,7 @@ public class S3Provider {
     }
 
     private void validateImageMaxSize(MultipartFile file) {
+        
         if (file.getSize() > MAX_FILE_SIZE) {
             throw new ValidationException(
                     String.format("이미지 크기 (%s) 가 최대 사이즈 (%s) 보다 큽니다.", file.getSize(), MAX_FILE_SIZE),

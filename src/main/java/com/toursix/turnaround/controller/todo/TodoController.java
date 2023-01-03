@@ -167,13 +167,15 @@ public class TodoController {
 
     @ApiOperation(
             value = "[인증] 활동 인증 페이지 - 활동을 인증합니다.",
-            notes = "이미지 파일이 없는 경우, 400을 보냅니다."
+            notes = "이미지 파일이 없는 경우, 400을 보냅니다.\n" +
+                    "이미지의 넓이가 720 * 720 보다 크다면, 400을 보냅니다."
     )
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "활동 인증 성공입니다."),
             @ApiResponse(code = 400,
                     message = "1. 필수적인 요청 값이 입력되지 않았습니다.\n"
-                            + "2. 허용되지 않은 파일 형식입니다.",
+                            + "2. 허용되지 않은 파일 형식입니다.\n"
+                            + "3. 이미지가 (720x720) 보다 큽니다.",
                     response = ErrorResponse.class),
             @ApiResponse(code = 401, message = "토큰이 만료되었습니다. 다시 로그인 해주세요.", response = ErrorResponse.class),
             @ApiResponse(
