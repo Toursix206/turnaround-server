@@ -6,6 +6,7 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.toursix.turnaround.domain.common.Status;
 import com.toursix.turnaround.domain.todo.Todo;
+import com.toursix.turnaround.domain.todo.TodoStage;
 import com.toursix.turnaround.domain.user.Onboarding;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
@@ -36,6 +37,7 @@ public class TodoRepositoryImpl implements TodoRepositoryCustom {
                         neTodo(nowTodo),
                         todo.onboarding.eq(onboarding),
                         todo.status.eq(Status.ACTIVE),
+                        todo.stage.eq(TodoStage.IN_PROGRESS),
                         startAtAndEndAtAreBetween(startAt, endAt)
                                 .or(startAtIsAfterStartAtAndBeforeEndAt(startAt, endAt))
                                 .or(endAtIsAfterStartAtAndBeforeEndAt(startAt, endAt))
