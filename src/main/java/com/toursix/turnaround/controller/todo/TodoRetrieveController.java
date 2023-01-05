@@ -118,7 +118,7 @@ public class TodoRetrieveController {
     @ApiOperation(value = "[인증] 리뷰 작성 페이지 - 활동의 리뷰를 조회합니다.",
             notes = "활동에 대해 인증을 성공할 경우 doneReviewId를 전달합니다.\n" +
                     "해당 doneReviewId를 path parameter 로 보내주세요.\n" +
-                    "작성되지 않은 경우 isWritten 이 false 이고 다른 데이터는 null 입니다."
+                    "작성되지 않은 경우(isWritten = false), content 는 null, score 는 0 입니다."
     )
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "해당 활동의 리뷰 조회 성공입니다."),
