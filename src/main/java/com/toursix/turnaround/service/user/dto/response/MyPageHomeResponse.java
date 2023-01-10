@@ -1,6 +1,7 @@
 package com.toursix.turnaround.service.user.dto.response;
 
 import com.toursix.turnaround.domain.user.OnboardingProfileType;
+import com.toursix.turnaround.domain.user.UrlType;
 import com.toursix.turnaround.domain.user.User;
 import java.util.Map;
 import lombok.AccessLevel;
@@ -23,31 +24,16 @@ public class MyPageHomeResponse {
     private OnboardingProfileType profileType;
     private String nickname;
     private int point;
-    private StoreUrl storeUrl;
-
-    @Getter
-    @NoArgsConstructor(access = AccessLevel.PRIVATE)
-    @AllArgsConstructor(access = AccessLevel.PRIVATE)
-    @Builder(access = AccessLevel.PRIVATE)
-    public static class StoreUrl {
-
-        private String aos;
-        private String ios;
-
-        public static StoreUrl of(String aosUrl, String iosUrl) {
-            return StoreUrl.builder()
-                    .aos(aosUrl)
-                    .ios(iosUrl)
-                    .build();
-        }
-    }
+    private String csUrl;
+    private UrlInfo storeUrlInfo;
 
     public static MyPageHomeResponse of(User user, Map<String, String> deployByOs) {
         return MyPageHomeResponse.builder()
                 .profileType(user.getOnboarding().getProfileType())
                 .nickname(user.getOnboarding().getNickname())
                 .point(user.getPoint().getAmount())
-                .storeUrl(StoreUrl.of(deployByOs.get(AOS), deployByOs.get(IOS)))
+                .csUrl(UrlType.CUSTOMER_SERVICE.getValue())
+                .storeUrlInfo(UrlInfo.of(deployByOs.get(AOS), deployByOs.get(IOS)))
                 .build();
     }
 }
