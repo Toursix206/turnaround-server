@@ -27,6 +27,9 @@ public class Deploy extends AuditingTimeEntity {
 
     @Column(nullable = false, length = 30)
     private String version;
+    
+    @Column(nullable = false, length = 300)
+    private String marketUrl;
 
     @Column(nullable = false, length = 30)
     @Enumerated(EnumType.STRING)
