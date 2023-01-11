@@ -48,7 +48,7 @@ public class DoneReview extends AuditingTimeEntity {
     @Embedded
     private DoneReviewRating rating;
 
-    @Column(length = 300)
+    @Column(length = 500)
     private String content;
 
     @Column(nullable = false)

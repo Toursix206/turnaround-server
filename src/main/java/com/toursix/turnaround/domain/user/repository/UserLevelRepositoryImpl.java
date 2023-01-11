@@ -22,6 +22,6 @@ public class UserLevelRepositoryImpl implements UserLevelRepositoryCustom {
                         userLevel.status.eq(Status.ACTIVE)
                 )
                 .orderBy(userLevel.experience.asc())
-                .fetchOne();
+                .fetchFirst();
     }
 }
